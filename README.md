@@ -11,3 +11,7 @@ It supports POSTs in the form of `application/x-www-form-urlencoded`, as well as
 ## Developers
 
 The page is hosted on Github Pages, so be sure to merge your changes into the `gh-pages` branch to see them.
+
+The JavaScript is generated from the PogoScript files. Once you have [installed PogoScript](http://github.com/featurist/pogoscript), just:
+
+	pogo -cw *.pogo
