@@ -7,3 +7,7 @@ A HTML page that computes an OAuth 1.0 signature, showing all the workings so yo
 ## POST Support
 
 It supports POSTs in the form of `application/x-www-form-urlencoded`, as well as POSTs of `application/xml` and `application/json` using the `Authorization` header - just put the XML or JSON into the 'body' field and set the 'body encoding' accordingly.
+
+## Developers
+
+The page is hosted on Github Pages, so be sure to merge your changes into the `gh-pages` branch to see them.
