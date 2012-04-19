@@ -35,14 +35,14 @@
     <input type="button" value="sign!" data-bind="click: sign">
     
     <ul>
-    <li><label>query string</label><textarea disabled data-bind="value: signature.queryString"></textarea></li>
-    <li><label>base string</label><textarea disabled data-bind="value: signature.baseString"></textarea></li>
-    <li><label>hmac key</label><input class="large" type='text' disabled data-bind="value: signature.hmacKey"></li>
-    <li><label>base64 hmac</label><input class="large" type='text' disabled data-bind="value: signature.base64Hmac"></li>
-    <li><label>signature</label><input class="large" type='text' disabled data-bind="value: signature.signature"></li>
-    <li><label>authorization header</label><textarea disabled data-bind="value: signature.authorizationHeader"></textarea></li>
+    <li><label>query string</label><textarea readonly data-bind="value: signature.queryString"></textarea></li>
+    <li><label>base string</label><textarea readonly data-bind="value: signature.baseString"></textarea></li>
+    <li><label>hmac key</label><input class="large" type='text' readonly data-bind="value: signature.hmacKey"></li>
+    <li><label>base64 hmac</label><input class="large" type='text' readonly data-bind="value: signature.base64Hmac"></li>
+    <li><label>signature</label><input class="large" type='text' readonly data-bind="value: signature.signature"></li>
+    <li><label>authorization header</label><textarea readonly data-bind="value: signature.authorizationHeader"></textarea></li>
 
-    <li><label>curl</label><textarea class='curl' disabled data-bind="text: signature.curl"></textarea></li>
+    <li><label>curl</label><textarea class='curl' readonly data-bind="text: signature.curl"></textarea></li>
     </ul>
     
     <script src="underscore-min.js" type="text/javascript"></script>
