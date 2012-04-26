@@ -26,7 +26,7 @@
             queryString: ko.observable(""),
             baseString: ko.observable(""),
             hmacKey: ko.observable(""),
-            base64Hmac: ko.observable(""),
+            base64Signature: ko.observable(""),
             signature: ko.observable(""),
             authorizationHeader: ko.observable(""),
             curl: ko.observable("")
@@ -82,7 +82,7 @@
             self.signature.queryString(oauthSignature.queryString());
             self.signature.baseString(oauthSignature.baseString());
             self.signature.hmacKey(oauthSignature.hmacKey());
-            self.signature.base64Hmac(oauthSignature.base64Hmac());
+            self.signature.base64Signature(oauthSignature.base64Signature());
             self.signature.signature(oauthSignature.signature());
             self.signature.authorizationHeader(oauthSignature.authorizationHeader());
             return self.signature.curl(oauthSignature.curl());

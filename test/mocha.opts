@@ -1,0 +1,2 @@
+--compilers pogo:pogo
+-r should

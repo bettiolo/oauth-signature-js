@@ -52,7 +52,7 @@ window: oauth signer = oauth signer (parameters) = _: extend {
   
   authorization header? =
     fields = :oauth parameters?
-    fields: "oauth_signature" = :signature?
+    fields: "oauth_signature" = :base64 signature?
     :header encoded (fields)
   
   url and fields? =
@@ -88,10 +88,10 @@ window: oauth signer = oauth signer (parameters) = _: extend {
       else
         binary
 
-  base64 hmac? = :hmac; encoding 'base64'
+  base64 signature? = :hmac; encoding 'base64'
 
   signature? =
-    :percent encode (:base64 hmac?)
+    :percent encode (:base64 signature?)
 
   
   
@@ -115,7 +115,7 @@ window: oauth signer = oauth signer (parameters) = _: extend {
     console: log ('base string:', :base string?)
     console: log ('hmac key:', :hmac key?)
     console: log ('hmac:', :hmac?)
-    console: log ('base64 hmac:', :base64 hmac?)
+    console: log ('base64 signature:', :base64 signature?)
     console: log ('signature:', :signature?)
 } (parameters)
 

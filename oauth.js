@@ -68,7 +68,7 @@
                 var self, fields;
                 self = this;
                 fields = self.oauthParameters();
-                fields["oauth_signature"] = self.signature();
+                fields["oauth_signature"] = self.base64Signature();
                 return self.headerEncoded(fields);
             },
             urlAndFields: function() {
@@ -102,7 +102,7 @@
                 var encoding, self;
                 encoding = gen1_options && gen1_options.encoding != null ? gen1_options.encoding : "binary";
                 self = this;
-                if (typeof process != "undefined") {
+                if (typeof process !== "undefined") {
                     var crypto, h;
                     crypto = require("crypto");
                     h = crypto.createHmac("sha1", self.hmacKey());
@@ -120,7 +120,7 @@
                     }
                 }
             },
-            base64Hmac: function() {
+            base64Signature: function() {
                 var self;
                 self = this;
                 return self.hmac({
@@ -130,7 +130,7 @@
             signature: function() {
                 var self;
                 self = this;
-                return self.percentEncode(self.base64Hmac());
+                return self.percentEncode(self.base64Signature());
             },
             curl: function() {
                 var self;
@@ -160,7 +160,7 @@
                 console.log("base string:", self.baseString());
                 console.log("hmac key:", self.hmacKey());
                 console.log("hmac:", self.hmac());
-                console.log("base64 hmac:", self.base64Hmac());
+                console.log("base64 signature:", self.base64Signature());
                 return console.log("signature:", self.signature());
             }
         }, parameters);

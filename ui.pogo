@@ -20,7 +20,7 @@ oauth parameters! = =>
     query string = ko: observable ''
     base string = ko: observable ''
     hmac key = ko: observable ''
-    base64 hmac = ko: observable ''
+    base64 signature = ko: observable ''
     signature = ko: observable ''
     authorization header = ko: observable ''
     curl = ko: observable ''
@@ -67,7 +67,7 @@ oauth parameters! = =>
     :signature: query string (oauth signature: query string?)
     :signature: base string (oauth signature: base string?)
     :signature: hmac key (oauth signature: hmac key?)
-    :signature: base64 hmac (oauth signature: base64 hmac?)
+    :signature: base64 signature (oauth signature: base64 signature?)
     :signature: signature (oauth signature: signature?)
     :signature: authorization header (oauth signature: authorization header?)
     :signature: curl (oauth signature: curl?)
