@@ -100,10 +100,9 @@ window: oauth signer = oauth signer (parameters) = _: extend {
       "curl '#(:url)?#(:query string?)&oauth_signature=#(:signature?)'"
     else if ((:method == 'POST') || (:method == 'PUT'))
       if (:body)
-        "body '#(:body)'"
         "curl -X #(:method) '#(:url and fields?)' -d '#(:body)' -H 'Authorization: #(:authorization header?)' -H 'Content-Type: #(:body encoding)'"
       else
-        "curl -X #(:method) '#(:url)' -d #(:query string?)&oauth_signature=#(:signature?)'"
+        "curl -X #(:method) '#(:url)' -d '#(:query string?)&oauth_signature=#(:signature?)'"
     else
       "curl -X DELETE '#(:url)?#(:query string?)&oauth_signature=#(:signature?)'"
 

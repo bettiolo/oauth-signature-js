@@ -139,10 +139,9 @@
                     return "curl '" + self.url + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
                 } else if (self.method === "POST" || self.method === "PUT") {
                     if (self.body) {
-                        "body '" + self.body + "'";
                         return "curl -X " + self.method + " '" + self.urlAndFields() + "' -d '" + self.body + "' -H 'Authorization: " + self.authorizationHeader() + "' -H 'Content-Type: " + self.bodyEncoding + "'";
                     } else {
-                        return "curl -X " + self.method + " '" + self.url + "' -d " + self.queryString() + "&oauth_signature=" + self.signature() + "'";
+                        return "curl -X " + self.method + " '" + self.url + "' -d '" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
                     }
                 } else {
                     return "curl -X DELETE '" + self.url + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
