@@ -11,7 +11,6 @@ serve directory (dir) over http; port (4000) =
 
 serve directory "#(__dirname)/.." over http; port (port)
 
-            
 object (o) as array =
     a = []
     

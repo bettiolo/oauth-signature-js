@@ -15,3 +15,9 @@ The page is hosted on Github Pages, so be sure to merge your changes into the `g
 The JavaScript is generated from the PogoScript files. Once you have [installed PogoScript](https://github.com/featurist/pogoscript), just:
 
 	pogo -cw *.pogo
+
+### Testing
+
+Tests are written using [Zombie.js](https://github.com/assaf/zombie) and [mocha](http://visionmedia.github.com/mocha/).
+
+    mocha test/spec.pogo
