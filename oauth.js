@@ -100,7 +100,7 @@
             },
             hmac: function(gen1_options) {
                 var encoding, self;
-                encoding = gen1_options && gen1_options.encoding != null ? gen1_options.encoding : "binary";
+                encoding = gen1_options && gen1_options.hasOwnProperty("encoding") ? gen1_options.encoding : "binary";
                 self = this;
                 if (typeof process !== "undefined") {
                     var crypto, h;

@@ -3,20 +3,20 @@ express = require 'express'
 
 port = 4001
 
-serve directory (dir) over http; port (4000) =
-    app = express: create server!
-    app: use (express: static (dir))
+serve directory (dir) over http (port: 4000) =
+    app = express.create server ()
+    app.use (express.static (dir))
     
-    app: listen (port)
+    app.listen (port)
 
-serve directory "#(__dirname)/.." over http; port (port)
+serve directory "#(__dirname)/.." over http (port: port)
 
 object (o) as array =
     a = []
     
     for @(field) in (o)
-        if (o: has own property (field))
-            a: push {name = field, value = o: (field)}
+        if (o.has own property (field))
+            a.push {name = field, value = o.(field)}
     
     a
 
@@ -27,51 +27,51 @@ describe 'OAuth'
         b = new (browser)
 
     oauth parameters (params) should produce (results) (done) =
-        b: visit "http://localhost:#(port)/"
-            b: fill 'url' (params: url)
-            b: select 'method' (params: method || 'GET')
-            b: fill 'consumer key' (params: consumer key)
-            b: fill 'consumer secret' (params: consumer secret)
-            b: fill '#token' (params: token)
-            b: fill '#token-secret' (params: token secret)
-            b: fill 'nonce' (params: nonce)
-            b: fill 'timestamp' (params: timestamp)
+        b.visit "http://localhost:#(port)/"
+            b.fill 'url' (params.url)
+            b.select 'method' (params.method || 'GET')
+            b.fill 'consumer key' (params.consumer key)
+            b.fill 'consumer secret' (params.consumer secret)
+            b.fill '#token' (params.token)
+            b.fill '#token-secret' (params.token secret)
+            b.fill 'nonce' (params.nonce)
+            b.fill 'timestamp' (params.timestamp)
             
-            if (params: body)
-                b: fill '#body' (params: body)
+            if (params.body)
+                b.fill '#body' (params.body)
                 
-            if (params: body encoding)
-                b: select 'body encoding' (params: body encoding)
+            if (params.body encoding)
+                b.select 'body encoding' (params.body encoding)
             
             add field (name, value, then) =
-                b: press button 'add'
-                    b: fill '.field-name:last' (name)
-                    b: fill '.field-value:last' (value)
+                b.press button 'add'
+                    b.fill '.field-name:last' (name)
+                    b.fill '.field-value:last' (value)
                     
-                    then!
+                    then ()
             
             sign (then) =
-                b: press button 'sign!'
-                    (b: text '#query-string'): should: equal (results: query string)
-                    (b: text '#base-string'): should: equal (results: base string)
-                    (b: field '#hmac-key': value): should: equal (results: hmac key)
-                    (b: field '#base64-signature': value): should: equal (results: base64 signature)
-                    (b: field '#signature': value): should: equal (results: signature)
-                    (b: field '#authorization-header': value): should: equal (results: authorization header)
-                    (b: field '#curl': value): should: equal (results: curl)
+                b.press button 'sign!'
+                    (b.text '#query-string').should.equal (results.query string)
+                    (b.text '#base-string').should.equal (results.base string)
+                    (b.field '#hmac-key'.value).should.equal (results.hmac key)
+                    (b.field '#base64-signature'.value).should.equal (results.base64 signature)
+                    (b.field '#signature'.value).should.equal (results.signature)
+                    (b.field '#authorization-header'.value).should.equal (results.authorization header)
+                    (b.field '#curl'.value).should.equal (results.curl)
             
-                    then!
+                    then ()
             
             add fields (fields, then) =
-                if (fields: length > 0)
-                    field = fields: pop?
+                if (fields.length > 0)
+                    field = fields.pop ()
                 
-                    add field (field: name, field: value)
+                    add field (field.name, field.value)
                         add fields (fields, then)
                 else
-                    then!
+                    then ()
 
-            add fields (object (params: fields) as array)
+            add fields (object (params.fields) as array)
                 sign (done)
 
     it 'produces the OAuth 1.0a reference sample' @(done)

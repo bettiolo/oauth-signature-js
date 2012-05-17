@@ -1,124 +1,124 @@
-window: oauth signer = oauth signer (parameters) = _: extend {
+window.oauth signer = oauth signer (parameters) = _.extend {
   token = ""
   token secret = ""
   version = "1.0"
   signature method = 'HMAC-SHA1'
   method = 'GET'
-  timestamp = Math: floor (new (Date!): get time? / 1000)
+  timestamp = Math.floor (new (Date ()).get time () / 1000)
   fields = {}
   
-  oauth parameters? =
+  oauth parameters () =
     query fields = {
-      "oauth_consumer_key" = :consumer key
-      "oauth_nonce" = :nonce
-      "oauth_timestamp" = :timestamp
-      "oauth_signature_method" = :signature method
+      "oauth_consumer_key" = self.consumer key
+      "oauth_nonce" = self.nonce
+      "oauth_timestamp" = self.timestamp
+      "oauth_signature_method" = self.signature method
     }
   
-    if (:token)
-      query fields: "oauth_token" = :token
+    if (self.token)
+      query fields."oauth_token" = self.token
 
-    if (:version)
-      query fields: "oauth_version" = :version
+    if (self.version)
+      query fields."oauth_version" = self.version
     
     query fields
   
-  query string fields? =
-    query fields = :oauth parameters?
+  query string fields () =
+    query fields = self.oauth parameters ()
 
-    _: each (_: keys (:fields)) @(field)
-      query fields: (field) = :fields: (field)
+    _.each (_.keys (self.fields)) @(field)
+      query fields.(field) = self.fields.(field)
 
     query fields
 
-  query string? =
-    query arguments = :query string fields?
-    ordered fields = _: keys (query arguments): sort!
-    _: map (ordered fields) @(field name)
-      field name + "=" + :percent encode (query arguments: (field name))
-    : join "&"
+  query string () =
+    query arguments = self.query string fields ()
+    ordered fields = _.keys (query arguments).sort ()
+    _.map (ordered fields) @(field name)
+      field name + "=" + self.percent encode (query arguments.(field name))
+    .join "&"
 
   url encoded (fields) =
-    _: map (_: keys (fields)) @(field name)
-      field name + "=" + encode URI component (fields: (field name))
-    : join '&'
+    _.map (_.keys (fields)) @(field name)
+      field name + "=" + encode URI component (fields.(field name))
+    .join '&'
 
   header encoded (fields) =
-    _: map (_: keys (fields)) @(field name)
-      field name + '="' + encode URI component (fields: (field name)) + '"'
-    : join ', '
+    _.map (_.keys (fields)) @(field name)
+      field name + '="' + encode URI component (fields.(field name)) + '"'
+    .join ', '
 
-  url encoded fields? = :url encoded (:fields)
+  url encoded fields () = self.url encoded (self.fields)
   
-  authorization header? =
-    fields = :oauth parameters?
-    fields: "oauth_signature" = :base64 signature?
-    :header encoded (fields)
+  authorization header () =
+    fields = self.oauth parameters ()
+    fields."oauth_signature" = self.base64 signature ()
+    self.header encoded (fields)
   
-  url and fields? =
-    encoded fields = :url encoded fields?
+  url and fields () =
+    encoded fields = self.url encoded fields ()
     
     if (encoded fields)
-      "#(:url)?#(encoded fields)"
+      "#(self.url)?#(encoded fields)"
     else
-      "#(:url)"
+      "#(self.url)"
 
   parameter encoded (fields) =
-    _: map (fields) @(field)
-      :percent encode (field)
-    : join '&'
+    _.map (fields) @(field)
+      self.percent encode (field)
+    .join '&'
 
-  base string? =
-    :parameter encoded [:method, :url, :query string?]
+  base string () =
+    self.parameter encoded [self.method, self.url, self.query string ()]
 
-  hmac key? =
-    :parameter encoded [:consumer secret, :token secret]
+  hmac key () =
+    self.parameter encoded [self.consumer secret, self.token secret]
   
-  hmac; encoding 'binary' =
+  hmac (encoding: 'binary') =
     if (typeof (process) != 'undefined')
       crypto = require 'crypto'
-      h = crypto: create hmac 'sha1' (:hmac key?)
-      h: update (:base string?)
-      h: digest (encoding)
+      h = crypto.create hmac 'sha1' (self.hmac key ())
+      h.update (self.base string ())
+      h.digest (encoding)
     else
-      binary = Crypto: HMAC (Crypto: SHA1, :base string? , :hmac key?); as bytes
+      binary = Crypto.HMAC (Crypto.SHA1, self.base string () , self.hmac key (), as bytes: true)
     
       if (encoding == 'base64')
-        Crypto: util: bytes to base64 (binary)
+        Crypto.util.bytes to base64 (binary)
       else
         binary
 
-  base64 signature? = :hmac; encoding 'base64'
+  base64 signature () = self.hmac (encoding: 'base64')
 
-  signature? =
-    :percent encode (:base64 signature?)
+  signature () =
+    self.percent encode (self.base64 signature ())
 
   
   
-  curl? =
-    if (:method == "GET")
-      "curl '#(:url)?#(:query string?)&oauth_signature=#(:signature?)'"
-    else if ((:method == 'POST') || (:method == 'PUT'))
-      if (:body)
-        "curl -X #(:method) '#(:url and fields?)' -d '#(:body)' -H 'Authorization: #(:authorization header?)' -H 'Content-Type: #(:body encoding)'"
+  curl () =
+    if (self.method == "GET")
+      "curl '#(self.url)?#(self.query string ())&oauth_signature=#(self.signature ())'"
+    else if ((self.method == 'POST') || (self.method == 'PUT'))
+      if (self.body)
+        "curl -X #(self.method) '#(self.url and fields ())' -d '#(self.body)' -H 'Authorization: #(self.authorization header ())' -H 'Content-Type: #(self.body encoding)'"
       else
-        "curl -X #(:method) '#(:url)' -d '#(:query string?)&oauth_signature=#(:signature?)'"
+        "curl -X #(self.method) '#(self.url)' -d '#(self.query string ())&oauth_signature=#(self.signature ())'"
     else
-      "curl -X DELETE '#(:url)?#(:query string?)&oauth_signature=#(:signature?)'"
+      "curl -X DELETE '#(self.url)?#(self.query string ())&oauth_signature=#(self.signature ())'"
 
   percent encode (s) =
-    encode URI component (s): replace `\*`g '%2A'
+    encode URI component (s).replace r/\*/g '%2A'
   
-  print! =
-    console: log ('query string:', :query string?)
-    console: log ('base string:', :base string?)
-    console: log ('hmac key:', :hmac key?)
-    console: log ('hmac:', :hmac?)
-    console: log ('base64 signature:', :base64 signature?)
-    console: log ('signature:', :signature?)
+  print () =
+    console.log ('query string:', self.query string ())
+    console.log ('base string:', self.base string ())
+    console.log ('hmac key:', self.hmac key ())
+    console.log ('hmac:', self.hmac ())
+    console.log ('base64 signature:', self.base64 signature ())
+    console.log ('signature:', self.signature ())
 } (parameters)
 
-oauth sample! =
+oauth sample () =
   oauth signer {
     url = 'http://photos.example.net/photos'
     consumer secret = "kd94hf93k423kf44"
@@ -131,4 +131,4 @@ oauth sample! =
       file = 'vacation.jpg'
       size = 'original'
     }
-  }: print!
+  }.print ()

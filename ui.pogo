@@ -1,77 +1,77 @@
-oauth parameters! = =>
-  :timestamp for now? =
-    Math: floor ((new (Date!): get time?) / 1000)
+oauth parameters () = =>
+  self.timestamp for now () =
+    Math.floor ((new (Date ()).get time ()) / 1000)
 
-  :parameters = {
-    method = ko: observable 'GET'
-    url = ko: observable ''
-    consumer key = ko: observable ''
-    consumer secret = ko: observable ''
-    token = ko: observable ''
-    token secret = ko: observable ''
-    nonce = ko: observable ''
-    timestamp = ko: observable ''
-    version = ko: observable '1.0'
-    body = ko: observable ''
-    body encoding = ko: observable 'application/json'
+  self.parameters = {
+    method = ko.observable 'GET'
+    url = ko.observable ''
+    consumer key = ko.observable ''
+    consumer secret = ko.observable ''
+    token = ko.observable ''
+    token secret = ko.observable ''
+    nonce = ko.observable ''
+    timestamp = ko.observable ''
+    version = ko.observable '1.0'
+    body = ko.observable ''
+    body encoding = ko.observable 'application/json'
   }
   
-  :signature = {
-    query string = ko: observable ''
-    base string = ko: observable ''
-    hmac key = ko: observable ''
-    base64 signature = ko: observable ''
-    signature = ko: observable ''
-    authorization header = ko: observable ''
-    curl = ko: observable ''
+  self.signature = {
+    query string = ko.observable ''
+    base string = ko.observable ''
+    hmac key = ko.observable ''
+    base64 signature = ko.observable ''
+    signature = ko.observable ''
+    authorization header = ko.observable ''
+    curl = ko.observable ''
   }
   
-  :refresh timestamp! =
-    :parameters: timestamp (:timestamp for now?)
+  self.refresh timestamp () =
+    self.parameters.timestamp (self.timestamp for now ())
   
-  :refresh timestamp!
+  self.refresh timestamp ()
   
-  :new nonce! =
-    :parameters: nonce ((Math: floor(Math: random? * 1000000000)): to string?)
+  self.new nonce () =
+    self.parameters.nonce ((Math.floor(Math.random () * 1000000000)).to string ())
   
-  :new nonce!
+  self.new nonce ()
   
-  :method options = ko: observable array ['GET', 'POST', 'PUT', 'DELETE']
-  :encoding options = ko: observable array ['application/json', 'application/xml']
+  self.method options = ko.observable array ['GET', 'POST', 'PUT', 'DELETE']
+  self.encoding options = ko.observable array ['application/json', 'application/xml']
   
-  :add field! =
-    :fields: push {value = '', name = ''}
+  self.add field () =
+    self.fields.push {value = '', name = ''}
   
-  fields = :fields = ko: observable array []
+  fields = self.fields = ko.observable array []
   
-  :remove field! =
-    fields: remove (this)
+  self.remove field () =
+    fields.remove (this)
 
-  :fields object? =
+  self.fields object () =
     f = {}
-    for each @(field) in (:fields?)
-      f: (field: name) = (field: value)
+    for each @(field) in (self.fields ())
+      f.(field.name) = (field.value)
 
     f
   
-  :sign! =
+  self.sign () =
     oauth parameters = {}
     
-    for @(field) in (:parameters)
-      oauth parameters: (field) = :parameters: (field)?
+    for @(field) in (self.parameters)
+      oauth parameters.(field) = self.parameters.(field) ()
     
-    oauth parameters: fields = :fields object?
+    oauth parameters.fields = self.fields object ()
     
     oauth signature = oauth signer (oauth parameters)
     
-    :signature: query string (oauth signature: query string?)
-    :signature: base string (oauth signature: base string?)
-    :signature: hmac key (oauth signature: hmac key?)
-    :signature: base64 signature (oauth signature: base64 signature?)
-    :signature: signature (oauth signature: signature?)
-    :signature: authorization header (oauth signature: authorization header?)
-    :signature: curl (oauth signature: curl?)
+    self.signature.query string (oauth signature.query string ())
+    self.signature.base string (oauth signature.base string ())
+    self.signature.hmac key (oauth signature.hmac key ())
+    self.signature.base64 signature (oauth signature.base64 signature ())
+    self.signature.signature (oauth signature.signature ())
+    self.signature.authorization header (oauth signature.authorization header ())
+    self.signature.curl (oauth signature.curl ())
     
   undefined
 
-ko: apply bindings (new (oauth parameters))
+ko.apply bindings (new (oauth parameters))

@@ -60,13 +60,16 @@
             return fields.remove(this);
         };
         self.fieldsObject = function() {
-            var self, f, gen1_items, gen2_i, field;
+            var self, f, gen1_items, gen2_i;
             self = this;
             f = {};
             gen1_items = self.fields();
             for (gen2_i = 0; gen2_i < gen1_items.length; gen2_i++) {
-                field = gen1_items[gen2_i];
-                f[field.name] = field.value;
+                (function(gen2_i) {
+                    var field;
+                    field = gen1_items[gen2_i];
+                    f[field.name] = field.value;
+                })(gen2_i);
             }
             return f;
         };
@@ -75,7 +78,9 @@
             self = this;
             oauthParameters = {};
             for (var field in self.parameters) {
-                oauthParameters[field] = self.parameters[field]();
+                (function(field) {
+                    oauthParameters[field] = self.parameters[field]();
+                })(field);
             }
             oauthParameters.fields = self.fieldsObject();
             oauthSignature = oauthSigner(oauthParameters);
