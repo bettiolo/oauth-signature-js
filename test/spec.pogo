@@ -51,7 +51,7 @@ describe 'OAuth'
                     then ()
             
             sign (then) =
-                b.press button 'sign!'
+                b.wait
                     (b.text '#query-string').should.equal (results.query string)
                     (b.text '#base-string').should.equal (results.base string)
                     (b.field '#hmac-key'.value).should.equal (results.hmac key)

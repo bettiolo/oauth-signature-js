@@ -52,15 +52,6 @@
                 return f;
             })
         };
-        self.signature = {
-            queryString: ko.observable(""),
-            baseString: ko.observable(""),
-            hmacKey: ko.observable(""),
-            base64Signature: ko.observable(""),
-            signature: ko.observable(""),
-            authorizationHeader: ko.observable(""),
-            curl: ko.observable("")
-        };
         self.refreshTimestamp = function() {
             var self;
             self = this;
@@ -75,17 +66,31 @@
         self.newNonce();
         self.methodOptions = ko.observableArray([ "GET", "POST", "PUT", "DELETE" ]);
         self.encodingOptions = ko.observableArray([ "application/json", "application/xml" ]);
-        self.sign = function() {
-            var self, oauthSignature;
-            self = this;
-            oauthSignature = oauthSigner(self.parameters);
-            self.signature.queryString(oauthSignature.queryString());
-            self.signature.baseString(oauthSignature.baseString());
-            self.signature.hmacKey(oauthSignature.hmacKey());
-            self.signature.base64Signature(oauthSignature.base64Signature());
-            self.signature.signature(oauthSignature.signature());
-            self.signature.authorizationHeader(oauthSignature.authorizationHeader());
-            return self.signature.curl(oauthSignature.curl());
+        self.oauthSignature = ko.computed(function() {
+            return oauthSigner(self.parameters);
+        });
+        self.signature = {
+            queryString: ko.computed(function() {
+                return self.oauthSignature().queryString();
+            }),
+            baseString: ko.computed(function() {
+                return self.oauthSignature().baseString();
+            }),
+            hmacKey: ko.computed(function() {
+                return self.oauthSignature().hmacKey();
+            }),
+            base64Signature: ko.computed(function() {
+                return self.oauthSignature().base64Signature();
+            }),
+            signature: ko.computed(function() {
+                return self.oauthSignature().signature();
+            }),
+            authorizationHeader: ko.computed(function() {
+                return self.oauthSignature().authorizationHeader();
+            }),
+            curl: ko.computed(function() {
+                return self.oauthSignature().curl();
+            })
         };
         return undefined;
     };

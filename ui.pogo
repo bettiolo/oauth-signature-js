@@ -35,16 +35,6 @@ oauth parameters () = =>
       f
   }
   
-  self.signature = {
-    query string = ko.observable ''
-    base string = ko.observable ''
-    hmac key = ko.observable ''
-    base64 signature = ko.observable ''
-    signature = ko.observable ''
-    authorization header = ko.observable ''
-    curl = ko.observable ''
-  }
-  
   self.refresh timestamp () =
     self.parameters.timestamp (self.timestamp for now ())
   
@@ -58,17 +48,32 @@ oauth parameters () = =>
   self.method options = ko.observable array ['GET', 'POST', 'PUT', 'DELETE']
   self.encoding options = ko.observable array ['application/json', 'application/xml']
   
-  self.sign () =
-    oauth signature = oauth signer (self.parameters)
+  self.oauth signature = ko.computed
+    oauth signer (self.parameters)
+      
+  self.signature = {
+    query string = ko.computed
+      self.oauth signature ().query string ()
+      
+    base string = ko.computed
+      self.oauth signature ().base string ()
+
+    hmac key = ko.computed
+      self.oauth signature ().hmac key ()
+
+    base64 signature = ko.computed
+      self.oauth signature ().base64 signature ()
+
+    signature = ko.computed
+      self.oauth signature ().signature ()
+          
+    authorization header = ko.computed
+      self.oauth signature ().authorization header ()
     
-    self.signature.query string (oauth signature.query string ())
-    self.signature.base string (oauth signature.base string ())
-    self.signature.hmac key (oauth signature.hmac key ())
-    self.signature.base64 signature (oauth signature.base64 signature ())
-    self.signature.signature (oauth signature.signature ())
-    self.signature.authorization header (oauth signature.authorization header ())
-    self.signature.curl (oauth signature.curl ())
-    
+    curl = ko.computed
+      self.oauth signature ().curl ()
+  }
+
   undefined
 
 window.oauth page = new (oauth parameters)

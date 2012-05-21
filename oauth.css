@@ -37,3 +37,7 @@ textarea.curl {
   width: 500px;
   height: 200px;
 }
+div.parameters, div.signature {
+  display: inline-block;
+  vertical-align: top;
+}
