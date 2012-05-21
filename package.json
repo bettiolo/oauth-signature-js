@@ -1,0 +1,21 @@
+{
+  "author": "Tim Macfarlane <timmacfarlane@gmail.com>",
+  "name": "oauth-reference-page",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/7digital/oauth-reference-page.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": "",
+    "zombie": "",
+    "should": "",
+    "express": ""
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
