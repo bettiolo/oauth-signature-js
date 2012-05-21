@@ -3,36 +3,65 @@
     self = this;
     window.oauthSigner = oauthSigner = function(parameters) {
         return _.extend({
-            token: "",
-            tokenSecret: "",
-            version: "1.0",
-            signatureMethod: "HMAC-SHA1",
-            method: "GET",
-            timestamp: Math.floor((new Date).getTime() / 1e3),
-            fields: {},
+            token: function() {
+                var self;
+                self = this;
+                return "";
+            },
+            tokenSecret: function() {
+                var self;
+                self = this;
+                return "";
+            },
+            version: function() {
+                var self;
+                self = this;
+                return "1.0";
+            },
+            signatureMethod: function() {
+                var self;
+                self = this;
+                return "HMAC-SHA1";
+            },
+            method: function() {
+                var self;
+                self = this;
+                return "GET";
+            },
+            timestamp: function() {
+                var self;
+                self = this;
+                return Math.floor((new Date).getTime() / 1e3);
+            },
+            fields: function() {
+                var self;
+                self = this;
+                return {};
+            },
             oauthParameters: function() {
                 var self, queryFields;
                 self = this;
                 queryFields = {
-                    oauth_consumer_key: self.consumerKey,
-                    oauth_nonce: self.nonce,
-                    oauth_timestamp: self.timestamp,
-                    oauth_signature_method: self.signatureMethod
+                    oauth_consumer_key: self.consumerKey(),
+                    oauth_nonce: self.nonce(),
+                    oauth_timestamp: self.timestamp(),
+                    oauth_signature_method: self.signatureMethod()
                 };
-                if (self.token) {
-                    queryFields["oauth_token"] = self.token;
+                if (self.token()) {
+                    queryFields["oauth_token"] = self.token();
                 }
-                if (self.version) {
-                    queryFields["oauth_version"] = self.version;
+                if (self.version()) {
+                    queryFields["oauth_version"] = self.version();
                 }
                 return queryFields;
             },
             queryStringFields: function() {
-                var self, queryFields;
+                var self, queryFields, fields;
                 self = this;
                 queryFields = self.oauthParameters();
-                _.each(_.keys(self.fields), function(field) {
-                    return queryFields[field] = self.fields[field];
+                fields = self.fields();
+                _.each(_.keys(fields), function(field) {
+                    return queryFields[field] = fields[field];
                 });
                 return queryFields;
             },
@@ -62,7 +91,7 @@
             urlEncodedFields: function() {
                 var self;
                 self = this;
-                return self.urlEncoded(self.fields);
+                return self.urlEncoded(self.fields());
             },
             authorizationHeader: function() {
                 var self, fields;
@@ -76,9 +105,9 @@
                 self = this;
                 encodedFields = self.urlEncodedFields();
                 if (encodedFields) {
-                    return self.url + "?" + encodedFields;
+                    return self.url() + "?" + encodedFields;
                 } else {
-                    return self.url;
+                    return self.url();
                 }
             },
             parameterEncoded: function(fields) {
@@ -91,16 +120,16 @@
             baseString: function() {
                 var self;
                 self = this;
-                return self.parameterEncoded([ self.method, self.url, self.queryString() ]);
+                return self.parameterEncoded([ self.method(), self.url(), self.queryString() ]);
             },
             hmacKey: function() {
                 var self;
                 self = this;
-                return self.parameterEncoded([ self.consumerSecret, self.tokenSecret ]);
+                return self.parameterEncoded([ self.consumerSecret(), self.tokenSecret() ]);
             },
             hmac: function(gen1_options) {
                 var encoding, self;
-                encoding = gen1_options && gen1_options.hasOwnProperty("encoding") ? gen1_options.encoding : "binary";
+                encoding = gen1_options && gen1_options.hasOwnProperty("encoding") && gen1_options.encoding !== void 0 ? gen1_options.encoding : "binary";
                 self = this;
                 if (typeof process !== "undefined") {
                     var crypto, h;
@@ -135,16 +164,16 @@
             curl: function() {
                 var self;
                 self = this;
-                if (self.method === "GET") {
-                    return "curl '" + self.url + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
-                } else if (self.method === "POST" || self.method === "PUT") {
-                    if (self.body) {
-                        return "curl -X " + self.method + " '" + self.urlAndFields() + "' -d '" + self.body + "' -H 'Authorization: " + self.authorizationHeader() + "' -H 'Content-Type: " + self.bodyEncoding + "'";
+                if (self.method() === "GET") {
+                    return "curl '" + self.url() + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
+                } else if (self.method() === "POST" || self.method() === "PUT") {
+                    if (self.body()) {
+                        return "curl -X " + self.method() + " '" + self.urlAndFields() + "' -d '" + self.body() + "' -H 'Authorization: " + self.authorizationHeader() + "' -H 'Content-Type: " + self.bodyEncoding() + "'";
                     } else {
-                        return "curl -X " + self.method + " '" + self.url + "' -d '" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
+                        return "curl -X " + self.method() + " '" + self.url() + "' -d '" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
                     }
                 } else {
-                    return "curl -X DELETE '" + self.url + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
+                    return "curl -X DELETE '" + self.url() + "?" + self.queryString() + "&oauth_signature=" + self.signature() + "'";
                 }
             },
             percentEncode: function(s) {
@@ -166,16 +195,48 @@
     };
     oauthSample = function() {
         return oauthSigner({
-            url: "http://photos.example.net/photos",
-            consumerSecret: "kd94hf93k423kf44",
-            token: "nnch734d00sl2jdk",
-            tokenSecret: "pfkkdhi9sl3r4s00",
-            consumerKey: "dpf43f3p2l4k3l03",
-            nonce: "kllo9940pd9333jh",
-            timestamp: 1191242096,
-            fields: {
-                file: "vacation.jpg",
-                size: "original"
+            url: function() {
+                var self;
+                self = this;
+                return "http://photos.example.net/photos";
+            },
+            consumerSecret: function() {
+                var self;
+                self = this;
+                return "kd94hf93k423kf44";
+            },
+            token: function() {
+                var self;
+                self = this;
+                return "nnch734d00sl2jdk";
+            },
+            tokenSecret: function() {
+                var self;
+                self = this;
+                return "pfkkdhi9sl3r4s00";
+            },
+            consumerKey: function() {
+                var self;
+                self = this;
+                return "dpf43f3p2l4k3l03";
+            },
+            nonce: function() {
+                var self;
+                self = this;
+                return "kllo9940pd9333jh";
+            },
+            timestamp: function() {
+                var self;
+                self = this;
+                return 1191242096;
+            },
+            fields: function() {
+                var self;
+                self = this;
+                return {
+                    file: "vacation.jpg",
+                    size: "original"
+                };
             }
         }).print();
     };

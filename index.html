@@ -18,14 +18,14 @@
       <li><label for="nonce">nonce</label><input id="nonce" type='text' data-bind="value: parameters.nonce"> <a href='#' data-bind="click: newNonce">new</a></li>
       <li><label for="timestamp">timestamp</label><input id="timestamp" type='text' data-bind="value: parameters.timestamp"> <a href='#' data-bind="click: refreshTimestamp">refresh</a></li>
       <li><label for="fields">fields</label>
-      <div id="fields" data-bind="foreach: fields" class="fields">
+      <div id="fields" data-bind="foreach: parameters.fieldsArray" class="fields">
         <div>
         <label>name</label> <input class="field-name" type='text' data-bind="value: name">
         <label>value</label> <input class="field-value" type='text' data-bind="value: value">
-        <a href='#' data-bind="click: $parent.removeField">remove</a>
+        <a href='#' data-bind="click: $parent.parameters.removeField">remove</a>
         </div>
       </div>
-      <input type="button" value="add" data-bind="click: addField"></li>
+      <input type="button" value="add" data-bind="click: parameters.addField"></li>
     
       <li>
       <label for="body">body (optional)</label><textarea id="body" class="body" data-bind="value: parameters.body"></textarea></li>

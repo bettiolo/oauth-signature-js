@@ -2,13 +2,14 @@
     var self, oauthParameters;
     self = this;
     oauthParameters = function() {
-        var self, fields;
+        var self, fieldsArray;
         self = this;
         self.timestampForNow = function() {
             var self;
             self = this;
             return Math.floor((new Date).getTime() / 1e3);
         };
+        fieldsArray = ko.observableArray([]);
         self.parameters = {
             method: ko.observable("GET"),
             url: ko.observable(""),
@@ -20,7 +21,36 @@
             timestamp: ko.observable(""),
             version: ko.observable("1.0"),
             body: ko.observable(""),
-            bodyEncoding: ko.observable("application/json")
+            bodyEncoding: ko.observable("application/json"),
+            fieldsArray: ko.observableArray(),
+            fields: ko.observable,
+            addField: function() {
+                var self;
+                self = this;
+                return fieldsArray.push({
+                    value: ko.observable(""),
+                    name: ko.observable("")
+                });
+            },
+            fieldsArray: fieldsArray,
+            removeField: function() {
+                var self;
+                self = this;
+                return fieldsArray.remove(this);
+            },
+            fields: ko.computed(function() {
+                var f, gen1_items, gen2_i;
+                f = {};
+                gen1_items = fieldsArray();
+                for (gen2_i = 0; gen2_i < gen1_items.length; gen2_i++) {
+                    (function(gen2_i) {
+                        var field;
+                        field = gen1_items[gen2_i];
+                        f[field.name()] = field.value();
+                    })(gen2_i);
+                }
+                return f;
+            })
         };
         self.signature = {
             queryString: ko.observable(""),
@@ -45,45 +75,10 @@
         self.newNonce();
         self.methodOptions = ko.observableArray([ "GET", "POST", "PUT", "DELETE" ]);
         self.encodingOptions = ko.observableArray([ "application/json", "application/xml" ]);
-        self.addField = function() {
-            var self;
-            self = this;
-            return self.fields.push({
-                value: "",
-                name: ""
-            });
-        };
-        fields = self.fields = ko.observableArray([]);
-        self.removeField = function() {
-            var self;
-            self = this;
-            return fields.remove(this);
-        };
-        self.fieldsObject = function() {
-            var self, f, gen1_items, gen2_i;
-            self = this;
-            f = {};
-            gen1_items = self.fields();
-            for (gen2_i = 0; gen2_i < gen1_items.length; gen2_i++) {
-                (function(gen2_i) {
-                    var field;
-                    field = gen1_items[gen2_i];
-                    f[field.name] = field.value;
-                })(gen2_i);
-            }
-            return f;
-        };
         self.sign = function() {
-            var self, field, oauthSignature;
+            var self, oauthSignature;
             self = this;
-            oauthParameters = {};
-            for (var field in self.parameters) {
-                (function(field) {
-                    oauthParameters[field] = self.parameters[field]();
-                })(field);
-            }
-            oauthParameters.fields = self.fieldsObject();
-            oauthSignature = oauthSigner(oauthParameters);
+            oauthSignature = oauthSigner(self.parameters);
             self.signature.queryString(oauthSignature.queryString());
             self.signature.baseString(oauthSignature.baseString());
             self.signature.hmacKey(oauthSignature.hmacKey());
@@ -94,5 +89,6 @@
         };
         return undefined;
     };
-    ko.applyBindings(new oauthParameters);
+    window.oauthPage = new oauthParameters;
+    ko.applyBindings(oauthPage);
 })).call(this);

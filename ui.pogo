@@ -2,6 +2,8 @@ oauth parameters () = =>
   self.timestamp for now () =
     Math.floor ((new (Date ()).get time ()) / 1000)
 
+  fields array = ko.observable array []
+
   self.parameters = {
     method = ko.observable 'GET'
     url = ko.observable ''
@@ -14,6 +16,23 @@ oauth parameters () = =>
     version = ko.observable '1.0'
     body = ko.observable ''
     body encoding = ko.observable 'application/json'
+    fields array = ko.observable array ()
+    fields = ko.observable
+  
+    add field () =
+      fields array.push {value = ko.observable '', name = ko.observable ''}
+  
+    fields array = fields array
+  
+    remove field () =
+      fields array.remove (this)
+
+    fields = ko.computed
+      f = {}
+      for each @(field) in (fields array ())
+        f.(field.name ()) = field.value ()
+
+      f
   }
   
   self.signature = {
@@ -39,30 +58,8 @@ oauth parameters () = =>
   self.method options = ko.observable array ['GET', 'POST', 'PUT', 'DELETE']
   self.encoding options = ko.observable array ['application/json', 'application/xml']
   
-  self.add field () =
-    self.fields.push {value = '', name = ''}
-  
-  fields = self.fields = ko.observable array []
-  
-  self.remove field () =
-    fields.remove (this)
-
-  self.fields object () =
-    f = {}
-    for each @(field) in (self.fields ())
-      f.(field.name) = (field.value)
-
-    f
-  
   self.sign () =
-    oauth parameters = {}
-    
-    for @(field) in (self.parameters)
-      oauth parameters.(field) = self.parameters.(field) ()
-    
-    oauth parameters.fields = self.fields object ()
-    
-    oauth signature = oauth signer (oauth parameters)
+    oauth signature = oauth signer (self.parameters)
     
     self.signature.query string (oauth signature.query string ())
     self.signature.base string (oauth signature.base string ())
@@ -74,4 +71,6 @@ oauth parameters () = =>
     
   undefined
 
-ko.apply bindings (new (oauth parameters))
+window.oauth page = new (oauth parameters)
+
+ko.apply bindings (oauth page)
