@@ -1,3 +1,12 @@
+form {
+  text-align: center;
+}
+div.parameters, div.signature {
+  text-align: left;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 20px;
+}
 input[type=text] {
   width: 200px;
 }
@@ -17,6 +26,7 @@ ul > li > label {
 }
 ul {
   list-style: none;
+  padding-left: 0;
 }
 li {
   margin-bottom: 5pt;
@@ -36,8 +46,4 @@ textarea {
 textarea.curl {
   width: 500px;
   height: 200px;
-}
-div.parameters, div.signature {
-  display: inline-block;
-  vertical-align: top;
 }
