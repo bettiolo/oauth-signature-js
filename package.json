@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "mocha": "",
-    "zombie": "",
+    "zombie": "0.13.0",
     "should": "",
     "express": ""
   },
