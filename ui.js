@@ -88,6 +88,12 @@
             authorizationHeader: ko.computed(function() {
                 return self.oauthSignature().authorizationHeader();
             }),
+            signedUrl: ko.computed(function() {
+                return self.oauthSignature().signedUrl();
+            }),
+            prettySignedUrl: ko.computed(function() {
+                return self.parameters.method() + " " + self.parameters.url() + "?...";
+            }),
             curl: ko.computed(function() {
                 return self.oauthSignature().curl();
             })

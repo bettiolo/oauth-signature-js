@@ -70,6 +70,12 @@ oauth parameters () = =>
     authorization header = ko.computed
       self.oauth signature ().authorization header ()
     
+    signed url = ko.computed
+      self.oauth signature ().signed url ()
+    
+    pretty signed url = ko.computed
+      self.parameters.method () + " " + self.parameters.url () + "?..."
+    
     curl = ko.computed
       self.oauth signature ().curl ()
   }

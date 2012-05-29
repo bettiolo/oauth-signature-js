@@ -1,5 +1,5 @@
 ((function() {
-    var self, oauthSigner, oauthSample;
+    var self, oauthSigner;
     self = this;
     window.oauthSigner = oauthSigner = function(parameters) {
         return _.extend({
@@ -161,6 +161,11 @@
                 self = this;
                 return self.percentEncode(self.base64Signature());
             },
+            signedUrl: function() {
+                var self;
+                self = this;
+                return self.url() + "?" + self.queryString() + "&oauth_signature=" + self.signature();
+            },
             curl: function() {
                 var self;
                 self = this;
@@ -180,64 +185,7 @@
                 var self;
                 self = this;
                 return encodeURIComponent(s).replace(/\*/g, "%2A");
-            },
-            print: function() {
-                var self;
-                self = this;
-                console.log("query string:", self.queryString());
-                console.log("base string:", self.baseString());
-                console.log("hmac key:", self.hmacKey());
-                console.log("hmac:", self.hmac());
-                console.log("base64 signature:", self.base64Signature());
-                return console.log("signature:", self.signature());
             }
         }, parameters);
-    };
-    oauthSample = function() {
-        return oauthSigner({
-            url: function() {
-                var self;
-                self = this;
-                return "http://photos.example.net/photos";
-            },
-            consumerSecret: function() {
-                var self;
-                self = this;
-                return "kd94hf93k423kf44";
-            },
-            token: function() {
-                var self;
-                self = this;
-                return "nnch734d00sl2jdk";
-            },
-            tokenSecret: function() {
-                var self;
-                self = this;
-                return "pfkkdhi9sl3r4s00";
-            },
-            consumerKey: function() {
-                var self;
-                self = this;
-                return "dpf43f3p2l4k3l03";
-            },
-            nonce: function() {
-                var self;
-                self = this;
-                return "kllo9940pd9333jh";
-            },
-            timestamp: function() {
-                var self;
-                self = this;
-                return 1191242096;
-            },
-            fields: function() {
-                var self;
-                self = this;
-                return {
-                    file: "vacation.jpg",
-                    size: "original"
-                };
-            }
-        }).print();
     };
 })).call(this);

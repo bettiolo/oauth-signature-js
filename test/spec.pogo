@@ -23,7 +23,7 @@ object (o) as array =
 describe 'OAuth'
     b = nil
 
-    before
+    before each
         b = new (browser)
 
     oauth parameters (params) should produce (results) (done) =
@@ -72,6 +72,7 @@ describe 'OAuth'
                     then ()
 
             add fields (object (params.fields) as array)
+                //console.log (b.html 'body')
                 sign (done)
 
     it 'produces the OAuth 1.0a reference sample' @(done)

@@ -50,13 +50,14 @@
           <li><label for="signature">signature</label><input id="signature" class="large" type='text' readonly data-bind="value: signature.signature"></li>
           <li><label for="authorization-header">authorization header</label><textarea id="authorization-header" readonly data-bind="value: signature.authorizationHeader"></textarea></li>
 
+          <li><a target="signed_request" data-bind="attr: {href: signature.signedUrl, title: 'hi'}, text: signature.prettySignedUrl"></a></li>
           <li><label for="curl">curl</label><textarea id="curl" class='curl' readonly data-bind="text: signature.curl"></textarea></li>
         </ul>
       </div>
     </form>
     
     <script src="underscore-min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="http://crypto-js.googlecode.com/files/2.5.3-crypto-sha1-hmac.js"></script>
+    <script type="text/javascript" src="//crypto-js.googlecode.com/files/2.5.3-crypto-sha1-hmac.js"></script>
     <script type="text/javascript" src="knockout-2.0.0.js"></script>
 
     <script src="oauth.js" type="text/javascript"></script>

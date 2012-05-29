@@ -94,8 +94,9 @@ window.oauth signer = oauth signer (parameters) = _.extend {
 
   signature () =
     self.percent encode (self.base64 signature ())
-
   
+  signed url () =
+    "#(self.url ())?#(self.query string ())&oauth_signature=#(self.signature ())"
   
   curl () =
     if (self.method () == "GET")
@@ -110,27 +111,4 @@ window.oauth signer = oauth signer (parameters) = _.extend {
 
   percent encode (s) =
     encode URI component (s).replace r/\*/g '%2A'
-  
-  print () =
-    console.log ('query string:', self.query string ())
-    console.log ('base string:', self.base string ())
-    console.log ('hmac key:', self.hmac key ())
-    console.log ('hmac:', self.hmac ())
-    console.log ('base64 signature:', self.base64 signature ())
-    console.log ('signature:', self.signature ())
 } (parameters)
-
-oauth sample () =
-  oauth signer {
-    url () = 'http://photos.example.net/photos'
-    consumer secret () = "kd94hf93k423kf44"
-    token () = "nnch734d00sl2jdk"
-    token secret () = "pfkkdhi9sl3r4s00"
-    consumer key () = "dpf43f3p2l4k3l03"
-    nonce () = 'kllo9940pd9333jh'
-    timestamp () = 1191242096
-    fields () = {
-      file = 'vacation.jpg'
-      size = 'original'
-    }
-  }.print ()
