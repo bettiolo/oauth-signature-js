@@ -138,14 +138,12 @@
                     h.update(self.baseString());
                     return h.digest(encoding);
                 } else {
-                    var binary;
-                    binary = Crypto.HMAC(Crypto.SHA1, self.baseString(), self.hmacKey(), {
-                        asBytes: true
-                    });
+                    var binaryHash;
+                    binaryHash = CryptoJS.HmacSHA1(self.baseString(), self.hmacKey());
                     if (encoding === "base64") {
-                        return Crypto.util.bytesToBase64(binary);
+                        return binaryHash.toString(CryptoJS.enc.Base64);
                     } else {
-                        return binary;
+                        return binaryHash;
                     }
                 }
             },

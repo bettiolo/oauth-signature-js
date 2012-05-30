@@ -83,12 +83,12 @@ window.oauth signer = oauth signer (parameters) = _.extend {
       h.update (self.base string ())
       h.digest (encoding)
     else
-      binary = Crypto.HMAC (Crypto.SHA1, self.base string () , self.hmac key (), as bytes: true)
+      binary hash = CryptoJS.HmacSHA1 (self.base string () , self.hmac key ())
     
       if (encoding == 'base64')
-        Crypto.util.bytes to base64 (binary)
+        binary hash.to string (CryptoJS.enc.Base64)
       else
-        binary
+        binary hash
 
   base64 signature () = self.hmac (encoding: 'base64')
 

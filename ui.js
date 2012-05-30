@@ -43,11 +43,15 @@
                 f = {};
                 gen1_items = fieldsArray();
                 for (gen2_i = 0; gen2_i < gen1_items.length; gen2_i++) {
-                    (function(gen2_i) {
+                    var gen3_forResult;
+                    gen3_forResult = void 0;
+                    if (function(gen2_i) {
                         var field;
                         field = gen1_items[gen2_i];
                         f[field.name()] = field.value();
-                    })(gen2_i);
+                    }(gen2_i)) {
+                        return gen3_forResult;
+                    }
                 }
                 return f;
             })
