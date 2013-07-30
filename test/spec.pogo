@@ -44,13 +44,10 @@ describe 'OAuth'
                 b.select 'body encoding' (params.body encoding)
             
             add field (name, value, then) =
-                b.press button '#add-parameter'
-                    b.wait
-                        then
-                            b.fill '.field-name:last' (name)
-                            b.fill '.field-value:last' (value)
-                        
-                            then ()
+                b.press button 'add'
+                    b.fill '.field-name:last' (name)
+                    b.fill '.field-value:last' (value)
+                    then ()
             
             sign (then) =
                 b.wait
@@ -67,9 +64,10 @@ describe 'OAuth'
             add fields (fields, then) =
                 if (fields.length > 0)
                     field = fields.pop ()
-                
-                    add field (field.name, field.value)
-                        add fields (fields, then)
+                    b.wait 
+                        then
+                            add field (field.name, field.value)
+                                add fields (fields, then)
                 else
                     then ()
 
