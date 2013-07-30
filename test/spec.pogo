@@ -24,7 +24,7 @@ describe 'OAuth'
     b = nil
 
     before each
-        b = new (browser)
+        b := new (browser)
 
     oauth parameters (params) should produce (results) (done) =
         b.visit "http://localhost:#(port)/"
@@ -44,7 +44,7 @@ describe 'OAuth'
                 b.select 'body encoding' (params.body encoding)
             
             add field (name, value, then) =
-                b.press button 'add'
+                b.press button '#add-parameter'
                     b.fill '.field-name:last' (name)
                     b.fill '.field-value:last' (value)
                     
