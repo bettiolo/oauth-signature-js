@@ -45,10 +45,12 @@ describe 'OAuth'
             
             add field (name, value, then) =
                 b.press button '#add-parameter'
-                    b.fill '.field-name:last' (name)
-                    b.fill '.field-value:last' (value)
-                    
-                    then ()
+                    b.wait
+                        then
+                            b.fill '.field-name:last' (name)
+                            b.fill '.field-value:last' (value)
+                        
+                            then ()
             
             sign (then) =
                 b.wait
