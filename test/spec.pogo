@@ -24,7 +24,7 @@ describe 'OAuth'
     b = nil
 
     before each
-        b := new (browser)      
+        b := new (browser)
 
     oauth parameters (params) should produce (results) (done) =
         b.visit "http://localhost:#(port)/"
