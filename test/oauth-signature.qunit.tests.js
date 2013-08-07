@@ -1,6 +1,8 @@
 module('Oauth Signature');
 test('Signature base string generator', function() {
-    var signatureBaseStringGenerator = new SignatureBaseStringGenerator();
+    var signatureBaseString = new SignatureBaseString();
 
-    equal(signatureBaseStringGenerator.get(), 'OK', 'The get method returns OK');
+
+    equal(signatureBaseString.generate(), 'OK', 'The get method returns OK');
+
 });

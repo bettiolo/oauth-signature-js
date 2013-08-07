@@ -1,14 +1,14 @@
 // Signature Base http://oauth.net/core/1.0/#sig_base_example
 
-var SignatureBaseStringGenerator = (function () {
+var SignatureBaseString = (function () {
     "use strict";
-    function SignatureBaseStringGenerator() {
+    function SignatureBaseString() {
 
     };
 
-    SignatureBaseStringGenerator.prototype.get = function() {
+    SignatureBaseString.prototype.generate = function() {
         return 'OK';
     };
 
-    return SignatureBaseStringGenerator;
+    return SignatureBaseString;
 })();

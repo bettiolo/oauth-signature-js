@@ -1,7 +1,7 @@
 describe("Signature base string generator tests", function() {
-    var signatureBaseStringGenerator = new SignatureBaseStringGenerator();
+    var signatureBaseString = new SignatureBaseString();
 
     it("should return OK when getting the base string", function() {
-        expect(signatureBaseStringGenerator.get()).toBe('OK');
+        expect(signatureBaseString.generate()).toBe('OK');
     });
 });
