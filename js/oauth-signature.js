@@ -14,9 +14,15 @@ var SignatureBaseString = (function () {
     };
 
     SignatureBaseString.prototype._normalizeRequestUrl = function () {
-        // HTTP://Example.com:80/resource?id=123
+        // HTTP://Example.COM:80/resource?id=123
         // http://example.com/resource
-
+        if (!this._requestUrl) {
+            return '';
+        }
+        var scheme = url('protocol', this._requestUrl);
+        var authority = url('hostname', this._requestUrl);
+        var path = url('path', this._requestUrl);
+        this._requestUrl = scheme.toLowerCase() + '://' + authority.toLowerCase() + path;
     };
 
     // lexicographical byte value ordering by name and value
