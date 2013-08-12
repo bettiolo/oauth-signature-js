@@ -26,9 +26,9 @@ test('The resource url should be included in the second element after the http m
 		'The default http port (80) MUST be excluded');
     equal(new SignatureBaseString('', 'https://example.org:443').generate(), '&https://example.org&',
         'The default https port (443) MUST be excluded');
-    equal(new SignatureBaseString('', 'http://example.org:8080').generate(), '&http://example.org&',
+    equal(new SignatureBaseString('', 'http://example.org:8080').generate(), '&http://example.org:8080&',
         'The non default http port MUST be included');
-    equal(new SignatureBaseString('', 'https://example.org:8080').generate(), '&https://example.org&',
+    equal(new SignatureBaseString('', 'https://example.org:8080').generate(), '&https://example.org:8080&',
         'The non default https port MUST be included');
     equal(new SignatureBaseString('GET', 'http://example.org/?foo=bar').generate(), 'GET&http://example.org/&',
         'The query string should not be included');

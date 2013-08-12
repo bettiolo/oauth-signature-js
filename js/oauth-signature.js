@@ -63,10 +63,21 @@ var SignatureBaseString = (function () {
         if (!this._requestUrl) {
             return '';
         }
-        var scheme = url('protocol', this._requestUrl);
-        var authority = url('hostname', this._requestUrl);
+        var scheme = url('protocol', this._requestUrl).toLowerCase();
+        var authority = url('hostname', this._requestUrl).toLocaleLowerCase();
+	    var port = url('port', this._requestUrl);
+	    if (scheme) {
+		    if ((port == 80 && scheme == 'http')
+			    || (port == 443 && scheme == 'https')) {
+			    port = '';
+		    }
+	    }
         var path = url('path', this._requestUrl);
-        this._requestUrl = scheme.toLowerCase() + '://' + authority.toLowerCase() + path;
+        this._requestUrl =
+	        scheme
+            + '://' + authority
+            + (port ? ':' + port : '')
+            + path;
     };
 
     SignatureBaseString.prototype._sortParameters = function () {
