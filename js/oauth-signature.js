@@ -9,7 +9,7 @@ var SignatureBaseString = (function () {
 	    this._loadParameters(parameters);
 	    this._sortedKeys = [];
 	    this._concatenatedParameters = '';
-    };
+    }
 
 	SignatureBaseString.prototype._loadParameters = function (parameters) {
 		if (parameters instanceof Array) {
@@ -46,8 +46,6 @@ var SignatureBaseString = (function () {
 		}
 	};
 
-
-
 	SignatureBaseString.prototype._addParameter = function (key, value) {
 		if (!this._parameters[key]) {
 			this._parameters[key] = [];
@@ -60,22 +58,24 @@ var SignatureBaseString = (function () {
     };
 
     SignatureBaseString.prototype._normalizeRequestUrl = function () {
+	    // The following is to prevent js-url from loading the window.location
         if (!this._requestUrl) {
             return '';
         }
-        var scheme = url('protocol', this._requestUrl).toLowerCase();
-        var authority = url('hostname', this._requestUrl).toLocaleLowerCase();
-	    var port = url('port', this._requestUrl);
+        var scheme = url('protocol', this._requestUrl).toLowerCase(),
+            authority = url('hostname', this._requestUrl).toLocaleLowerCase(),
+		    port = url('port', this._requestUrl),
+	        path = url('path', this._requestUrl);
+
 	    if (scheme) {
 		    if ((port == 80 && scheme == 'http')
 			    || (port == 443 && scheme == 'https')) {
 			    port = '';
 		    }
 	    }
-        var path = url('path', this._requestUrl);
         this._requestUrl =
-	        scheme
-            + '://' + authority
+	        scheme + '://'
+		    + authority
             + (port ? ':' + port : '')
             + path;
     };
