@@ -13,7 +13,7 @@ test('It should start with an uppercase http method, followed by two ampersands'
 	equal(new SignatureBaseString(undefined).generate(), '&&',
 		'The http method shouldn\'t be included if it is undefined');
 });
-test('The resource url should be included in the second segment after the http method and should be suffixed by an ampersand', function () {
+test('The resource url should be included in the second element after the http method and should be suffixed by an ampersand', function () {
 	equal(new SignatureBaseString('GET', 'http://example.co.uk').generate(), 'GET&http://example.co.uk&',
 		'The http method should be the first component of the url');
 	equal(new SignatureBaseString('', 'http://EXAMPLE.co.UK/endpoint').generate(), '&http://example.co.uk/endpoint&',
@@ -34,4 +34,18 @@ test('The resource url should be included in the second segment after the http m
         'The query string should not be included');
     equal(new SignatureBaseString('GET', 'http://example.org/#anchor').generate(), 'GET&http://example.org/&',
         'The anchor should not be included');
+});
+test('The normalized request parameters should be the last element', function () {
+	equal(new SignatureBaseString('', '', { foo : 'bar' }).generate(), '&&foo=bar',
+		'The parameter should be appended');
+	equal(new SignatureBaseString('', '', { foo : 'bar', baz : 'qux' }).generate(), '&&baz=qux&foo=bar',
+		'The parameters specified with object initializer should be ordered alphabetically');
+	equal(new SignatureBaseString('', '', [{ foo : 'bar' }, { baz : 'qux' }]).generate(), '&&baz=qux&foo=bar',
+		'The parameter specified with an array of objects should be ordered alphabetically');
+	equal(new SignatureBaseString('', '', [{ foo : 'qux' }, { foo : 'bar'}, {foo : 'baz' }, { a : 'b' }]).generate(), '&&a=b&foo=bar&foo=baz&foo=qux',
+		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
+	equal(new SignatureBaseString('', '', [{ foo : [ 'qux', 'bar', 'baz' ]}, { a : 'b' }]).generate(), '&&a=b&foo=bar&foo=baz&foo=qux',
+		'The parameter specified with an array of objects with an array of values for the same key should be ordered alphabetically by value');
+	equal(new SignatureBaseString('', '', { foo : [ 'qux', 'bar', 'baz'], a : 'b' }).generate(), '&&a=b&foo=bar&foo=baz&foo=qux',
+		'The array of values for a single key should be ordered alphabetically by value');
 });

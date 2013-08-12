@@ -5,17 +5,61 @@ var SignatureBaseString = (function () {
     function SignatureBaseString(httpMethod, requestUrl, parameters) {
         this._httpMethod = httpMethod || '';
         this._requestUrl = requestUrl || '';
-        this._parameters = parameters;
+	    this._parameters = {}; // Format: { 'key': ['value 1', 'value 2'] };
+	    this._loadParameters(parameters);
+	    this._sortedKeys = [];
+	    this._concatenatedParameters = '';
     };
 
+	SignatureBaseString.prototype._loadParameters = function (parameters) {
+		if (parameters instanceof Array) {
+			this._loadParametersFromArray(parameters);
+			return;
+		}
+		if (typeof parameters === 'object') {
+			this._loadParametersFromObject(parameters);
+		}
+	};
+
+	SignatureBaseString.prototype._loadParametersFromArray = function (parameters) {
+		var i;
+		for (i = 0; i < parameters.length; i++) {
+			this._loadParametersFromObject(parameters[i]);
+		}
+	};
+
+	SignatureBaseString.prototype._loadParametersFromObject = function (parameters) {
+		var key,
+			value,
+			i;
+		for (key in parameters) {
+			if (parameters.hasOwnProperty(key)) {
+				value = parameters[key];
+				if (value instanceof Array) {
+					for (i = 0; i < value.length; i++) {
+						this._addParameter(key, value[i]);
+					}
+				} else {
+					this._addParameter(key, value);
+				}
+			}
+		}
+	};
+
+
+
+	SignatureBaseString.prototype._addParameter = function (key, value) {
+		if (!this._parameters[key]) {
+			this._parameters[key] = [];
+		}
+		this._parameters[key].push(value);
+	}
+
     SignatureBaseString.prototype._normalizeHttpMethod = function () {
-        // make uppercase
         this._httpMethod = this._httpMethod.toUpperCase();
     };
 
     SignatureBaseString.prototype._normalizeRequestUrl = function () {
-        // HTTP://Example.COM:80/resource?id=123
-        // http://example.com/resource
         if (!this._requestUrl) {
             return '';
         }
@@ -25,9 +69,13 @@ var SignatureBaseString = (function () {
         this._requestUrl = scheme.toLowerCase() + '://' + authority.toLowerCase() + path;
     };
 
-    // lexicographical byte value ordering by name and value
     SignatureBaseString.prototype._sortParameters = function () {
-
+	    var key;
+	    this._sortedKeys = [];
+	    for (key in this._parameters) {
+		    this._sortedKeys.push(key);
+	    }
+	    this._sortedKeys.sort();
     };
 
     SignatureBaseString.prototype._normalizeParameters = function () {
@@ -35,13 +83,27 @@ var SignatureBaseString = (function () {
     };
 
     SignatureBaseString.prototype._concatenateParameters = function() {
-        return '';
+	    var i;
+	    this._concatenatedParameters = this._sortedKeys.length == 0 ? '&' : '';
+	    for (i = 0; i < this._sortedKeys.length; i++) {
+		    this._concatenatedParameters += this._getConcatenatedParameter(this._sortedKeys[i]);
+	    }
     };
+
+	SignatureBaseString.prototype._getConcatenatedParameter = function(key) {
+		var i,
+			parameters = this._parameters[key],
+			concatenatedParameters = '';
+		parameters.sort();
+		for (i = 0; i < parameters.length; i++) {
+			concatenatedParameters += '&' + key + '=' + parameters[i];
+		}
+		return concatenatedParameters;
+	};
 
     SignatureBaseString.prototype._concatenateRequestElements = function () {
         // HTTP_METHOD + request url + parameters
-        var concatenatedParameters = this._concatenateParameters();
-        return this._httpMethod + '&' + this._requestUrl + '&' + concatenatedParameters;
+        return this._httpMethod + '&' + this._requestUrl + this._concatenatedParameters;
     };
 
     SignatureBaseString.prototype.generate = function() {
@@ -49,6 +111,7 @@ var SignatureBaseString = (function () {
         this._normalizeRequestUrl();
         this._sortParameters();
         this._normalizeParameters();
+	    this._concatenateParameters();
         return this._concatenateRequestElements();
     };
 
