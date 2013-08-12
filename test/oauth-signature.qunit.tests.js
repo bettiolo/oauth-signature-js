@@ -34,6 +34,13 @@ test('The resource url should be included in the second element after the http m
         'The query string should not be included');
     equal(new SignatureBaseString('GET', 'http://example.org/#anchor').generate(), 'GET&http://example.org/&',
         'The anchor should not be included');
+	equal(new SignatureBaseString('', '').generate(), '&&',
+		'The resource url should not be included if it is empty');
+	equal(new SignatureBaseString('', null).generate(), '&&',
+		'The resource url should not be included if it is null');
+	equal(new SignatureBaseString('', undefined).generate(), '&&',
+		'The resource url should not be included if it is undefined');
+
 });
 test('The normalized request parameters should be the last element', function () {
 	equal(new SignatureBaseString('', '', { foo : 'bar' }).generate(), '&&foo=bar',
@@ -48,4 +55,10 @@ test('The normalized request parameters should be the last element', function ()
 		'The parameter specified with an array of objects with an array of values for the same key should be ordered alphabetically by value');
 	equal(new SignatureBaseString('', '', { foo : [ 'qux', 'bar', 'baz'], a : 'b' }).generate(), '&&a=b&foo=bar&foo=baz&foo=qux',
 		'The array of values for a single key should be ordered alphabetically by value');
+	equal(new SignatureBaseString('', '', '').generate(), '&&',
+		'The request parameters should not be included if it is empty');
+	equal(new SignatureBaseString('', '', null).generate(), '&&',
+		'The request parameters should not be included if it is null');
+	equal(new SignatureBaseString('', '', undefined).generate(), '&&',
+		'The request parameters should not be included if it is undefined');
 });
