@@ -66,15 +66,16 @@ var SignatureBaseString = (function () {
             authority = url('hostname', this._requestUrl).toLocaleLowerCase(),
 		    port = url('port', this._requestUrl),
 	        path = url('path', this._requestUrl);
-
-	    if (scheme) {
-		    if ((port == 80 && scheme == 'http')
-			    || (port == 443 && scheme == 'https')) {
+	    if (this._requestUrl.toLowerCase().indexOf(scheme) != 0) {
+		    scheme = '';
+	    }
+	    if ((port == 80 && (scheme == 'http' || !scheme))
+		    || (port == 443 && scheme == 'https'))
+	    {
 			    port = '';
-		    }
 	    }
         this._requestUrl =
-	        scheme + '://'
+	        (scheme ? scheme + '://' : '')
 		    + authority
             + (port ? ':' + port : '')
             + path;

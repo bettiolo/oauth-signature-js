@@ -40,7 +40,12 @@ test('The resource url should be included in the second element after the http m
 		'The resource url should not be included if it is null');
 	equal(new SignatureBaseString('', undefined).generate(), '&&',
 		'The resource url should not be included if it is undefined');
-
+	equal(new SignatureBaseString('', 'example.org').generate(), '&example.org&',
+		'[Arbitrary] The URL scheme will not be added automatically');
+	equal(new SignatureBaseString('', 'example.org:100').generate(), '&example.org:100&',
+		'[Arbitrary] The port will not be stripped if the scheme is missing');
+	equal(new SignatureBaseString('', 'example.org:80').generate(), '&example.org&',
+		'[Arbitrary] The default http port will be stripped if the scheme is missing');
 });
 test('The normalized request parameters should be the last element', function () {
 	equal(new SignatureBaseString('', '', { foo : 'bar' }).generate(), '&&foo=bar',
