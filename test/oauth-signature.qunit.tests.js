@@ -67,3 +67,18 @@ test('The normalized request parameters should be the last element', function ()
 	equal(new SignatureBaseString('', '', undefined).generate(), '&&',
 		'The request parameters should not be included if it is undefined');
 });
+test('The value should be encoded following the RFC3986', function () {
+	expect(0);
+//	var unreservedCharacters = '';
+//	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
+//		'Characters in the unreserved character set MUST NOT be encoded');
+//	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
+//		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
+//	equal(new OAuthParameterEncoder().encode(''), '',
+//		'Characters not in the unreserved character set MUST be encoded');
+});
+test('The value should be encoded following the RFC3629', function () {
+	expect(0);
+//	equal(new OAuthParameterEncoder().encode(''), '',
+//		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
+});

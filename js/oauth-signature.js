@@ -142,16 +142,18 @@ var OAuthParameterEncoder = (function () {
 
     }
 
-    OAuthParameterEncoder.property = {
+    OAuthParameterEncoder.prototype = {
 
-        encode : function (value) {
-            return value;
+        encode : function (decoded) {
+            return decoded;
         },
 
-        decode : function (value) {
-            return value;
+        decode : function (encoded) {
+            return encoded;
         }
 
     };
+
+	return OAuthParameterEncoder;
 
 })();
