@@ -1,4 +1,4 @@
-module('Oauth Signature Base String');
+module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
 		'The component separator (&) should be included for omitted elements');
@@ -67,6 +67,7 @@ test('The normalized request parameters should be the last element', function ()
 	equal(new SignatureBaseString('', '', undefined).generate(), '&&',
 		'The request parameters should not be included if it is undefined');
 });
+module('OAuth Encoding');
 test('The value should be encoded following the RFC3986', function () {
 	var i,
 		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
@@ -89,6 +90,12 @@ test('The value should be encoded following the RFC3986', function () {
 	}
 	equal(new OAuthParameterEncoder().encode('%'), '%25',
 		'Percent character must be encoded');
+	equal(new OAuthParameterEncoder().encode(), '',
+		'Empty value should return empty string');
+	equal(new OAuthParameterEncoder().encode(null), '',
+		'Null value should return empty string');
+	equal(new OAuthParameterEncoder().encode(undefined), '',
+		'Undefined value should return empty string');
 });
 test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
 	equal(new OAuthParameterEncoder().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
@@ -119,11 +126,16 @@ test('The value should be decoded following the RFC3986', function () {
 		'Encoded percent character must be decoded');
 	equal(new OAuthParameterEncoder().decode('%31%32%33%41%42%43'), '123ABC',
 		'Encoded unreserved characters must be decoded');
+	equal(new OAuthParameterEncoder().decode(), '',
+		'Empty value should return empty string');
+	equal(new OAuthParameterEncoder().decode(null), '',
+		'Null value should return empty string');
+	equal(new OAuthParameterEncoder().decode(undefined), '',
+		'Undefined value should return empty string');
 });
 test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
 	equal(new OAuthParameterEncoder().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
 	equal(new OAuthParameterEncoder().decode('%E4%BD%A0%E5%A5%BD'), '你好',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-
 });

@@ -63,7 +63,7 @@ var SignatureBaseString = (function () {
         _normalizeRequestUrl : function () {
             // The following is to prevent js-url from loading the window.location
             if (!this._requestUrl) {
-                return '';
+                return;
             }
             var scheme = url('protocol', this._requestUrl).toLowerCase(),
                 authority = url('hostname', this._requestUrl).toLocaleLowerCase(),
@@ -145,6 +145,9 @@ var OAuthParameterEncoder = (function () {
     OAuthParameterEncoder.prototype = {
 
         encode : function (decoded) {
+	        if (!decoded) {
+		        return '';
+	        }
 	        // using implementation from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FencodeURIComponent
 	        return encodeURIComponent(decoded)
 		        .replace(/[!'()]/g, escape)
@@ -152,6 +155,9 @@ var OAuthParameterEncoder = (function () {
         },
 
         decode : function (encoded) {
+	        if (!encoded) {
+		        return '';
+	        }
             return decodeURIComponent(encoded);
         }
 
