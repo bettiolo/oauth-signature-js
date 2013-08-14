@@ -152,7 +152,7 @@ var OAuthParameterEncoder = (function () {
         },
 
         decode : function (encoded) {
-            return encoded;
+            return decodeURIComponent(encoded);
         }
 
     };
