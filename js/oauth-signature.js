@@ -2,6 +2,7 @@
 var SignatureBaseString = (function () {
     'use strict';
 
+	// requestUrl: if the scheme is missing, http will be added automatically
     function SignatureBaseString(httpMethod, requestUrl, parameters) {
         this._httpMethod = httpMethod || '';
         this._requestUrl = requestUrl || '';
@@ -69,9 +70,9 @@ var SignatureBaseString = (function () {
                 port = url('port', this._requestUrl),
                 path = url('path', this._requestUrl);
             if (this._requestUrl.toLowerCase().indexOf(scheme) != 0) {
-                scheme = '';
+                scheme = 'http';
             }
-            if ((port == 80 && (scheme == 'http' || !scheme))
+            if ((port == 80 && scheme == 'http')
                 || (port == 443 && scheme == 'https'))
             {
                     port = '';
