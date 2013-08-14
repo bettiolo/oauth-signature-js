@@ -68,17 +68,32 @@ test('The normalized request parameters should be the last element', function ()
 		'The request parameters should not be included if it is undefined');
 });
 test('The value should be encoded following the RFC3986', function () {
-	expect(0);
-//	var unreservedCharacters = '';
-//	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
-//		'Characters in the unreserved character set MUST NOT be encoded');
-//	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
-//		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
-//	equal(new OAuthParameterEncoder().encode(''), '',
-//		'Characters not in the unreserved character set MUST be encoded');
+	var i,
+		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+							    'abcdefghijklmnopqrstuvwxyz' +
+								'0123456789-_.~',
+		reservedCharactersWithEncoding =[
+			['!', '%21'], ['#', '%23'], ['$', '%24'], ['&', '%26'],	['\'', '%27'],
+			['(', '%28'], [')', '%29'], ['*', '%2A'], ['+', '%2B'], [',', '%2C'],
+			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
+			['@', '%40'], ['[', '%5B'], [']', '%5D']
+		];
+	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
+		'Characters in the unreserved character set MUST NOT be encoded');
+	equal(new OAuthParameterEncoder().encode('*'), '%2A',
+		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
+	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
+		equal(new OAuthParameterEncoder().encode(reservedCharactersWithEncoding[i][0]), reservedCharactersWithEncoding[i][1],
+			'Characters not in the unreserved character set MUST be encoded');
+
+	}
+	equal(new OAuthParameterEncoder().encode('%'), '%25',
+		'Percent character must be encoded');
 });
-test('The value should be encoded following the RFC3629', function () {
-	expect(0);
-//	equal(new OAuthParameterEncoder().encode(''), '',
-//		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
+test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
+	equal(new OAuthParameterEncoder().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
+		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
+	equal(new OAuthParameterEncoder().encode('你好'), '%E4%BD%A0%E5%A5%BD',
+		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
+
 });
