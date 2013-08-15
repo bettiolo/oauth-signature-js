@@ -66,6 +66,8 @@ test('The normalized request parameters should be the last element', function ()
 		'The request parameters should not be included if it is null');
 	equal(new SignatureBaseString('', '', undefined).generate(), '&&',
 		'The request parameters should not be included if it is undefined');
+	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : '50' }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
+		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
 });
 module('OAuth Encoding');
 test('The value should be encoded following the RFC3986', function () {

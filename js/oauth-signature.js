@@ -6,60 +6,16 @@ var SignatureBaseString = (function () {
     function SignatureBaseString(httpMethod, requestUrl, parameters) {
         this._httpMethod = httpMethod || '';
         this._requestUrl = requestUrl || '';
-	    this._parameters = {}; // Format: { 'key': ['value 1', 'value 2'] };
-	    this._loadParameters(parameters);
+	    this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
 	    this._sortedKeys = [];
 	    this._concatenatedParameters = '';
+	    this._encoder = new OAuthParameterEncoder();
     }
 
 	SignatureBaseString.prototype = {
-
-        _loadParameters : function (parameters) {
-            if (parameters instanceof Array) {
-                this._loadParametersFromArray(parameters);
-                return;
-            }
-            if (typeof parameters === 'object') {
-                this._loadParametersFromObject(parameters);
-            }
-        },
-
-        _loadParametersFromArray : function (parameters) {
-            var i;
-            for (i = 0; i < parameters.length; i++) {
-                this._loadParametersFromObject(parameters[i]);
-            }
-        },
-
-        _loadParametersFromObject : function (parameters) {
-            var key,
-                value,
-                i;
-            for (key in parameters) {
-                if (parameters.hasOwnProperty(key)) {
-                    value = parameters[key];
-                    if (value instanceof Array) {
-                        for (i = 0; i < value.length; i++) {
-                            this._addParameter(key, value[i]);
-                        }
-                    } else {
-                        this._addParameter(key, value);
-                    }
-                }
-            }
-        },
-
-        _addParameter : function (key, value) {
-            if (!this._parameters[key]) {
-                this._parameters[key] = [];
-            }
-            this._parameters[key].push(value);
-        },
-
         _normalizeHttpMethod : function () {
             this._httpMethod = this._httpMethod.toUpperCase();
         },
-
         _normalizeRequestUrl : function () {
             // The following is to prevent js-url from loading the window.location
             if (!this._requestUrl) {
@@ -83,7 +39,6 @@ var SignatureBaseString = (function () {
                 + (port ? ':' + port : '')
                 + path;
         },
-
         _sortParameters : function () {
             var key;
             this._sortedKeys = [];
@@ -92,11 +47,9 @@ var SignatureBaseString = (function () {
             }
             this._sortedKeys.sort();
         },
-
         _normalizeParameters : function () {
 
         },
-
         _concatenateParameters : function () {
             var i;
             this._concatenatedParameters = this._sortedKeys.length == 0 ? '&' : '';
@@ -104,23 +57,22 @@ var SignatureBaseString = (function () {
                 this._concatenatedParameters += this._getConcatenatedParameter(this._sortedKeys[i]);
             }
         },
-
         _getConcatenatedParameter : function (key) {
             var i,
                 parameters = this._parameters[key],
                 concatenatedParameters = '';
             parameters.sort();
             for (i = 0; i < parameters.length; i++) {
-                concatenatedParameters += '&' + key + '=' + parameters[i];
+                concatenatedParameters +=
+	                '&' + this._encoder.encode(key) +
+		            '=' + this._encoder.encode(parameters[i]);
             }
             return concatenatedParameters;
         },
-
         _concatenateRequestElements : function () {
             // HTTP_METHOD + request url + parameters
             return this._httpMethod + '&' + this._requestUrl + this._concatenatedParameters;
         },
-
         generate : function () {
             this._normalizeHttpMethod();
             this._normalizeRequestUrl();
@@ -132,18 +84,71 @@ var SignatureBaseString = (function () {
     };
 
     return SignatureBaseString;
+})();
 
+var ParametersLoader = (function () {
+	'use strict';
+
+	function ParametersLoader (parameters) {
+		this._parameters = {}; // Format: { 'key': ['value 1', 'value 2'] };
+		this._loadParameters(parameters);
+	}
+
+	ParametersLoader.prototype = {
+		_loadParameters : function (parameters) {
+			if (parameters instanceof Array) {
+				this._loadParametersFromArray(parameters);
+				return;
+			}
+			if (typeof parameters === 'object') {
+				this._loadParametersFromObject(parameters);
+			}
+		},
+		_loadParametersFromArray : function (parameters) {
+			var i;
+			for (i = 0; i < parameters.length; i++) {
+				this._loadParametersFromObject(parameters[i]);
+			}
+		},
+		_loadParametersFromObject : function (parameters) {
+			var key,
+				value,
+				i;
+			for (key in parameters) {
+				if (parameters.hasOwnProperty(key)) {
+					value = parameters[key];
+					if (value instanceof Array) {
+						for (i = 0; i < value.length; i++) {
+							this._addParameter(key, value[i]);
+						}
+					} else {
+						this._addParameter(key, value);
+					}
+				}
+			}
+		},
+		_addParameter : function (key, value) {
+			if (!this._parameters[key]) {
+				this._parameters[key] = [];
+			}
+			this._parameters[key].push(value);
+		},
+		get : function () {
+			return this._parameters;
+		}
+	};
+
+	return ParametersLoader;
 })();
 
 var OAuthParameterEncoder = (function () {
-    "use strict";
+    'use strict';
 
     function OAuthParameterEncoder() {
 
     }
 
     OAuthParameterEncoder.prototype = {
-
         encode : function (decoded) {
 	        if (!decoded) {
 		        return '';
@@ -153,16 +158,13 @@ var OAuthParameterEncoder = (function () {
 		        .replace(/[!'()]/g, escape)
 		        .replace(/\*/g, "%2A");
         },
-
         decode : function (encoded) {
 	        if (!encoded) {
 		        return '';
 	        }
             return decodeURIComponent(encoded);
         }
-
     };
 
 	return OAuthParameterEncoder;
-
 })();
