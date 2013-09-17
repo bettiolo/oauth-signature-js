@@ -55,9 +55,9 @@ test('Should handle non-values', function () {
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
-		'The component separator (&) should be included for omitted elements');
+		'The element separator (&) should be included for omitted elements');
 	equal(new SignatureBaseString('pOsT').generate(), 'POST&&',
-		'The component separator (&) should be included for omitted elements');
+		'The element separator (&) should be included for omitted elements');
 	equal(new SignatureBaseString().generate(), '&&',
 		'The http method shouldn\'t be included if it is undefined');
 	equal(new SignatureBaseString('').generate(), '&&',
@@ -65,15 +65,15 @@ test('It should start with an uppercase http method, followed by two ampersands'
 	equal(new SignatureBaseString(null).generate(), '&&',
 		'The http method shouldn\'t be included if it is null');
 });
-test('The resource url should be included in the second element after the http method and should be suffixed by an ampersand', function () {
+test('The url should be included in the second element after the http method and should be suffixed by an ampersand', function () {
 	equal(new SignatureBaseString('GET', 'http://example.co.uk').generate(), 'GET&http://example.co.uk&',
 		'The http method should be the first component of the url');
 	equal(new SignatureBaseString('', 'http://EXAMPLE.co.UK/endpoint').generate(), '&http://example.co.uk/endpoint&',
-		'The URL authority must be lowercase');
+		'The url authority must be lowercase');
     equal(new SignatureBaseString('', 'http://EXAMPLE.co.UK/endpoint/').generate(), '&http://example.co.uk/endpoint/&',
 		'It should not strip off the trailing /');
     equal(new SignatureBaseString('', 'HTTP://example.org').generate(), '&http://example.org&',
-        'The URL scheme must be lowercase');
+        'The url scheme must be lowercase');
     equal(new SignatureBaseString('', 'http://example.org:80').generate(), '&http://example.org&',
 		'The default http port (80) MUST be excluded');
     equal(new SignatureBaseString('', 'https://example.org:443').generate(), '&https://example.org&',
@@ -91,7 +91,7 @@ test('The resource url should be included in the second element after the http m
 	equal(new SignatureBaseString('', null).generate(), '&&',
 		'The resource url should not be included if it is null');
 	equal(new SignatureBaseString('', 'example.org').generate(), '&http://example.org&',
-		'The http URL scheme is added automatically');
+		'The http url scheme is added automatically');
 	equal(new SignatureBaseString('', 'example.org:100').generate(), '&http://example.org:100&',
 		'The port will not be stripped if the scheme is missing');
 	equal(new SignatureBaseString('', 'example.org:80').generate(), '&http://example.org&',
