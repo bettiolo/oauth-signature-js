@@ -80,7 +80,7 @@ var ParametersElement = (function () {
 	function ParametersElement (parameters) {
 		this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
 		this._concatenatedParameters = '';
-		this._sortedKeys = [];
+		this._sortedKeys = [ ];
 		this._rfc3986 = new Rfc3986();
 		this._sortParameters();
 		this._concatenateParameters();
@@ -89,7 +89,7 @@ var ParametersElement = (function () {
 	ParametersElement .prototype = {
 		_sortParameters : function () {
 			var key;
-			this._sortedKeys = [];
+			this._sortedKeys = [ ];
 			for (key in this._parameters) {
 				this._sortedKeys.push(key);
 			}
@@ -126,8 +126,8 @@ var ParametersLoader = (function () {
 	'use strict';
 
 	function ParametersLoader (parameters) {
-		this._parameters = {}; // Format: { 'key': ['value 1', 'value 2'] };
-		this._loadParameters(parameters);
+		this._parameters = { }; // Format: { 'key': ['value 1', 'value 2'] }
+		this._loadParameters(parameters || { });
 	}
 
 	ParametersLoader.prototype = {
