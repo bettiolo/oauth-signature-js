@@ -1,9 +1,11 @@
-module('Http Method element');
-test('Is normalized to uppercase', function (){
+module('Http method element');
+test('Should be uppercase', function (){
 	equal(new HttpMethodElement('get').get(), 'GET',
-		'A lowercase GET http method should be normalized to uppercase');
+		'A lowercase GET http method should be uppercase');
 	equal(new HttpMethodElement('pOsT').get(), 'POST',
-		'A mixed case POST http method should be normalized to uppercase');
+		'A mixed case POST http method should be uppercase');
+});
+test('Should handle non-values', function (){
 	equal(new HttpMethodElement('').get(), '',
 		'An empty http method should be normalized to an empty string');
 	equal(new HttpMethodElement().get(), '',
