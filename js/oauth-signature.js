@@ -2,7 +2,7 @@
 var SignatureBaseString = (function () {
     'use strict';
 
-	// requestUrl: if the scheme is missing, http will be added automatically
+	// url: if the scheme is missing, http will be added automatically
     function SignatureBaseString(httpMethod, url, parameters) {
         this._httpMethod = new HttpMethodElement(httpMethod).get();
         this._url = url || '';
@@ -69,7 +69,7 @@ var SignatureBaseString = (function () {
             return concatenatedParameters;
         },
         _concatenateRequestElements : function () {
-            // HTTP_METHOD + request url + parameters
+            // HTTP_METHOD & url & parameters
             return this._httpMethod + '&' + this._url + this._concatenatedParameters;
         },
         generate : function () {
