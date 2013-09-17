@@ -1,4 +1,4 @@
-module('Http method element');
+module('HttpMethodElement');
 test('Should be uppercase', function (){
 	equal(new HttpMethodElement('get').get(), 'GET',
 		'A lowercase GET http method should be uppercase');
@@ -14,7 +14,7 @@ test('Should handle non-values', function (){
 		'A null http method should be normalized to an empty string');
 });
 
-module('Url element')
+module('UrlElement')
 test('Should be normalized', function () {
 	equal(new UrlElement('http://example.co.uk').get(), 'http://example.co.uk',
 		'A valid url should remain the same');
