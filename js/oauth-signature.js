@@ -15,9 +15,6 @@ var SignatureBaseString = (function () {
     }
 
 	SignatureBaseString.prototype = {
-        _normalizeHttpMethod : function () {
-            this._httpMethod = this._httpMethod.toUpperCase();
-        },
         _normalizeRequestUrl : function () {
             // The following is to prevent js-url from loading the window.location
             if (!this._url) {
@@ -76,7 +73,6 @@ var SignatureBaseString = (function () {
             return this._httpMethod + '&' + this._url + this._concatenatedParameters;
         },
         generate : function () {
-            this._normalizeHttpMethod();
             this._normalizeRequestUrl();
             this._sortParameters();
             this._normalizeParameters();
