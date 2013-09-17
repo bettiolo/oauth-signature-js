@@ -3,13 +3,15 @@ var SignatureBaseString = (function () {
     'use strict';
 
 	// requestUrl: if the scheme is missing, http will be added automatically
-    function SignatureBaseString(httpMethod, requestUrl, parameters) {
+    function SignatureBaseString(httpMethod, url, parameters) {
         this._httpMethod = httpMethod || '';
-        this._requestUrl = requestUrl || '';
+        this._url = url || '';
 	    this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
+
 	    this._sortedKeys = [];
 	    this._concatenatedParameters = '';
-	    this._encoder = new Rfc3986();
+	    this._rfc3986 = new Rfc3986();
+
     }
 
 	SignatureBaseString.prototype = {
@@ -18,14 +20,14 @@ var SignatureBaseString = (function () {
         },
         _normalizeRequestUrl : function () {
             // The following is to prevent js-url from loading the window.location
-            if (!this._requestUrl) {
+            if (!this._url) {
                 return;
             }
-            var scheme = url('protocol', this._requestUrl).toLowerCase(),
-                authority = url('hostname', this._requestUrl).toLocaleLowerCase(),
-                port = url('port', this._requestUrl),
-                path = url('path', this._requestUrl);
-            if (this._requestUrl.toLowerCase().indexOf(scheme) != 0) {
+            var scheme = url('protocol', this._url).toLowerCase(),
+                authority = url('hostname', this._url).toLocaleLowerCase(),
+                port = url('port', this._url),
+                path = url('path', this._url);
+            if (this._url.toLowerCase().indexOf(scheme) != 0) {
                 scheme = 'http';
             }
             if ((port == 80 && scheme == 'http')
@@ -33,7 +35,7 @@ var SignatureBaseString = (function () {
             {
                     port = '';
             }
-            this._requestUrl =
+            this._url =
                 (scheme ? scheme + '://' : '')
                 + authority
                 + (port ? ':' + port : '')
@@ -64,14 +66,14 @@ var SignatureBaseString = (function () {
             parameters.sort();
             for (i = 0; i < parameters.length; i++) {
                 concatenatedParameters +=
-	                '&' + this._encoder.encode(key) +
-		            '=' + this._encoder.encode(parameters[i]);
+	                '&' + this._rfc3986.encode(key) +
+		            '=' + this._rfc3986.encode(parameters[i]);
             }
             return concatenatedParameters;
         },
         _concatenateRequestElements : function () {
             // HTTP_METHOD + request url + parameters
-            return this._httpMethod + '&' + this._requestUrl + this._concatenatedParameters;
+            return this._httpMethod + '&' + this._url + this._concatenatedParameters;
         },
         generate : function () {
             this._normalizeHttpMethod();
