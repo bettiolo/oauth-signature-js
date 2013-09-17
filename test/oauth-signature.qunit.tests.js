@@ -178,6 +178,8 @@ test('The value should be decoded following the RFC3986', function () {
 	equal(new Rfc3986().decode('%31%32%33%41%42%43'), '123ABC',
 		'Encoded unreserved characters must be decoded');
 	equal(new Rfc3986().decode(), '',
+		'Undefined value should return empty string');
+	equal(new Rfc3986().decode(''), '',
 		'Empty value should return empty string');
 	equal(new Rfc3986().decode(null), '',
 		'Null value should return empty string');
