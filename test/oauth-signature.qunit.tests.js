@@ -1,3 +1,17 @@
+module('Http Method element');
+test('Is normalized to uppercase', function (){
+	equal(new HttpMethodElement('get').get(), 'GET',
+		'A lowercase GET http method should be normalized to uppercase');
+	equal(new HttpMethodElement('pOsT').get(), 'POST',
+		'A mixed case POST http method should be normalized to uppercase');
+	equal(new HttpMethodElement('').get(), '',
+		'An empty http method should be normalized to an empty string');
+	equal(new HttpMethodElement().get(), '',
+		'A missing http method should be normalized to an empty string');
+	equal(new HttpMethodElement(null).get(), '',
+		'A null http method should be normalized to an empty string');
+});
+
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',

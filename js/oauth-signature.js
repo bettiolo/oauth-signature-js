@@ -4,7 +4,7 @@ var SignatureBaseString = (function () {
 
 	// requestUrl: if the scheme is missing, http will be added automatically
     function SignatureBaseString(httpMethod, url, parameters) {
-        this._httpMethod = httpMethod || '';
+        this._httpMethod = new HttpMethodElement(httpMethod).get();
         this._url = url || '';
 	    this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
 
@@ -86,6 +86,21 @@ var SignatureBaseString = (function () {
     };
 
     return SignatureBaseString;
+})();
+
+var HttpMethodElement = (function () {
+
+	function HttpMethodElement(httpMethod) {
+		this._httpMethod = httpMethod || '';
+	}
+
+	HttpMethodElement.prototype = {
+		get : function () {
+			return this._httpMethod.toUpperCase();
+		}
+	}
+
+	return HttpMethodElement;
 })();
 
 var ParametersLoader = (function () {
