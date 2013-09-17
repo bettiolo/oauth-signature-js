@@ -6,13 +6,14 @@ test('Should be uppercase', function (){
 		'A mixed case POST http method should be uppercase');
 });
 test('Should handle non-values', function (){
+	equal(new HttpMethodElement().get(), '',
+		'An undefined http method should be normalized to an empty string');
 	equal(new HttpMethodElement('').get(), '',
 		'An empty http method should be normalized to an empty string');
-	equal(new HttpMethodElement().get(), '',
-		'A missing http method should be normalized to an empty string');
 	equal(new HttpMethodElement(null).get(), '',
 		'A null http method should be normalized to an empty string');
 });
+
 module('Url element')
 test('Should be normalized', function () {
 	equal(new UrlElement('http://example.co.uk').get(), 'http://example.co.uk',
@@ -43,6 +44,8 @@ test('Should be normalized', function () {
 		'The default http port will be stripped if the scheme is missing');
 });
 test('Should handle non-values', function () {
+	equal(new UrlElement().get(), '',
+		'An undefined url should be normalized to an empty string');
 	equal(new UrlElement('').get(), '',
 		'An empty url should be normalized to an empty string');
 	equal(new UrlElement(null).get(), '',
@@ -55,10 +58,10 @@ test('It should start with an uppercase http method, followed by two ampersands'
 		'The component separator (&) should be included for omitted elements');
 	equal(new SignatureBaseString('pOsT').generate(), 'POST&&',
 		'The component separator (&) should be included for omitted elements');
+	equal(new SignatureBaseString().generate(), '&&',
+		'The http method shouldn\'t be included if it is undefined');
 	equal(new SignatureBaseString('').generate(), '&&',
 		'The http method shouldn\'t be included if it is empty');
-	equal(new SignatureBaseString().generate(), '&&',
-		'The http method shouldn\'t be included if it  is not passed');
 	equal(new SignatureBaseString(null).generate(), '&&',
 		'The http method shouldn\'t be included if it is null');
 });
@@ -139,6 +142,8 @@ test('The value should be encoded following the RFC3986', function () {
 	equal(new Rfc3986().encode('%'), '%25',
 		'Percent character must be encoded');
 	equal(new Rfc3986().encode(), '',
+		'Undefined value should return empty string');
+	equal(new Rfc3986().encode(''), '',
 		'Empty value should return empty string');
 	equal(new Rfc3986().encode(null), '',
 		'Null value should return empty string');
