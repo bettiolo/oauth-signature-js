@@ -103,6 +103,36 @@ var HttpMethodElement = (function () {
 	return HttpMethodElement;
 })();
 
+var UrlElement = (function () {
+
+	function UrlElement() {
+
+	}
+
+	UrlElement.prototype = {
+		get : function () {
+
+		}
+	}
+
+	return UrlElement;
+})();
+
+var ParametersElement = (function () {
+
+	function ParametersElement () {
+
+	}
+
+	ParametersElement .prototype = {
+		get : function () {
+
+		}
+	}
+
+	return ParametersElement ;
+})();
+
 var ParametersLoader = (function () {
 	'use strict';
 
