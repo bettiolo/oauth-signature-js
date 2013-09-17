@@ -5,7 +5,7 @@ var SignatureBaseString = (function () {
 	// url: if the scheme is missing, http will be added automatically
     function SignatureBaseString(httpMethod, url, parameters) {
         this._httpMethod = new HttpMethodElement(httpMethod).get();
-        this._url = url || '';
+        this._url = new UrlElement(url).get();
 	    this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
 
 	    this._sortedKeys = [];
@@ -15,29 +15,6 @@ var SignatureBaseString = (function () {
     }
 
 	SignatureBaseString.prototype = {
-        _normalizeRequestUrl : function () {
-            // The following is to prevent js-url from loading the window.location
-            if (!this._url) {
-                return;
-            }
-            var scheme = url('protocol', this._url).toLowerCase(),
-                authority = url('hostname', this._url).toLocaleLowerCase(),
-                port = url('port', this._url),
-                path = url('path', this._url);
-            if (this._url.toLowerCase().indexOf(scheme) != 0) {
-                scheme = 'http';
-            }
-            if ((port == 80 && scheme == 'http')
-                || (port == 443 && scheme == 'https'))
-            {
-                    port = '';
-            }
-            this._url =
-                (scheme ? scheme + '://' : '')
-                + authority
-                + (port ? ':' + port : '')
-                + path;
-        },
         _sortParameters : function () {
             var key;
             this._sortedKeys = [];
@@ -73,7 +50,6 @@ var SignatureBaseString = (function () {
             return this._httpMethod + '&' + this._url + this._concatenatedParameters;
         },
         generate : function () {
-            this._normalizeRequestUrl();
             this._sortParameters();
             this._normalizeParameters();
             this._concatenateParameters();
@@ -101,13 +77,34 @@ var HttpMethodElement = (function () {
 
 var UrlElement = (function () {
 
-	function UrlElement() {
-
+	function UrlElement(url) {
+		this._url = url || '';
 	}
 
 	UrlElement.prototype = {
 		get : function () {
-
+			// The following is to prevent js-url from loading the window.location
+			if (!this._url) {
+				return this._url;
+			}
+			var scheme = url('protocol', this._url).toLowerCase(),
+				authority = url('hostname', this._url).toLocaleLowerCase(),
+				port = url('port', this._url),
+				path = url('path', this._url);
+			if (this._url.toLowerCase().indexOf(scheme) != 0) {
+				scheme = 'http';
+			}
+			if ((port == 80 && scheme == 'http')
+				|| (port == 443 && scheme == 'https'))
+			{
+				port = '';
+			}
+			this._url =
+				(scheme ? scheme + '://' : '')
+					+ authority
+					+ (port ? ':' + port : '')
+					+ path;
+			return this._url;
 		}
 	}
 

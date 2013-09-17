@@ -11,6 +11,41 @@ test('Is normalized to uppercase', function (){
 	equal(new HttpMethodElement(null).get(), '',
 		'A null http method should be normalized to an empty string');
 });
+module('Url element')
+test('Should be normalized', function () {
+	equal(new UrlElement('http://example.co.uk').get(), 'http://example.co.uk',
+		'A valid url should remain the same');
+	equal(new UrlElement('http://EXAMPLE.co.UK/endpoint').get(), 'http://example.co.uk/endpoint',
+		'The url authority must be lowercase');
+	equal(new UrlElement('http://EXAMPLE.co.UK/endpoint/').get(), 'http://example.co.uk/endpoint/',
+		'It should not strip off the trailing /');
+	equal(new UrlElement('HTTP://example.org').get(), 'http://example.org',
+		'The url scheme must be lowercase');
+	equal(new UrlElement('http://example.org:80').get(), 'http://example.org',
+		'The default http port (80) MUST be excluded');
+	equal(new UrlElement('https://example.org:443').get(), 'https://example.org',
+		'The default https port (443) MUST be excluded');
+	equal(new UrlElement('http://example.org:8080').get(), 'http://example.org:8080',
+		'The non default http port MUST be included');
+	equal(new UrlElement('https://example.org:8080').get(), 'https://example.org:8080',
+		'The non default https port MUST be included');
+	equal(new UrlElement('http://example.org/?foo=bar').get(), 'http://example.org/',
+		'The query string should not be included');
+	equal(new UrlElement('http://example.org/#anchor').get(), 'http://example.org/',
+		'The anchor should not be included');
+	equal(new UrlElement('example.org').get(), 'http://example.org',
+		'The http url scheme is added automatically');
+	equal(new UrlElement('example.org:100').get(), 'http://example.org:100',
+		'The port will not be stripped if the scheme is missing');
+	equal(new UrlElement('example.org:80').get(), 'http://example.org',
+		'The default http port will be stripped if the scheme is missing');
+});
+test('Should handle non-values', function () {
+	equal(new UrlElement('').get(), '',
+		'An empty url should be normalized to an empty string');
+	equal(new UrlElement(null).get(), '',
+		'An null url should be normalized to an empty string');
+});
 
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
