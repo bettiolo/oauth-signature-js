@@ -81,28 +81,28 @@ test('The value should be encoded following the RFC3986', function () {
 			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
 			['@', '%40'], ['[', '%5B'], [']', '%5D']
 		];
-	equal(new OAuthParameterEncoder().encode(unreservedCharacters), unreservedCharacters,
+	equal(new Rfc3986Encoder().encode(unreservedCharacters), unreservedCharacters,
 		'Characters in the unreserved character set MUST NOT be encoded');
-	equal(new OAuthParameterEncoder().encode('*'), '%2A',
+	equal(new Rfc3986Encoder().encode('*'), '%2A',
 		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
 	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
-		equal(new OAuthParameterEncoder().encode(reservedCharactersWithEncoding[i][0]), reservedCharactersWithEncoding[i][1],
+		equal(new Rfc3986Encoder().encode(reservedCharactersWithEncoding[i][0]), reservedCharactersWithEncoding[i][1],
 			'Characters not in the unreserved character set MUST be encoded');
 
 	}
-	equal(new OAuthParameterEncoder().encode('%'), '%25',
+	equal(new Rfc3986Encoder().encode('%'), '%25',
 		'Percent character must be encoded');
-	equal(new OAuthParameterEncoder().encode(), '',
+	equal(new Rfc3986Encoder().encode(), '',
 		'Empty value should return empty string');
-	equal(new OAuthParameterEncoder().encode(null), '',
+	equal(new Rfc3986Encoder().encode(null), '',
 		'Null value should return empty string');
-	equal(new OAuthParameterEncoder().encode(undefined), '',
+	equal(new Rfc3986Encoder().encode(undefined), '',
 		'Undefined value should return empty string');
 });
 test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
-	equal(new OAuthParameterEncoder().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
+	equal(new Rfc3986Encoder().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-	equal(new OAuthParameterEncoder().encode('你好'), '%E4%BD%A0%E5%A5%BD',
+	equal(new Rfc3986Encoder().encode('你好'), '%E4%BD%A0%E5%A5%BD',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
 
 });
@@ -117,27 +117,27 @@ test('The value should be decoded following the RFC3986', function () {
 			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
 			['@', '%40'], ['[', '%5B'], [']', '%5D']
 		];
-	equal(new OAuthParameterEncoder().decode(unreservedCharacters), unreservedCharacters,
+	equal(new Rfc3986Encoder().decode(unreservedCharacters), unreservedCharacters,
 		'Not encoded characters in the unreserved character set MUST NOT be decoded');
 	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
-		equal(new OAuthParameterEncoder().decode(reservedCharactersWithEncoding[i][1]), reservedCharactersWithEncoding[i][0],
+		equal(new Rfc3986Encoder().decode(reservedCharactersWithEncoding[i][1]), reservedCharactersWithEncoding[i][0],
 			'Encoded characters not in the unreserved character set MUST be decoded');
 
 	}
-	equal(new OAuthParameterEncoder().decode('%25'), '%',
+	equal(new Rfc3986Encoder().decode('%25'), '%',
 		'Encoded percent character must be decoded');
-	equal(new OAuthParameterEncoder().decode('%31%32%33%41%42%43'), '123ABC',
+	equal(new Rfc3986Encoder().decode('%31%32%33%41%42%43'), '123ABC',
 		'Encoded unreserved characters must be decoded');
-	equal(new OAuthParameterEncoder().decode(), '',
+	equal(new Rfc3986Encoder().decode(), '',
 		'Empty value should return empty string');
-	equal(new OAuthParameterEncoder().decode(null), '',
+	equal(new Rfc3986Encoder().decode(null), '',
 		'Null value should return empty string');
-	equal(new OAuthParameterEncoder().decode(undefined), '',
+	equal(new Rfc3986Encoder().decode(undefined), '',
 		'Undefined value should return empty string');
 });
 test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
-	equal(new OAuthParameterEncoder().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
+	equal(new Rfc3986Encoder().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-	equal(new OAuthParameterEncoder().decode('%E4%BD%A0%E5%A5%BD'), '你好',
+	equal(new Rfc3986Encoder().decode('%E4%BD%A0%E5%A5%BD'), '你好',
 		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
 });
