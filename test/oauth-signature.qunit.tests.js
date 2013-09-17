@@ -24,8 +24,6 @@ test('It should start with an uppercase http method, followed by two ampersands'
 		'The http method shouldn\'t be included if it  is not passed');
 	equal(new SignatureBaseString(null).generate(), '&&',
 		'The http method shouldn\'t be included if it is null');
-	equal(new SignatureBaseString(undefined).generate(), '&&',
-		'The http method shouldn\'t be included if it is undefined');
 });
 test('The resource url should be included in the second element after the http method and should be suffixed by an ampersand', function () {
 	equal(new SignatureBaseString('GET', 'http://example.co.uk').generate(), 'GET&http://example.co.uk&',
@@ -52,8 +50,6 @@ test('The resource url should be included in the second element after the http m
 		'The resource url should not be included if it is empty');
 	equal(new SignatureBaseString('', null).generate(), '&&',
 		'The resource url should not be included if it is null');
-	equal(new SignatureBaseString('', undefined).generate(), '&&',
-		'The resource url should not be included if it is undefined');
 	equal(new SignatureBaseString('', 'example.org').generate(), '&http://example.org&',
 		'The http URL scheme is added automatically');
 	equal(new SignatureBaseString('', 'example.org:100').generate(), '&http://example.org:100&',
@@ -78,11 +74,10 @@ test('The normalized request parameters should be the last element', function ()
 		'The request parameters should not be included if it is empty');
 	equal(new SignatureBaseString('', '', null).generate(), '&&',
 		'The request parameters should not be included if it is null');
-	equal(new SignatureBaseString('', '', undefined).generate(), '&&',
-		'The request parameters should not be included if it is undefined');
 	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : '50' }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
 });
+
 module('OAuth Encoding');
 test('The value should be encoded following the RFC3986', function () {
 	var i,
@@ -110,8 +105,6 @@ test('The value should be encoded following the RFC3986', function () {
 		'Empty value should return empty string');
 	equal(new Rfc3986().encode(null), '',
 		'Null value should return empty string');
-	equal(new Rfc3986().encode(undefined), '',
-		'Undefined value should return empty string');
 });
 test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
 	equal(new Rfc3986().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
@@ -146,8 +139,6 @@ test('The value should be decoded following the RFC3986', function () {
 		'Empty value should return empty string');
 	equal(new Rfc3986().decode(null), '',
 		'Null value should return empty string');
-	equal(new Rfc3986().decode(undefined), '',
-		'Undefined value should return empty string');
 });
 test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
 	equal(new Rfc3986().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
