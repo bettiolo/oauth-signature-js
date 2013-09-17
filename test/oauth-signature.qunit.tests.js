@@ -52,6 +52,42 @@ test('Should handle non-values', function () {
 		'An null url should be normalized to an empty string');
 });
 
+module('ParametersLoader') // Output format: { 'key': ['value 1', 'value 2'] }
+test('Should load parameters from different input structures', function () {
+	var objectLikeInput =
+		{
+			a : 'b',
+			foo : [ 'bar', 'baz', 'qux' ]
+		},
+		arrayLikeInput =
+		[
+			{ a : 'b'},
+			{ foo : 'bar' },
+			{ foo : ['baz', 'qux'] }
+		],
+		expectedOutput =
+		{
+			a : [ 'b' ],
+			foo : [ 'bar', 'baz', 'qux' ]
+		};
+	deepEqual(new ParametersLoader(objectLikeInput).get(), expectedOutput,
+		'An object-like structure should be loaded');
+	deepEqual(new ParametersLoader(arrayLikeInput).get(), expectedOutput,
+		'An array-like  structure should be loaded');
+});
+test('Should handle non-values', function () {
+	deepEqual(new ParametersLoader().get(), { },
+		'An undefined parameter should be returned as an empty object');
+	deepEqual(new ParametersLoader('').get(), { },
+		'An empty string parameter should be returned as an empty object');
+	deepEqual(new ParametersLoader(null).get(), { },
+		'An null parameter should be returned as an empty object');
+	deepEqual(new ParametersLoader({ }).get(), { },
+		'An empty object-like parameter should be returned as an empty object');
+	deepEqual(new ParametersLoader([ ]).get(), { },
+		'An empty array-like parameter should be returned as an empty object');
+});
+
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
