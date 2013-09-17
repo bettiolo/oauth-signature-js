@@ -9,7 +9,7 @@ var SignatureBaseString = (function () {
 	    this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
 	    this._sortedKeys = [];
 	    this._concatenatedParameters = '';
-	    this._encoder = new Rfc3986Encoder();
+	    this._encoder = new Rfc3986();
     }
 
 	SignatureBaseString.prototype = {
@@ -141,14 +141,14 @@ var ParametersLoader = (function () {
 	return ParametersLoader;
 })();
 
-var Rfc3986Encoder = (function () {
+var Rfc3986 = (function () {
     'use strict';
 
-    function Rfc3986Encoder() {
+    function Rfc3986() {
 
     }
 
-    Rfc3986Encoder.prototype = {
+    Rfc3986.prototype = {
         encode : function (decoded) {
 	        if (!decoded) {
 		        return '';
@@ -166,5 +166,5 @@ var Rfc3986Encoder = (function () {
         }
     };
 
-	return Rfc3986Encoder;
+	return Rfc3986;
 })();
