@@ -15,7 +15,9 @@ var SignatureBaseString = (function () {
 
         _concatenateRequestElements : function () {
             // HTTP_METHOD & url & parameters
-            return this._httpMethod + '&' + this._url + '&' + this._parameters;
+            return this._rfc3986.encode(this._httpMethod) + '&'
+		         + this._rfc3986.encode(this._url) + '&'
+	             + this._rfc3986.encode(this._parameters);
         },
         generate : function () {
             return this._concatenateRequestElements();
