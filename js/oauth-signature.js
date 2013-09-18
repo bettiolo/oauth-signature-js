@@ -146,23 +146,24 @@ var ParametersLoader = (function () {
 			}
 		},
 		_loadParametersFromObject : function (parameters) {
-			var key,
-				value,
-				i;
+			var key;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					value = parameters[key] || '';
-					if (value instanceof Array) {
-						for (i = 0; i < value.length; i++) {
-							this._addParameter(key, value[i]);
-						}
-						if (value.length == 0) {
-							this._addParameter(key, '');
-						}
-					} else {
-						this._addParameter(key, value);
-					}
+					this._loadParameterValue(key, parameters[key] || '');
 				}
+			}
+		},
+		_loadParameterValue : function (key, value) {
+			var i;
+			if (value instanceof Array) {
+				for (i = 0; i < value.length; i++) {
+					this._addParameter(key, value[i]);
+				}
+				if (value.length == 0) {
+					this._addParameter(key, '');
+				}
+			} else {
+				this._addParameter(key, value);
 			}
 		},
 		_addParameter : function (key, value) {
