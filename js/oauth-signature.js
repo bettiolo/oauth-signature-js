@@ -150,10 +150,13 @@ var ParametersLoader = (function () {
 				i;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					value = parameters[key];
+					value = parameters[key] || '';
 					if (value instanceof Array) {
 						for (i = 0; i < value.length; i++) {
 							this._addParameter(key, value[i]);
+						}
+						if (value.length == 0) {
+							this._addParameter(key, '');
 						}
 					} else {
 						this._addParameter(key, value);

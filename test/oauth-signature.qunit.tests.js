@@ -73,7 +73,15 @@ test('Should load parameters from different input structures', function () {
 	deepEqual(new ParametersLoader(objectLikeInput).get(), expectedOutput,
 		'An object-like structure should be loaded');
 	deepEqual(new ParametersLoader(arrayLikeInput).get(), expectedOutput,
-		'An array-like  structure should be loaded');
+		'An array-like structure should be loaded');
+	deepEqual(new ParametersLoader( { a : null }).get(), { a : [ '' ] },
+		'An object-like structure with an empty property should maintain the property');
+	deepEqual(new ParametersLoader( { a : [ ] }).get(), { a : [ '' ] },
+		'An object-like structure with an empty array property should maintain the property');
+	deepEqual(new ParametersLoader( [ { a : null } ]).get(), { a : [ '' ] },
+		'An array-like structure with an empty property should maintain the property');
+	deepEqual(new ParametersLoader( [ { a : [ ] } ]).get(), { a : [ '' ] },
+		'An array-like structure with an empty array property should maintain the property');
 });
 test('Should handle non-values', function () {
 	deepEqual(new ParametersLoader().get(), { },
@@ -92,17 +100,20 @@ module('ParametersElement');
 test('Should sort and concatenate the parameters', function () {
 	var orderByName =
 		{
-			foo : [ 'bar' ],
-			baz : [ 'qux' ]
+			foo : [ 'ß', 'bar'],
+			baz : [ 'qux' ],
+			a : [ '' ]
 		},
 		orderByNameAndValue =
 		{
-			foo : [ 'qux', 'bar', 'baz', 10 ],
-			a : [ 'b' ]
+			c : [ 'hi there' ],
+			z : [ 't', 'p' ],
+			f : [ 'a', '50', '25' ],
+			a : [ '1' ]
 		};
-	equal(new ParametersElement(orderByName).get(), 'baz=qux&foo=bar',
+	equal(new ParametersElement(orderByName).get(), 'a=&baz=qux&foo=bar&foo=%C3%9F',
 		'The parameters should be concatenated alphabetically by name');
-	equal(new ParametersElement(orderByNameAndValue).get(), 'a=b&foo=10&foo=bar&foo=baz&foo=qux',
+	equal(new ParametersElement(orderByNameAndValue).get(), 'a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameters should be ordered alphabetically by name and value');
 });
 test('Should handle non-values', function () {
@@ -254,6 +265,6 @@ test('The normalized request parameters should be the last element', function ()
 		'The request parameters should not be included if it is empty');
 	equal(new SignatureBaseString('', '', null).generate(), '&&',
 		'The request parameters should not be included if it is null');
-	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : '50' }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
+	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : 50 }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
 });
