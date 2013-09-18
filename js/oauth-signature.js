@@ -12,14 +12,11 @@ var SignatureBaseString = (function () {
     }
 
 	SignatureBaseString.prototype = {
-        _concatenateRequestElements : function () {
-            // HTTP_METHOD & url & parameters
-            return this._rfc3986.encode(this._httpMethod) + '&'
-		         + this._rfc3986.encode(this._url) + '&'
-	             + this._rfc3986.encode(this._parameters);
-        },
         generate : function () {
-            return this._concatenateRequestElements();
+	        // HTTP_METHOD & url & parameters
+	        return this._rfc3986.encode(this._httpMethod) + '&'
+		        + this._rfc3986.encode(this._url) + '&'
+		        + this._rfc3986.encode(this._parameters);
         }
     };
 
@@ -81,7 +78,7 @@ var UrlElement = (function () {
 
 var ParametersElement = (function () {
 	'use strict';
-	
+
 	function ParametersElement (parameters) {
 		this._parameters = parameters; // Format: { 'key': ['value 1', 'value 2'] };
 		this._sortedKeys = [ ];
