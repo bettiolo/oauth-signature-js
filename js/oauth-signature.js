@@ -6,6 +6,7 @@ var SignatureBaseString = (function () {
     function SignatureBaseString(httpMethod, url, parameters) {
         this._httpMethod = new HttpMethodElement(httpMethod).get();
         this._url = new UrlElement(url).get();
+	    parameters = new ParametersLoader(parameters).get();
 	    this._parameters = new ParametersElement(parameters).get();
 	    this._rfc3986 = new Rfc3986();
     }
@@ -14,7 +15,7 @@ var SignatureBaseString = (function () {
 
         _concatenateRequestElements : function () {
             // HTTP_METHOD & url & parameters
-            return this._httpMethod + '&' + this._url + this._parameters;
+            return this._httpMethod + '&' + this._url + '&' + this._parameters;
         },
         generate : function () {
             return this._concatenateRequestElements();
@@ -78,9 +79,9 @@ var UrlElement = (function () {
 var ParametersElement = (function () {
 
 	function ParametersElement (parameters) {
-		this._parameters = new ParametersLoader(parameters).get(); // Format: { 'key': ['value 1', 'value 2'] };
-		this._concatenatedParameters = '';
+		this._parameters = parameters; // Format: { 'key': ['value 1', 'value 2'] };
 		this._sortedKeys = [ ];
+		this._normalizedParameters = [ ];
 		this._rfc3986 = new Rfc3986();
 		this._sortParameters();
 		this._concatenateParameters();
@@ -89,7 +90,6 @@ var ParametersElement = (function () {
 	ParametersElement .prototype = {
 		_sortParameters : function () {
 			var key;
-			this._sortedKeys = [ ];
 			for (key in this._parameters) {
 				this._sortedKeys.push(key);
 			}
@@ -97,25 +97,23 @@ var ParametersElement = (function () {
 		},
 		_concatenateParameters : function () {
 			var i;
-			this._concatenatedParameters = this._sortedKeys.length == 0 ? '&' : '';
 			for (i = 0; i < this._sortedKeys.length; i++) {
-				this._concatenatedParameters += this._getConcatenatedParameter(this._sortedKeys[i]);
+				this._normalizeParameter(this._sortedKeys[i]);
 			}
 		},
-		_getConcatenatedParameter : function (key) {
+		_normalizeParameter : function (key) {
 			var i,
-				parameters = this._parameters[key],
-				concatenatedParameters = '';
-			parameters.sort();
-			for (i = 0; i < parameters.length; i++) {
-				concatenatedParameters +=
-					'&' + this._rfc3986.encode(key) +
-						'=' + this._rfc3986.encode(parameters[i]);
+				values = this._parameters[key],
+				encodedKey = this._rfc3986.encode(key),
+				encodedValue;
+			values.sort();
+			for (i = 0; i < values.length; i++) {
+				encodedValue = this._rfc3986.encode(values[i]);
+				this._normalizedParameters.push(encodedKey + '=' + encodedValue)
 			}
-			return concatenatedParameters;
 		},
 		get : function () {
-			return this._concatenatedParameters;
+			return this._normalizedParameters.join('&');
 		}
 	}
 

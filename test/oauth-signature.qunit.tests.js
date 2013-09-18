@@ -88,6 +88,34 @@ test('Should handle non-values', function () {
 		'An empty array-like parameter should be returned as an empty object');
 });
 
+module('ParametersElement');
+test('Should sort and concatenate the parameters', function () {
+	var orderByName =
+		{
+			foo : [ 'bar' ],
+			baz : [ 'qux' ]
+		},
+		orderByNameAndValue =
+		{
+			foo : [ 'qux', 'bar', 'baz', 10 ],
+			a : [ 'b' ]
+		};
+	equal(new ParametersElement(orderByName).get(), 'baz=qux&foo=bar',
+		'The parameters should be concatenated alphabetically by name');
+	equal(new ParametersElement(orderByNameAndValue).get(), 'a=b&foo=10&foo=bar&foo=baz&foo=qux',
+		'The parameters should be ordered alphabetically by name and value');
+});
+test('Should handle non-values', function () {
+	equal(new ParametersElement().get(), '',
+		'An undefined input should be returned as an empty string');
+	equal(new ParametersElement('').get(), '',
+		'An empty string input should be returned as an empty string');
+	equal(new ParametersElement(null).get(), '',
+		'A null input should be returned as an empty string');
+	equal(new ParametersElement({ }).get(), '',
+		'An empty object input should be returned as an empty string');
+});
+
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
