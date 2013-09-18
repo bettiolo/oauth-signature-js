@@ -4,15 +4,14 @@ var SignatureBaseString = (function () {
 
 	// url: if the scheme is missing, http will be added automatically
     function SignatureBaseString(httpMethod, url, parameters) {
+	    parameters = new ParametersLoader(parameters).get();
         this._httpMethod = new HttpMethodElement(httpMethod).get();
         this._url = new UrlElement(url).get();
-	    parameters = new ParametersLoader(parameters).get();
 	    this._parameters = new ParametersElement(parameters).get();
 	    this._rfc3986 = new Rfc3986();
     }
 
 	SignatureBaseString.prototype = {
-
         _concatenateRequestElements : function () {
             // HTTP_METHOD & url & parameters
             return this._rfc3986.encode(this._httpMethod) + '&'
@@ -28,6 +27,7 @@ var SignatureBaseString = (function () {
 })();
 
 var HttpMethodElement = (function () {
+	'use strict';
 
 	function HttpMethodElement(httpMethod) {
 		this._httpMethod = httpMethod || '';
@@ -43,6 +43,7 @@ var HttpMethodElement = (function () {
 })();
 
 var UrlElement = (function () {
+	'use strict';
 
 	function UrlElement(url) {
 		this._url = url || '';
@@ -79,7 +80,8 @@ var UrlElement = (function () {
 })();
 
 var ParametersElement = (function () {
-
+	'use strict';
+	
 	function ParametersElement (parameters) {
 		this._parameters = parameters; // Format: { 'key': ['value 1', 'value 2'] };
 		this._sortedKeys = [ ];
