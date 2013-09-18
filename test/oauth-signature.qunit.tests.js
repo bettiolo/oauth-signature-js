@@ -116,6 +116,82 @@ test('Should handle non-values', function () {
 		'An empty object input should be returned as an empty string');
 });
 
+module('Rfc3986 Encoding');
+test('The value should be encoded following the RFC3986', function () {
+	var i,
+		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+								'abcdefghijklmnopqrstuvwxyz' +
+								'0123456789-_.~',
+		reservedCharactersWithEncoding =[
+			['!', '%21'], ['#', '%23'], ['$', '%24'], ['&', '%26'],	['\'', '%27'],
+			['(', '%28'], [')', '%29'], ['*', '%2A'], ['+', '%2B'], [',', '%2C'],
+			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
+			['@', '%40'], ['[', '%5B'], [']', '%5D']
+		];
+	equal(new Rfc3986().encode(unreservedCharacters), unreservedCharacters,
+		'Characters in the unreserved character set MUST NOT be encoded');
+	equal(new Rfc3986().encode('*'), '%2A',
+		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
+	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
+		equal(new Rfc3986().encode(reservedCharactersWithEncoding[i][0]), reservedCharactersWithEncoding[i][1],
+			'Characters not in the unreserved character set MUST be encoded');
+	}
+	equal(new Rfc3986().encode('%'), '%25',
+		'Percent character must be encoded');
+});
+test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
+	equal(new Rfc3986().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
+		'Value MUST be encoded as UTF-8 octets before percent-encoding them');
+	equal(new Rfc3986().encode('你好'), '%E4%BD%A0%E5%A5%BD',
+		'Value MUST be encoded as UTF-8 octets before percent-encoding them');
+});
+test('Should handle non-values', function () {
+	equal(new Rfc3986().encode(), '',
+		'Undefined value should return empty string');
+	equal(new Rfc3986().encode(''), '',
+		'Empty value should return empty string');
+	equal(new Rfc3986().encode(null), '',
+		'Null value should return empty string');
+});
+
+module('Rfc3986 Decoding');
+test('The value should be decoded following the RFC3986', function () {
+	var i,
+		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+								'abcdefghijklmnopqrstuvwxyz' +
+								'0123456789-_.~',
+		reservedCharactersWithEncoding =[
+			['!', '%21'], ['#', '%23'], ['$', '%24'], ['&', '%26'],	['\'', '%27'],
+			['(', '%28'], [')', '%29'], ['*', '%2A'], ['+', '%2B'], [',', '%2C'],
+			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
+			['@', '%40'], ['[', '%5B'], [']', '%5D']
+		];
+	equal(new Rfc3986().decode(unreservedCharacters), unreservedCharacters,
+		'Not encoded characters in the unreserved character set MUST NOT be decoded');
+	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
+		equal(new Rfc3986().decode(reservedCharactersWithEncoding[i][1]), reservedCharactersWithEncoding[i][0],
+			'Encoded characters not in the unreserved character set MUST be decoded');
+	}
+	equal(new Rfc3986().decode('%25'), '%',
+		'Encoded percent character must be decoded');
+	equal(new Rfc3986().decode('%31%32%33%41%42%43'), '123ABC',
+		'Encoded unreserved characters must be decoded');
+});
+test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
+	equal(new Rfc3986().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
+		'Value MUST be percent-decoded to get UTF-8 octets');
+	equal(new Rfc3986().decode('%E4%BD%A0%E5%A5%BD'), '你好',
+		'Value MUST be percent-decoded to get UTF-8 octets');
+});
+test('Should handle non-values', function () {
+	equal(new Rfc3986().decode(), '',
+		'Undefined value should return empty string');
+	equal(new Rfc3986().decode(''), '',
+		'Empty value should return empty string');
+	equal(new Rfc3986().decode(null), '',
+		'Null value should return empty string');
+});
+
 module('OAuth Signature Base String');
 test('It should start with an uppercase http method, followed by two ampersands', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
@@ -180,77 +256,4 @@ test('The normalized request parameters should be the last element', function ()
 		'The request parameters should not be included if it is null');
 	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : '50' }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
-});
-
-module('OAuth Encoding');
-test('The value should be encoded following the RFC3986', function () {
-	var i,
-		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-							    'abcdefghijklmnopqrstuvwxyz' +
-								'0123456789-_.~',
-		reservedCharactersWithEncoding =[
-			['!', '%21'], ['#', '%23'], ['$', '%24'], ['&', '%26'],	['\'', '%27'],
-			['(', '%28'], [')', '%29'], ['*', '%2A'], ['+', '%2B'], [',', '%2C'],
-			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
-			['@', '%40'], ['[', '%5B'], [']', '%5D']
-		];
-	equal(new Rfc3986().encode(unreservedCharacters), unreservedCharacters,
-		'Characters in the unreserved character set MUST NOT be encoded');
-	equal(new Rfc3986().encode('*'), '%2A',
-		'Hexadecimal characters in the encodings MUST be uppercase using the percent-encoding (%xx)');
-	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
-		equal(new Rfc3986().encode(reservedCharactersWithEncoding[i][0]), reservedCharactersWithEncoding[i][1],
-			'Characters not in the unreserved character set MUST be encoded');
-
-	}
-	equal(new Rfc3986().encode('%'), '%25',
-		'Percent character must be encoded');
-	equal(new Rfc3986().encode(), '',
-		'Undefined value should return empty string');
-	equal(new Rfc3986().encode(''), '',
-		'Empty value should return empty string');
-	equal(new Rfc3986().encode(null), '',
-		'Null value should return empty string');
-});
-test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
-	equal(new Rfc3986().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
-		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-	equal(new Rfc3986().encode('你好'), '%E4%BD%A0%E5%A5%BD',
-		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-
-});
-test('The value should be decoded following the RFC3986', function () {
-	var i,
-		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-			'abcdefghijklmnopqrstuvwxyz' +
-			'0123456789-_.~',
-		reservedCharactersWithEncoding =[
-			['!', '%21'], ['#', '%23'], ['$', '%24'], ['&', '%26'],	['\'', '%27'],
-			['(', '%28'], [')', '%29'], ['*', '%2A'], ['+', '%2B'], [',', '%2C'],
-			['/', '%2F'], [':', '%3A'], [';', '%3B'], ['=', '%3D'], ['?', '%3F'],
-			['@', '%40'], ['[', '%5B'], [']', '%5D']
-		];
-	equal(new Rfc3986().decode(unreservedCharacters), unreservedCharacters,
-		'Not encoded characters in the unreserved character set MUST NOT be decoded');
-	for (i = 0; i < reservedCharactersWithEncoding.length; i++) {
-		equal(new Rfc3986().decode(reservedCharactersWithEncoding[i][1]), reservedCharactersWithEncoding[i][0],
-			'Encoded characters not in the unreserved character set MUST be decoded');
-
-	}
-	equal(new Rfc3986().decode('%25'), '%',
-		'Encoded percent character must be decoded');
-	equal(new Rfc3986().decode('%31%32%33%41%42%43'), '123ABC',
-		'Encoded unreserved characters must be decoded');
-	equal(new Rfc3986().decode(), '',
-		'Undefined value should return empty string');
-	equal(new Rfc3986().decode(''), '',
-		'Empty value should return empty string');
-	equal(new Rfc3986().decode(null), '',
-		'Null value should return empty string');
-});
-test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
-	equal(new Rfc3986().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
-		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
-	equal(new Rfc3986().decode('%E4%BD%A0%E5%A5%BD'), '你好',
-		'Text names and values MUST be encoded as UTF-8 octets before percent-encoding them');
 });
