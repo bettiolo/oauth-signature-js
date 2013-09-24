@@ -280,8 +280,8 @@ test('Produces the OAuth 1.0a reference sample', function () {
 			file : 'vacation.jpg',
 			size : 'original'
 		},
-		expectedSignatureBaseString = "GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal",
-		url = 'http://photos.example.net/photos';
+		url = 'http://photos.example.net/photos',
+		expectedSignatureBaseString = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal';
 	equal(new SignatureBaseString('GET', url, parameters).generate(), expectedSignatureBaseString,
 		'The generated signature base string should match the expected value');
 });
@@ -293,8 +293,10 @@ test('Generates base64 encoded hash for test string', function () {
 });
 test('Generates base64 encoded hash for OAuth 1.0a reference sample', function () {
 	var text = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal',
-		key = 'kd94hf93k423kf44&pfkkdhi9sl3r4s00',
-		expectedHash = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=';
-	equal(new HmacSha1(text, key).getBase64EncodedHash(), expectedHash,
+		consumerSecret = 'kd94hf93k423kf44',
+		tokenSecret = 'pfkkdhi9sl3r4s00',
+		key = consumerSecret + '&' + tokenSecret,
+		expectedBase64Hash = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=';
+	equal(new HmacSha1(text, key).getBase64EncodedHash(), expectedBase64Hash,
 		'The base64 encoded hash from reference data is correct');
 });
