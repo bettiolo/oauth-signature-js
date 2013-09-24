@@ -288,6 +288,6 @@ test('Produces the OAuth 1.0a reference sample', function () {
 
 module('HmacSha1');
 test('Generates signature', function () {
-	equal(new HmacSha1('testSignatureBaseString', 'consumerSecret&tokenSecret').generate(), '',
-		'The generated signature is correct');
+	equal(new HmacSha1('testSignatureBaseString', 'consumerSecret&tokenSecret').getHash(), 'fbc24ec22a41e3d17ed72d96d3fd92e2ad13a78b',
+		'The generated signature from test data is correct');
 });
