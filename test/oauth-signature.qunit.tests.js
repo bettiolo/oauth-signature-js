@@ -270,18 +270,18 @@ test('Handles non-values', function () {
 		'The request parameters should not be included if it is null');
 });
 test('Produces the OAuth 1.0a reference sample', function () {
-	var url = 'http://photos.example.net/photos';
 	var parameters = {
-		oauth_consumer_key : 'dpf43f3p2l4k3l03',
-		oauth_token : 'nnch734d00sl2jdk',
-		oauth_nonce : 'kllo9940pd9333jh',
-		oauth_timestamp : '1191242096',
-		oauth_signature_method : 'HMAC-SHA1', // Mandatory?
-		oauth_version : '1.0', // Mandatory?
-		file : 'vacation.jpg',
-		size : 'original'
-	};
-	var expectedSignatureBaseString = "GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal";
+			oauth_consumer_key : 'dpf43f3p2l4k3l03',
+			oauth_token : 'nnch734d00sl2jdk',
+			oauth_nonce : 'kllo9940pd9333jh',
+			oauth_timestamp : '1191242096',
+			oauth_signature_method : 'HMAC-SHA1', // Mandatory?
+			oauth_version : '1.0', // Mandatory?
+			file : 'vacation.jpg',
+			size : 'original'
+		},
+		expectedSignatureBaseString = "GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal",
+		url = 'http://photos.example.net/photos';
 	equal(new SignatureBaseString('GET', url, parameters).generate(), expectedSignatureBaseString,
 		'The generated signature base string should match the expected value');
 });
