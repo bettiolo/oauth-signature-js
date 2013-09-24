@@ -269,5 +269,4 @@ test('Should handle non-values', function () {
 		'The request parameters should not be included if it is empty');
 	equal(new SignatureBaseString('', '', null).generate(), '&&',
 		'The request parameters should not be included if it is null');
-
 });
