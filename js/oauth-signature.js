@@ -207,3 +207,30 @@ var Rfc3986 = (function () {
 
 	return Rfc3986;
 })();
+
+var SignatureGenerator = (function () {
+	'use strict';
+
+	function SignatureGenerator() {
+
+	}
+
+	return SignatureGenerator;
+})();
+
+var HmacSha1 = (function () {
+	'use strict';
+
+	function HmacSha1(text, key) {
+		this._text = key;
+		this._key = key;
+	}
+
+	HmacSha1.prototype = {
+		generate : function () {
+
+		}
+	};
+
+	return HmacSha1;
+})();
