@@ -287,7 +287,14 @@ test('Produces the OAuth 1.0a reference sample', function () {
 });
 
 module('HmacSha1');
-test('Generates signature', function () {
-	equal(new HmacSha1('testSignatureBaseString', 'consumerSecret&tokenSecret').getHash(), 'fbc24ec22a41e3d17ed72d96d3fd92e2ad13a78b',
-		'The generated signature from test data is correct');
+test('Generates base64 encoded hash for test string', function () {
+	equal(new HmacSha1('testSignatureBaseString', 'consumerSecret&tokenSecret').getBase64EncodedHash(), '+8JOwipB49F+1y2W0/2S4q0Tp4s=',
+		'The base64 encoded hash from test data is correct');
+});
+test('Generates base64 encoded hash for OAuth 1.0a reference sample', function () {
+	var text = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal',
+		key = 'kd94hf93k423kf44&pfkkdhi9sl3r4s00',
+		expectedHash = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=';
+	equal(new HmacSha1(text, key).getBase64EncodedHash(), expectedHash,
+		'The base64 encoded hash from reference data is correct');
 });
