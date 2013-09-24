@@ -222,13 +222,17 @@ var HmacSha1 = (function () {
 	'use strict';
 
 	function HmacSha1(text, key) {
-		this._text = text;
-		this._key = key;
+		this._text = text || '';
+		this._key = key || '';
+		this._hash = CryptoJS.HmacSHA1(this._text, this._key);
 	}
 
 	HmacSha1.prototype = {
+		getHash : function () {
+			return this._hash.toString();
+		},
 		getBase64EncodedHash : function () {
-			return CryptoJS.HmacSHA1(this._text, this._key).toString(CryptoJS.enc.Base64);
+			return this._hash.toString(CryptoJS.enc.Base64);
 		}
 	};
 
