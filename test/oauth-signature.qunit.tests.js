@@ -1,11 +1,11 @@
 module('HttpMethodElement');
-test('Should be uppercase', function (){
+test('Converts the http method to uppercase', function (){
 	equal(new HttpMethodElement('get').get(), 'GET',
 		'A lowercase GET http method should be uppercase');
 	equal(new HttpMethodElement('pOsT').get(), 'POST',
 		'A mixed case POST http method should be uppercase');
 });
-test('Should handle non-values', function (){
+test('Handles non-values', function (){
 	equal(new HttpMethodElement().get(), '',
 		'An undefined http method should be normalized to an empty string');
 	equal(new HttpMethodElement('').get(), '',
@@ -15,7 +15,7 @@ test('Should handle non-values', function (){
 });
 
 module('UrlElement')
-test('Should be normalized', function () {
+test('Normalizes the url', function () {
 	equal(new UrlElement('http://example.co.uk').get(), 'http://example.co.uk',
 		'A valid url should remain the same');
 	equal(new UrlElement('http://EXAMPLE.co.UK/endpoint').get(), 'http://example.co.uk/endpoint',
@@ -43,7 +43,7 @@ test('Should be normalized', function () {
 	equal(new UrlElement('example.org:80').get(), 'http://example.org',
 		'The default http port will be stripped if the scheme is missing');
 });
-test('Should handle non-values', function () {
+test('Handles non-values', function () {
 	equal(new UrlElement().get(), '',
 		'An undefined url should be normalized to an empty string');
 	equal(new UrlElement('').get(), '',
@@ -53,7 +53,7 @@ test('Should handle non-values', function () {
 });
 
 module('ParametersLoader') // Output format: { 'key': ['value 1', 'value 2'] }
-test('Should load parameters from different input structures', function () {
+test('Loads parameters from different input structures', function () {
 	var objectLikeInput =
 		{
 			a : 'b',
@@ -83,7 +83,7 @@ test('Should load parameters from different input structures', function () {
 	deepEqual(new ParametersLoader( [ { a : [ ] } ]).get(), { a : [ '' ] },
 		'An array-like structure with an empty array property should maintain the property');
 });
-test('Should handle non-values', function () {
+test('Handles non-values', function () {
 	deepEqual(new ParametersLoader().get(), { },
 		'An undefined parameter should be returned as an empty object');
 	deepEqual(new ParametersLoader('').get(), { },
@@ -97,7 +97,7 @@ test('Should handle non-values', function () {
 });
 
 module('ParametersElement');
-test('Should sort and concatenate the parameters', function () {
+test('Sorts and concatenates the parameters', function () {
 	var orderByName =
 		{
 			foo : [ 'ß', 'bar'],
@@ -116,7 +116,7 @@ test('Should sort and concatenate the parameters', function () {
 	equal(new ParametersElement(orderByNameAndValue).get(), 'a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameters should be ordered alphabetically by name and value');
 });
-test('Should handle non-values', function () {
+test('Handles non-values', function () {
 	equal(new ParametersElement().get(), '',
 		'An undefined input should be returned as an empty string');
 	equal(new ParametersElement('').get(), '',
@@ -127,8 +127,8 @@ test('Should handle non-values', function () {
 		'An empty object input should be returned as an empty string');
 });
 
-module('Rfc3986 Encoding');
-test('The value should be encoded following the RFC3986', function () {
+module('Rfc3986');
+test('Encodes the value following the RFC3986', function () {
 	var i,
 		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
 								'abcdefghijklmnopqrstuvwxyz' +
@@ -150,13 +150,13 @@ test('The value should be encoded following the RFC3986', function () {
 	equal(new Rfc3986().encode('%'), '%25',
 		'Percent character must be encoded');
 });
-test('The value containing UTF8 characters should be encoded following the RFC3629', function () {
+test('Encodes the value containing UTF8 characters following the RFC3629', function () {
 	equal(new Rfc3986().encode('åçñ'), '%C3%A5%C3%A7%C3%B1',
 		'Value MUST be encoded as UTF-8 octets before percent-encoding them');
 	equal(new Rfc3986().encode('你好'), '%E4%BD%A0%E5%A5%BD',
 		'Value MUST be encoded as UTF-8 octets before percent-encoding them');
 });
-test('Should handle non-values', function () {
+test('Handles encoding of non-values', function () {
 	equal(new Rfc3986().encode(), '',
 		'Undefined value should return empty string');
 	equal(new Rfc3986().encode(''), '',
@@ -164,9 +164,7 @@ test('Should handle non-values', function () {
 	equal(new Rfc3986().encode(null), '',
 		'Null value should return empty string');
 });
-
-module('Rfc3986 Decoding');
-test('The value should be decoded following the RFC3986', function () {
+test('Decodes the value following the RFC3986', function () {
 	var i,
 		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
 								'abcdefghijklmnopqrstuvwxyz' +
@@ -188,13 +186,13 @@ test('The value should be decoded following the RFC3986', function () {
 	equal(new Rfc3986().decode('%31%32%33%41%42%43'), '123ABC',
 		'Encoded unreserved characters must be decoded');
 });
-test('The value containing encoded UTF8 characters should be decoded following the RFC3629', function () {
+test('Decodes the value containing UTF8 characters following the RFC3629', function () {
 	equal(new Rfc3986().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
 		'Value MUST be percent-decoded to get UTF-8 octets');
 	equal(new Rfc3986().decode('%E4%BD%A0%E5%A5%BD'), '你好',
 		'Value MUST be percent-decoded to get UTF-8 octets');
 });
-test('Should handle non-values', function () {
+test('Handles decoding of non-values', function () {
 	equal(new Rfc3986().decode(), '',
 		'Undefined value should return empty string');
 	equal(new Rfc3986().decode(''), '',
@@ -204,13 +202,13 @@ test('Should handle non-values', function () {
 });
 
 module('SignatureBaseString');
-test('It should start with an uppercase http method, followed by two ampersands', function () {
+test('Starts with an uppercase http method', function () {
 	equal(new SignatureBaseString('get').generate(), 'GET&&',
 		'The element separator (&) should be included for omitted elements');
 	equal(new SignatureBaseString('pOsT').generate(), 'POST&&',
 		'The element separator (&) should be included for omitted elements');
 });
-test('The encoded url should be included in the second element after the http method and should be suffixed by an ampersand', function () {
+test('Includes the encoded url as the second element', function () {
 	equal(new SignatureBaseString('GET', 'http://example.co.uk').generate(), 'GET&http%3A%2F%2Fexample.co.uk&',
 		'The http method should be the first component of the url');
 	equal(new SignatureBaseString('', 'http://EXAMPLE.co.UK/endpoint').generate(), '&http%3A%2F%2Fexample.co.uk%2Fendpoint&',
@@ -238,7 +236,7 @@ test('The encoded url should be included in the second element after the http me
 	equal(new SignatureBaseString('', 'example.org:80').generate(), '&http%3A%2F%2Fexample.org&',
 		'The default http port will be stripped if the scheme is missing');
 });
-test('The normalized request parameters should be the last element', function () {
+test('Ends with the normalized request parameters', function () {
 	equal(new SignatureBaseString('', '', { foo : 'bar' }).generate(), '&&foo%3Dbar',
 		'The parameter should be appended');
 	equal(new SignatureBaseString('', '', { foo : 'bar', baz : 'qux' }).generate(), '&&baz%3Dqux%26foo%3Dbar',
@@ -254,7 +252,7 @@ test('The normalized request parameters should be the last element', function ()
 	equal(new SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : 50 }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a%3D1%26c%3Dhi%2520there%26f%3D25%26f%3D50%26f%3Da%26z%3Dp%26z%3Dt',
 		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
 });
-test('Should handle non-values', function () {
+test('Handles non-values', function () {
 	equal(new SignatureBaseString().generate(), '&&',
 		'The http method shouldn\'t be included if it is undefined');
 	equal(new SignatureBaseString('').generate(), '&&',
