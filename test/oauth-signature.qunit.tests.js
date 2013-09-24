@@ -300,4 +300,12 @@ test('Generates base64 encoded hash for OAuth 1.0a reference sample', function (
 	equal(new HmacSha1(text, key).getBase64EncodedHash(), expectedBase64Hash,
 		'The base64 encoded hash of reference data is correct');
 });
+test('Handles non-values', function () {
+	var expectedHash = 'fbdb1d1b18aa6c08324b7d64b71fb76370690e1d';
+	equal(new HmacSha1().getHash(), expectedHash,
+		'Handles undefined values');
+	equal(new HmacSha1('', '', '').getHash(), expectedHash,
+		'Handles empty values');
+	equal(new HmacSha1(null, null, null).getHash(), expectedHash,
+		'Handles empty values');
 });
