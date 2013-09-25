@@ -315,3 +315,9 @@ test('Generates RFC3986 encoded signature for test string', function () {
 	equal(new HmacSha1Signature('testSignatureBaseString', 'consumerSecret', 'tokenSecret').generate(), '%2B8JOwipB49F%2B1y2W0%2F2S4q0Tp4s%3D',
 		'The signature of test data is encoded correctly');
 });
+test('Concatenates the consumer secret and token secret for the key using the separator (&)', function () {
+});
+test('Encodes the consumer secret and token secret', function () {
+});
+test('Handles non-values', function () {
+});
