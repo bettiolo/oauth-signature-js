@@ -208,14 +208,23 @@ var Rfc3986 = (function () {
 	return Rfc3986;
 })();
 
-var SignatureGenerator = (function () {
+var HmacSha1Signature = (function () {
 	'use strict';
 
-	function SignatureGenerator(signatureBaseString, consumerSecret, tokenSecret) {
-
+	function HmacSha1SignatureGenerator(signatureBaseString, consumerSecret, tokenSecret) {
+		this._rfc3986 = new Rfc3986();
+		this._text = signatureBaseString;
+		this._key = consumerSecret + '&' + tokenSecret;
+		this._base64EncodedHash = new HmacSha1(this._text, this._key).getBase64EncodedHash();
 	}
 
-	return SignatureGenerator;
+	HmacSha1SignatureGenerator.prototype = {
+		generate : function () {
+			return this._rfc3986.encode(this._base64EncodedHash);
+		}
+	};
+
+	return HmacSha1SignatureGenerator;
 })();
 
 var HmacSha1 = (function () {
