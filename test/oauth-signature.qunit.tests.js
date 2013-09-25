@@ -15,7 +15,7 @@ test('Handles non-values', function (){
 		'A null http method should be normalized to an empty string');
 });
 
-module('UrlElement')
+module('UrlElement');
 test('Normalizes the url', function () {
 	equal(new UrlElement('http://example.co.uk').get(), 'http://example.co.uk',
 		'A valid url should remain the same');
@@ -53,7 +53,7 @@ test('Handles non-values', function () {
 		'An null url should be normalized to an empty string');
 });
 
-module('ParametersLoader') // Output format: { 'key': ['value 1', 'value 2'] }
+module('ParametersLoader'); // Outputs: { 'key': ['value 1', 'value 2'] }
 test('Loads parameters from different input structures', function () {
 	var objectLikeInput =
 		{
