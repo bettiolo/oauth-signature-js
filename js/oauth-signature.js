@@ -34,7 +34,7 @@ var HttpMethodElement = (function () {
 		get : function () {
 			return this._httpMethod.toUpperCase();
 		}
-	}
+	};
 
 	return HttpMethodElement;
 })();
@@ -71,7 +71,7 @@ var UrlElement = (function () {
 					+ path;
 			return this._url;
 		}
-	}
+	};
 
 	return UrlElement;
 })();
@@ -116,7 +116,7 @@ var ParametersElement = (function () {
 		get : function () {
 			return this._normalizedParameters.join('&');
 		}
-	}
+	};
 
 	return ParametersElement ;
 })();
