@@ -311,13 +311,21 @@ test('Handles non-values', function () {
 });
 
 module('HmacSha1Signature');
-test('Generates RFC3986 encoded signature for test string', function () {
-	equal(new HmacSha1Signature('testSignatureBaseString', 'consumerSecret', 'tokenSecret').generate(), '%2B8JOwipB49F%2B1y2W0%2F2S4q0Tp4s%3D',
-		'The signature of test data is encoded correctly');
+test('Encodes the secrets following the RFC3986', function () {
+	var signatureBaseString = 'GET&http%3A%2F%2Fapi.example.com%2Fendpoint&oauth_consumer_key%3Dconsumer-key%26oauth_nonce%3D5678%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234%26oauth_token%3Dtoken-key%26oauth_version%3D1.0';
+	equal(new HmacSha1Signature(signatureBaseString, '你好', 'åçñ').generate(), 'JXcouSrYw1x7ql1ArjfT1Bg8O9g%3D',
+		'The secrets are encoding using RFC3986');
 });
-test('Concatenates the consumer secret and token secret for the key using the separator (&)', function () {
-});
-test('Encodes the consumer secret and token secret', function () {
+test('Appends the secrets separator (&)', function () {
+	var signatureBaseString = 'GET&http%3A%2F%2Fapi.example.com%2Fendpoint&oauth_consumer_key%3Dconsumer-key%26oauth_nonce%3D5678%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234%26oauth_version%3D1.0';
+	equal(new HmacSha1Signature(signatureBaseString, 'consumer-secret', '').generate(), '9ynBsPmHokLVL8g3UQ3QX3czNXk%3D',
+		'The separator (&) is appended if the optional token secret is empty');
 });
 test('Handles non-values', function () {
+	equal(new HmacSha1Signature().generate(), '5CoEcoq7XoKFjwYCieQvuzadeUA%3D',
+		'Handles undefined values');
+	equal(new HmacSha1Signature(null, null, null).generate(), '5CoEcoq7XoKFjwYCieQvuzadeUA%3D',
+		'Handles null values');
+	equal(new HmacSha1Signature('', '', '').generate(), '5CoEcoq7XoKFjwYCieQvuzadeUA%3D',
+		'Handles empty values');
 });

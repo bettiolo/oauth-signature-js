@@ -214,7 +214,7 @@ var HmacSha1Signature = (function () {
 	function HmacSha1SignatureGenerator(signatureBaseString, consumerSecret, tokenSecret) {
 		this._rfc3986 = new Rfc3986();
 		this._text = signatureBaseString;
-		this._key = consumerSecret + '&' + tokenSecret;
+		this._key = this._rfc3986.encode(consumerSecret) + '&' + this._rfc3986.encode(tokenSecret);
 		this._base64EncodedHash = new HmacSha1(this._text, this._key).getBase64EncodedHash();
 	}
 
