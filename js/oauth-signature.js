@@ -228,9 +228,6 @@ var HmacSha1 = (function () {
 	}
 
 	HmacSha1.prototype = {
-		getHash : function () {
-			return this._hash.toString();
-		},
 		getBase64EncodedHash : function () {
 			return this._hash.toString(CryptoJS.enc.Base64);
 		}
