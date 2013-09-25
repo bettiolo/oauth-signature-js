@@ -275,8 +275,8 @@ test('Produces the OAuth 1.0a reference sample', function () {
 			oauth_token : 'nnch734d00sl2jdk',
 			oauth_nonce : 'kllo9940pd9333jh',
 			oauth_timestamp : '1191242096',
-			oauth_signature_method : 'HMAC-SHA1', // Mandatory?
-			oauth_version : '1.0', // Mandatory?
+			oauth_signature_method : 'HMAC-SHA1',
+			oauth_version : '1.0', // Optional
 			file : 'vacation.jpg',
 			size : 'original'
 		},
