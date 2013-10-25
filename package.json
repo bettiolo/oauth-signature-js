@@ -15,5 +15,12 @@
   "scripts": {
     "test": "karma start --single-run --browsers PhantomJS"
   },
-  "license": ""
+  "license": "",
+  "volo": {
+		"baseUrl": "src/app",
+		"url": "",
+		"dependencies": {},
+		"type": "",
+		"ignore": [ "*.test.js" ]
+	}
 }
