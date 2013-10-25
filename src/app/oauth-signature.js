@@ -1,30 +1,28 @@
-// Specification: http://oauth.net/core/1.0/#anchor14
-var SignatureBaseString = (function () {
-    'use strict';
+var oauthSignature = (function() {
+	'use strict';
 
+	function OAuthSignature() {
+
+	}
+
+	// Specification: http://oauth.net/core/1.0/#anchor14
 	// url: if the scheme is missing, http will be added automatically
-    function SignatureBaseString(httpMethod, url, parameters) {
-	    parameters = new ParametersLoader(parameters).get();
-        this._httpMethod = new HttpMethodElement(httpMethod).get();
-        this._url = new UrlElement(url).get();
-	    this._parameters = new ParametersElement(parameters).get();
-	    this._rfc3986 = new Rfc3986();
-    }
+	function SignatureBaseString(httpMethod, url, parameters) {
+		parameters = new ParametersLoader(parameters).get();
+		this._httpMethod = new HttpMethodElement(httpMethod).get();
+		this._url = new UrlElement(url).get();
+		this._parameters = new ParametersElement(parameters).get();
+		this._rfc3986 = new Rfc3986();
+	}
 
 	SignatureBaseString.prototype = {
-        generate : function () {
-	        // HTTP_METHOD & url & parameters
-	        return this._rfc3986.encode(this._httpMethod) + '&'
-		        + this._rfc3986.encode(this._url) + '&'
-		        + this._rfc3986.encode(this._parameters);
-        }
-    };
-
-    return SignatureBaseString;
-})();
-
-var HttpMethodElement = (function () {
-	'use strict';
+		generate : function () {
+			// HTTP_METHOD & url & parameters
+			return this._rfc3986.encode(this._httpMethod) + '&'
+				+ this._rfc3986.encode(this._url) + '&'
+				+ this._rfc3986.encode(this._parameters);
+		}
+	};
 
 	function HttpMethodElement(httpMethod) {
 		this._httpMethod = httpMethod || '';
@@ -35,12 +33,6 @@ var HttpMethodElement = (function () {
 			return this._httpMethod.toUpperCase();
 		}
 	};
-
-	return HttpMethodElement;
-})();
-
-var UrlElement = (function () {
-	'use strict';
 
 	function UrlElement(url) {
 		this._url = url || '';
@@ -72,12 +64,6 @@ var UrlElement = (function () {
 			return this._url;
 		}
 	};
-
-	return UrlElement;
-})();
-
-var ParametersElement = (function () {
-	'use strict';
 
 	function ParametersElement (parameters) {
 		this._parameters = parameters; // Format: { 'key': ['value 1', 'value 2'] };
@@ -117,12 +103,6 @@ var ParametersElement = (function () {
 			return this._normalizedParameters.join('&');
 		}
 	};
-
-	return ParametersElement ;
-})();
-
-var ParametersLoader = (function () {
-	'use strict';
 
 	function ParametersLoader (parameters) {
 		this._parameters = { }; // Format: { 'key': ['value 1', 'value 2'] }
@@ -177,58 +157,40 @@ var ParametersLoader = (function () {
 		}
 	};
 
-	return ParametersLoader;
-})();
+	function Rfc3986() {
 
-var Rfc3986 = (function () {
-    'use strict';
+	}
 
-    function Rfc3986() {
+	Rfc3986.prototype = {
+		encode : function (decoded) {
+			if (!decoded) {
+				return '';
+			}
+			// using implementation from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FencodeURIComponent
+			return encodeURIComponent(decoded)
+				.replace(/[!'()]/g, escape)
+				.replace(/\*/g, "%2A");
+		},
+		decode : function (encoded) {
+			if (!encoded) {
+				return '';
+			}
+			return decodeURIComponent(encoded);
+		}
+	};
 
-    }
-
-    Rfc3986.prototype = {
-        encode : function (decoded) {
-	        if (!decoded) {
-		        return '';
-	        }
-	        // using implementation from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FencodeURIComponent
-	        return encodeURIComponent(decoded)
-		        .replace(/[!'()]/g, escape)
-		        .replace(/\*/g, "%2A");
-        },
-        decode : function (encoded) {
-	        if (!encoded) {
-		        return '';
-	        }
-            return decodeURIComponent(encoded);
-        }
-    };
-
-	return Rfc3986;
-})();
-
-var HmacSha1Signature = (function () {
-	'use strict';
-
-	function HmacSha1SignatureGenerator(signatureBaseString, consumerSecret, tokenSecret) {
+	function HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret) {
 		this._rfc3986 = new Rfc3986();
 		this._text = signatureBaseString;
 		this._key = this._rfc3986.encode(consumerSecret) + '&' + this._rfc3986.encode(tokenSecret);
 		this._base64EncodedHash = new HmacSha1(this._text, this._key).getBase64EncodedHash();
 	}
 
-	HmacSha1SignatureGenerator.prototype = {
+	HmacSha1Signature.prototype = {
 		generate : function () {
 			return this._rfc3986.encode(this._base64EncodedHash);
 		}
 	};
-
-	return HmacSha1SignatureGenerator;
-})();
-
-var HmacSha1 = (function () {
-	'use strict';
 
 	function HmacSha1(text, key) {
 		this._text = text || '';
@@ -242,5 +204,14 @@ var HmacSha1 = (function () {
 		}
 	};
 
-	return HmacSha1;
+	var oauthSignature = new OAuthSignature();
+	oauthSignature.SignatureBaseString = SignatureBaseString;
+	oauthSignature.HttpMethodElement = HttpMethodElement;
+	oauthSignature.UrlElement = UrlElement;
+	oauthSignature.ParametersElement = ParametersElement;
+	oauthSignature.ParametersLoader = ParametersLoader;
+	oauthSignature.Rfc3986 = Rfc3986;
+	oauthSignature.HmacSha1Signature = HmacSha1Signature;
+	oauthSignature.HmacSha1 = HmacSha1;
+	return oauthSignature;
 })();
