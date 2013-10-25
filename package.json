@@ -20,6 +20,6 @@
 		"url": "src/app/oauth-signature.js",
 		"dependencies": {},
 		"type": "",
-		"ignore": [ "*.test.js" ]
+    "ignore": [ "**/*.tests.js" ]
 	}
 }
