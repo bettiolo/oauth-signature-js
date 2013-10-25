@@ -17,8 +17,7 @@
   },
   "license": "",
   "volo": {
-		"baseUrl": "src/app",
-		"url": "",
+		"url": "src/app/oauth-signature.js",
 		"dependencies": {},
 		"type": "",
 		"ignore": [ "*.test.js" ]
