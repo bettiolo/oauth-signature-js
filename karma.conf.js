@@ -15,8 +15,7 @@ module.exports = function(config) {
       'lib/url.js',
       'lib/cryptojs/hmac-sha1.js',
       'lib/cryptojs/enc-base64-min.js',
-      'js/*.js',
-      'test/*.tests.js'
+      'app/*.js',
     ],
 
     // list of files to exclude
