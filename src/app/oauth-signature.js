@@ -2,7 +2,12 @@ var oauthSignature = (function() {
 	'use strict';
 
 	function OAuthSignature() {
+	}
 
+	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, tokenSecret, consumerSecret) {
+		var signatureBaseString = new SignatureBaseString(httpMethod, url, parameters).generate();
+		var signature = new HmacSha1Signature(signatureBaseString, tokenSecret, consumerSecret).generate();
+		return signature;
 	}
 
 	// Specification: http://oauth.net/core/1.0/#anchor14
