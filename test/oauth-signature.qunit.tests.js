@@ -269,7 +269,7 @@ test('Handles non-values', function () {
 	equal(new SignatureBaseString('', '', null).generate(), '&&',
 		'The request parameters should not be included if it is null');
 });
-test('Produces the OAuth 1.0a reference sample', function () {
+test('Produces the OAuth 1.0a GET reference sample', function () {
 	var parameters = {
 			oauth_consumer_key : 'dpf43f3p2l4k3l03',
 			oauth_token : 'nnch734d00sl2jdk',
@@ -283,7 +283,23 @@ test('Produces the OAuth 1.0a reference sample', function () {
 		url = 'http://photos.example.net/photos',
 		expectedSignatureBaseString = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal';
 	equal(new SignatureBaseString('GET', url, parameters).generate(), expectedSignatureBaseString,
-		'The generated signature base string should match the expected value');
+		'The generated GET signature base string should match the expected value');
+});
+test('Produces the OAuth 1.0a POST reference sample', function () {
+	var parameters = {
+			oauth_consumer_key : 'dpf43f3p2l4k3l03',
+			oauth_token : 'nnch734d00sl2jdk',
+			oauth_nonce : 'kllo9940pd9333jh',
+			oauth_timestamp : '1191242096',
+			oauth_signature_method : 'HMAC-SHA1',
+			oauth_version : '1.0', // Optional
+			file : 'vacation.jpg',
+			size : 'original'
+		},
+		url = 'http://photos.example.net/photos',
+		expectedSignatureBaseString = 'POST&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal';
+	equal(new SignatureBaseString('POST', url, parameters).generate(), expectedSignatureBaseString,
+		'The generated POST signature base string should match the expected value');
 });
 
 module('HmacSha1');
@@ -292,12 +308,12 @@ test('Generates base64 encoded hash for test string', function () {
 		'The base64 encoded hash of test data is correct');
 });
 test('Generates base64 encoded hash for OAuth 1.0a reference sample', function () {
-	var text = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal',
+	var baseString = 'GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal',
 		consumerSecret = 'kd94hf93k423kf44',
 		tokenSecret = 'pfkkdhi9sl3r4s00',
 		key = consumerSecret + '&' + tokenSecret,
 		expectedBase64Hash = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=';
-	equal(new HmacSha1(text, key).getBase64EncodedHash(), expectedBase64Hash,
+	equal(new HmacSha1(baseString, key).getBase64EncodedHash(), expectedBase64Hash,
 		'The base64 encoded hash of reference data is correct');
 });
 test('Handles non-values', function () {
