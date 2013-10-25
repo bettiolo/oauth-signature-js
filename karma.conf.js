@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path, that will be used to resolve files and exclude
-    basePath: '',
+    basePath: 'src/',
 
     // frameworks to use
     frameworks: ['qunit'],
@@ -15,7 +15,8 @@ module.exports = function(config) {
       'lib/url.js',
       'lib/cryptojs/hmac-sha1.js',
       'lib/cryptojs/enc-base64-min.js',
-      'app/*.js',
+      'app/oauth-signature.js',
+      'app/oauth-signature.tests.js'
     ],
 
     // list of files to exclude
