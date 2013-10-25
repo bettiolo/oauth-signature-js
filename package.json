@@ -1,4 +1,19 @@
 {
-	"name" : "application-name",
-	"version" : "0.0.1"
+  "name": "oauth-signature",
+  "author": "Marco Bettiolo <marco@bettiolo.it>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bettiolo/oauth-signature"
+  },
+  "version": "0.0.1",
+  "devDependencies": {
+    "karma-qunit": "~0.1.1"
+  },
+  "engines": {
+    "node": "~0.10"
+  },
+  "scripts": {
+    "test": "karma start --single-run --browsers PhantomJS"
+  },
+  "license": ""
 }
