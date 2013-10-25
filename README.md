@@ -25,7 +25,7 @@ var httpMethod = 'GET',
   		oauth_nonce : 'kllo9940pd9333jh',
   		oauth_timestamp : '1191242096',
   		oauth_signature_method : 'HMAC-SHA1',
-  		oauth_version : '1.0', // Optional
+  		oauth_version : '1.0',
   		file : 'vacation.jpg',
   		size : 'original'
   	},
