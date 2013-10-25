@@ -276,7 +276,7 @@ test('Produces the OAuth 1.0a GET reference sample', function () {
 			oauth_nonce : 'kllo9940pd9333jh',
 			oauth_timestamp : '1191242096',
 			oauth_signature_method : 'HMAC-SHA1',
-			oauth_version : '1.0', // Optional
+			oauth_version : '1.0',
 			file : 'vacation.jpg',
 			size : 'original'
 		},
@@ -292,7 +292,7 @@ test('Produces the OAuth 1.0a POST reference sample', function () {
 			oauth_nonce : 'kllo9940pd9333jh',
 			oauth_timestamp : '1191242096',
 			oauth_signature_method : 'HMAC-SHA1',
-			oauth_version : '1.0', // Optional
+			oauth_version : '1.0',
 			file : 'vacation.jpg',
 			size : 'original'
 		},
@@ -349,21 +349,22 @@ test('Handles non-values', function () {
 module('OAuthSignature');
 test('Produces the signature for the OAuth 1.0a GET reference sample', function () {
 	// This is implementing http://oauth.net/core/1.0a/#rfc.section.A.5.1 and http://oauth.net/core/1.0a/#rfc.section.A.5.2
-	var parameters = {
+	var httpMethod = 'GET',
+		url = 'http://photos.example.net/photos',
+		parameters = {
 			oauth_consumer_key : 'dpf43f3p2l4k3l03',
 			oauth_token : 'nnch734d00sl2jdk',
 			oauth_nonce : 'kllo9940pd9333jh',
 			oauth_timestamp : '1191242096',
-			oauth_signature_method : 'HMAC-SHA1',
-			oauth_version : '1.0', // Optional
+			oauth_signature_method : 'HMAC-SHA1', // ToDo: should be optional and default to HMAC-SHA1
+			oauth_version : '1.0', // ToDo: should be optional and default to 1.0
 			file : 'vacation.jpg',
 			size : 'original'
 		},
-		url = 'http://photos.example.net/photos',
 		consumerSecret = 'kd94hf93k423kf44',
 		tokenSecret = 'pfkkdhi9sl3r4s00',
 		expectedEncodedSignature = 'tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D',
-		encodedSignature = oauthSignature.generate('GET', url, parameters, consumerSecret, tokenSecret);
+		encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret);
 	equal(encodedSignature, expectedEncodedSignature,
 		'The generated GET signature should match the expected reference value');
 });
