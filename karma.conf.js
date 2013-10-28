@@ -12,7 +12,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/url.js',
+      'lib/url.min.js',
       'lib/cryptojs/hmac-sha1.js',
       'lib/cryptojs/enc-base64-min.js',
       'app/oauth-signature.js',
