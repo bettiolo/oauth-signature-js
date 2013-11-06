@@ -3,7 +3,7 @@
   "author": "Marco Bettiolo <marco@bettiolo.it>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bettiolo/oauth-signature"
+    "url": "https://github.com/bettiolo/oauth-signature-js"
   },
   "version": "0.0.1",
   "devDependencies": {
