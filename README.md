@@ -7,8 +7,9 @@
 To generate the OAuth signature call the following method:
   
 ```js
-oauthSignature.generate(httpMethod, url, parameters, tokenSecret, consumerSecret)
+oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret)
 ```
+`tokenSecret` is optional
 
 ## Example
 
