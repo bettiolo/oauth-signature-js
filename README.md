@@ -57,7 +57,7 @@ The tests can be executed in your browser or in node
 
 ### Browser
 
-Open the file [](src/app/oauth-signature.tests.js) in your browser
+Open the file [src/test-runner.qunit.html](src/test-runner.qunit.html) in your browser
 
 ### Node
 
