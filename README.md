@@ -45,3 +45,8 @@ Example GET request using query string parameters:
 
 http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_key=dpf43f3p2l4k3l03&oauth_token=nnch734d00sl2jdk&oauth_signature_method=HMAC-SHA1&oauth_signature=tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D&oauth_timestamp=1191242096&oauth_nonce=kllo9940pd9333jh&oauth_version=1.0
 
+## Advantages
+
+This project has an extensive test coverage for all the corner cases present in the OAuth specification.
+
+Take a look at the test file: signature.tests.js
