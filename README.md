@@ -49,4 +49,4 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 This project has an extensive test coverage for all the corner cases present in the OAuth specification.
 
-Take a look at the test file: signature.tests.js
+Take a look at the test file: [signature.tests.js](/src/app/oauth-signature.tests.js)
