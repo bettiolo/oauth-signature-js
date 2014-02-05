@@ -49,4 +49,16 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 This project has an extensive test coverage for all the corner cases present in the OAuth specification.
 
-Take a look at the test file: [signature.tests.js](/src/app/oauth-signature.tests.js)
+Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
+
+## How do I run tests?
+
+The tests can be executed in your browser or in node
+
+### Browser
+
+Open the file [](src/app/oauth-signature.tests.js) in your browser
+
+### Node
+
+Execute `npm test` in the console
