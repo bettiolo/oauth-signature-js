@@ -1,14 +1,15 @@
 # OAuth 1.0a signature generator
 
-[![Build Status](https://travis-ci.org/bettiolo/oauth-signature.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature)
+[![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
 
 ## Usage
 
 To generate the OAuth signature call the following method:
   
 ```js
-oauthSignature.generate(httpMethod, url, parameters, tokenSecret, consumerSecret)
+oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret)
 ```
+`tokenSecret` is optional
 
 ## Example
 
@@ -44,3 +45,20 @@ Example GET request using query string parameters:
 
 http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_key=dpf43f3p2l4k3l03&oauth_token=nnch734d00sl2jdk&oauth_signature_method=HMAC-SHA1&oauth_signature=tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D&oauth_timestamp=1191242096&oauth_nonce=kllo9940pd9333jh&oauth_version=1.0
 
+## Advantages
+
+This project has an extensive test coverage for all the corner cases present in the OAuth specification.
+
+Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
+
+## How do I run tests?
+
+The tests can be executed in your browser or in node
+
+### Browser
+
+Open the file [src/test-runner.qunit.html](src/test-runner.qunit.html) in your browser
+
+### Node
+
+Execute `npm test` in the console

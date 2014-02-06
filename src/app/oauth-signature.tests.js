@@ -29,6 +29,8 @@ test('Normalizes the url', function () {
 		'The default http port (80) MUST be excluded');
 	equal(new oauthSignature.UrlElement('https://example.org:443').get(), 'https://example.org',
 		'The default https port (443) MUST be excluded');
+	equal(new oauthSignature.UrlElement('https://example.org').get(), 'https://example.org',
+		'The correct url MUST remain unchanged');
 	equal(new oauthSignature.UrlElement('http://example.org:8080').get(), 'http://example.org:8080',
 		'The non default http port MUST be included');
 	equal(new oauthSignature.UrlElement('https://example.org:8080').get(), 'https://example.org:8080',
