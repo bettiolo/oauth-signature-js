@@ -14,10 +14,10 @@ module.exports = function (grunt) {
 			},
 			specs : {
 				src : [
-					'app/oauth-signature.js',
-					'lib/cryptojs/hmac-sha1.js',
-					'lib/cryptojs/enc-base64.min.js',
-					'lib/url.min.js'
+					'src/app/oauth-signature.js',
+					'src/lib/cryptojs/hmac-sha1.js',
+					'src/lib/cryptojs/enc-base64-min.js',
+					'src/lib/url.min.js'
 				],
 				dest : 'dist/oauth-signature.js',
 				nonull : true
