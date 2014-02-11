@@ -1,6 +1,10 @@
 # OAuth 1.0a signature generator
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
+[![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
+[![Dependency Status](https://david-dm.org/bettiolo/oauth-signature-js.png?theme=shields.io)](https://david-dm.org/bettiolo/oauth-signature-js)
+
+[![NPM](https://nodei.co/npm/oauth-signature.png?mini=true)](https://nodei.co/npm/oauth-signature/)
 
 ## Usage
 
