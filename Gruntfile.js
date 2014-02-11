@@ -32,13 +32,50 @@ module.exports = function (grunt) {
 					// sourceMap : '<%= cfg.dist.dir %>/pub.min.map.js';
 				}
 			}
+		},
+		karma : {
+			options : {
+				basePath : '',
+				frameworks : [ 'qunit' ],
+				exclude : [ ],
+				reporters : [ 'dots' ],
+				port : 9876,
+				colors : true,
+				logLevel : 'WARN',
+				autoWatch : false,
+				browsers : [ 'PhantomJS' ],
+				captureTimeout : 60000
+			},
+			dev : {
+				options : {
+					singleRun : true,
+					files : [
+						'src/lib/url.min.js',
+						'src/lib/cryptojs/hmac-sha1.js',
+						'src/lib/cryptojs/enc-base64-min.js',
+						'src/app/oauth-signature.js',
+						'src/app/oauth-signature.tests.js'
+					]
+				}
+			},
+			dist : {
+				options : {
+					singleRun : true,
+					files : [
+						'dist/oauth-signature.min.js',
+						'src/app/oauth-signature.tests.js'
+					]
+				}
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-karma');
 
 	grunt.registerTask('build', [ 'clean', 'concat', 'uglify' ]);
-
+	grunt.registerTask('test', [ 'karma:dev:start' ]);
+	grunt.registerTask('test-build', [ 'karma:dist:start' ]);
 };
