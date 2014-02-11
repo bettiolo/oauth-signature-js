@@ -24,13 +24,14 @@
     "karma-requirejs": "~0.1.0",
     "karma-coffee-preprocessor": "~0.1.2",
     "karma-phantomjs-launcher": "~0.1.2",
-    "grunt-karma": "~0.6.2"
+    "grunt-karma": "~0.6.2",
+    "grunt-cli": "~0.1.13"
   },
   "engines": {
     "node": "~0.10"
   },
   "scripts": {
-    "test": "node_modules/.bin/grunt test-build"
+    "test": "grunt test-build"
   },
   "license": "",
   "volo": {
