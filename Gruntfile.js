@@ -75,7 +75,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-karma');
 
-	grunt.registerTask('build', [ 'clean', 'concat', 'uglify' ]);
+	grunt.registerTask('build', [ 'clean', 'concat', 'uglify', 'test-build' ]);
 	grunt.registerTask('test', [ 'karma:dev:start' ]);
 	grunt.registerTask('test-build', [ 'karma:dist:start' ]);
 };
