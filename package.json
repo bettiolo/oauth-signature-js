@@ -9,9 +9,9 @@
     "url": "https://github.com/bettiolo/oauth-signature-js"
   },
   "bugs": {
-    "url" : "http://github.com/bettiolo/oauth-signature-js/issues"
+    "url": "http://github.com/bettiolo/oauth-signature-js/issues"
   },
-  "license" : "BSD-3-Clause",
+  "license": "BSD-3-Clause",
   "main": "dist/oauth_signature.js",
   "scripts": {
     "test": "grunt test-build"
