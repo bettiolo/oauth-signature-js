@@ -14,8 +14,8 @@
   "license": "BSD-3-Clause",
   "main": "dist/oauth_signature.js",
   "scripts": {
-    "test": "grunt test-build",
-    "build": "grunt build"
+    "prepublish": "grunt build",
+    "test": "grunt test-build"
   },
   "engines": {
     "node": "*"
