@@ -1,11 +1,28 @@
 {
   "name": "oauth-signature",
-  "author": "Marco Bettiolo <marco@bettiolo.it>",
+  "description": "OAuth 1.0a signature generator",
+  "version": "1.0.0",
+  "author": "Marco Bettiolo <marco@bettiolo.it> (https://github.com/bettiolo)",
+  "homepage": "https://github.com/bettiolo/oauth-signature-js",
   "repository": {
     "type": "git",
     "url": "https://github.com/bettiolo/oauth-signature-js"
   },
-  "version": "0.0.1",
+  "bugs": {
+    "url" : "http://github.com/bettiolo/oauth-signature-js/issues"
+  },
+  "license" : "BSD-3-Clause",
+  "main": "dist/oauth_signature.js",
+  "scripts": {
+    "test": "grunt test-build"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "keywords": [
+    "oauth",
+    "hmac-sha1"
+  ],
   "devDependencies": {
     "karma-qunit": "~0.1.1",
     "karma": "~0.10.9",
@@ -27,13 +44,6 @@
     "grunt-karma": "~0.6.2",
     "grunt-cli": "~0.1.13"
   },
-  "engines": {
-    "node": "~0.10"
-  },
-  "scripts": {
-    "test": "grunt test-build"
-  },
-  "license": "",
   "volo": {
     "baseUrl": "src/lib",
     "dependencies": {
