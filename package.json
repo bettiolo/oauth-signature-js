@@ -46,7 +46,9 @@
       "url.min": "github:websanova/js-url/v1.8.6#url.min.js",
       "cryptojs/hmac-sha1": "https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js",
       "cryptojs/enc-base64-min": "https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js",
-      "../lib-dev/qunit": "github:jquery/qunit/v1.14.0#qunit"
+      "../lib-dev/qunit": "github:jquery/qunit/v1.14.0#qunit",
+      "../lib-dev/mocha": "github:visionmedia/mocha/1.17.1",
+      "../lib-dev/chai": "github:chaijs/chai/1.9.0"
     }
   }
 }

@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <title>OAuth Signature Generation tests</title>
     <!--<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">-->
-    <link rel="stylesheet" href="lib-dev/qunit/qunit.css">
+    <link rel="stylesheet" href="lib-dev/mocha/mocha.css">
 </head>
 <body>
-<div id="qunit"></div>
-<div id="qunit-fixture"></div>
-<!--<script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>-->
-<script src="lib-dev/qunit/qunit.js"></script>
+<div id="mocha"></div>
+<script src="lib-dev/mocha/mocha.js"></script>
+<script src="lib-dev/chai/chai.js"></script>
+<script>mocha.setup('qunit')</script>
 
 <!-- third party libraries -->
 <script src="lib/url.min.js"></script>
@@ -21,7 +21,13 @@
 <script src="app/oauth-signature.js"></script>
 
 <!-- test files -->
-<script src="app/oauth-signature.tests.qunit.js"></script>
+<script src="app/oauth-signature.tests.mocha.js"></script>
+
+<script>
+    // mocha.checkLeaks();
+    // mocha.globals(['jQuery']);
+    mocha.run();
+</script>
 
 </body>
 </html>

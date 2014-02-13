@@ -54,7 +54,7 @@ module.exports = function (grunt) {
 						'src/lib/cryptojs/hmac-sha1.js',
 						'src/lib/cryptojs/enc-base64-min.js',
 						'src/app/oauth-signature.js',
-						'src/app/oauth-signature.tests.js'
+						'src/app/oauth-signature.tests.qunit.js'
 					]
 				}
 			},
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
 					singleRun : true,
 					files : [
 						'dist/oauth-signature.min.js',
-						'src/app/oauth-signature.tests.js'
+						'src/app/oauth-signature.tests.qunit.js'
 					]
 				}
 			}
