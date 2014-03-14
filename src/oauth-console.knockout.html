@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OAuth Console</title>
+</head>
+<body>
+
+<section class="inputValues">
+	<fieldset>
+		<legend>OAuth Console</legend>
+		<p>
+			<label for="httpMethod">Http Method:</label>
+			<select id="httpMethod" data-bind="value: httpMethod">
+				<option></option>
+				<option>GET</option>
+				<option>POST</option>
+				<option>PUT</option>
+				<option>HEAD</option>
+				<option>DELETE</option>
+			</select>
+		</p>
+		<p>
+			<label for="url">Url:</label>
+			<input id="url" type="text" data-bind="value: url" />
+		</p>
+
+		<p>
+			<label for="consumerKey">Consumer Key:</label>
+			<input id="consumerKey" type="text" data-bind="value: parameters.oauth_consumer_key" />
+		</p>
+		<p>
+			<label for="consumerSecret">Consumer Secret:</label>
+			<input id="consumerSecret" type="text" data-bind="value: consumerSecret" />
+		</p>
+		<p>
+			<label for="tokenKey">Token Key:</label>
+			<input id="tokenKey" type="text" data-bind="value: parameters.oauth_token" />
+		</p>
+		<p>
+			<label for="tokenSecret">Token Secret:</label>
+			<input id="tokenSecret" type="text" data-bind="value: tokenSecret" />
+		</p>
+		<label for="parameters">Additional Parameters</label>
+		<ul id="parameters" data-bind="foreach: additionalParameters">
+			<li>
+				<span data-bind="text: name"></span> - <span data-bind="text: value"></span>
+			</li>
+		</ul>
+	</fieldset>
+</section>
+
+<section class="output">
+	<fieldset>
+		<legend>Output</legend>
+		<p>
+			<label for="signature">Signature:</label>
+			<input type="text" id="signature" data-bind="value: encodedSignature" />
+		</p>
+	</fieldset>
+</section>
+
+<script src="lib/url.min.js"></script>
+<script src="lib/cryptojs/hmac-sha1.js"></script>
+<script src="lib/cryptojs/enc-base64-min.js"></script>
+<script src="app/oauth-signature.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js"></script>
+<script src="ui.knockout.js"></script>
+</body>
+</html>

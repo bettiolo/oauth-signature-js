@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OAuth Console</title>
+</head>
+<body>
+
+<section class="inputValues">
+	<fieldset>
+		<legend>OAuth Console</legend>
+		<p>
+			<label for="httpMethod">Http Method:</label>
+			<select id="httpMethod">
+				<option></option>
+				<option selected>GET</option>
+				<option>POST</option>
+				<option>PUT</option>
+				<option>HEAD</option>
+				<option>DELETE</option>
+			</select>
+		</p>
+		<p>
+			<label for="url">Url:</label>
+			<input id="url" type="text" value="http://photos.example.net/photos" />
+		</p>
+
+		<p>
+			<label for="consumerKey">Consumer Key:</label>
+			<input id="consumerKey" type="text" value="dpf43f3p2l4k3l03" />
+		</p>
+		<p>
+			<label for="consumerSecret">Consumer Secret:</label>
+			<input id="consumerSecret" type="text" value="kd94hf93k423kf44" />
+		</p>
+		<p>
+			<label for="tokenKey">Token Key:</label>
+			<input id="tokenKey" type="text" value="nnch734d00sl2jdk" />
+		</p>
+		<p>
+			<label for="tokenSecret">Token Secret:</label>
+			<input id="tokenSecret" type="text" value="pfkkdhi9sl3r4s00" />
+		</p>
+	</fieldset>
+</section>
+
+<section class="output">
+	<fieldset>
+		<legend>Output</legend>
+		<p>
+			<label for="signature">Signature:</label>
+			<input type="text" id="signature" />
+		</p>
+	</fieldset>
+</section>
+
+<script src="lib/url.min.js"></script>
+<script src="lib/cryptojs/hmac-sha1.js"></script>
+<script src="lib/cryptojs/enc-base64-min.js"></script>
+<script src="app/oauth-signature.js"></script>
+<script src="ui.plain.js"></script>
+</body>
+</html>
