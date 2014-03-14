@@ -4,10 +4,9 @@ var oauthSignature = (function() {
 	function OAuthSignature() {
 	}
 
-	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, tokenSecret, consumerSecret) {
+	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, consumerSecret, tokenSecret) {
 		var signatureBaseString = new SignatureBaseString(httpMethod, url, parameters).generate();
-		var signature = new HmacSha1Signature(signatureBaseString, tokenSecret, consumerSecret).generate();
-		return signature;
+		return new HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret).generate();
 	}
 
 	// Specification: http://oauth.net/core/1.0/#anchor14
