@@ -1,5 +1,8 @@
-var oauthSignature = (function() {
+;(function() {
 	'use strict';
+
+	// In node there is no global Window object
+	var isNode = (typeof window === 'undefined');
 
 	function OAuthSignature() {
 	}
@@ -48,17 +51,32 @@ var oauthSignature = (function() {
 			if (!this._url) {
 				return this._url;
 			}
-			var scheme = url('protocol', this._url).toLowerCase(),
-				authority = url('hostname', this._url).toLocaleLowerCase(),
-				port = url('port', this._url),
-				path = url('path', this._url);
-			if (this._url.toLowerCase().indexOf(scheme) != 0) {
-				scheme = 'http';
+
+			// FIXME: Make this behaviour explicit by returning warnings
+			if (this._url.indexOf('://') == -1) {
+				this._url = 'http://' + this._url;
 			}
+
+			// Handle parsing the url in node or in browser
+			var parsedUrl = isNode ? this.parseInNode() : this.parseInBrowser(),
+				// FIXME: Make this behaviour explicit by returning warnings
+				scheme = (parsedUrl.scheme || 'http').toLowerCase(),
+				// FIXME: Make this behaviour explicit by returning warnings
+				authority = (parsedUrl.authority || '').toLocaleLowerCase(),
+				path = parsedUrl.path || '',
+				port = parsedUrl.port || '';
+
+			// FIXME: Make this behaviour explicit by returning warnings
 			if ((port == 80 && scheme == 'http')
 				|| (port == 443 && scheme == 'https'))
 			{
 				port = '';
+			}
+			var baseUrl = scheme + '://' + authority;
+			baseUrl = baseUrl + (!!port ? ':' + port : '');
+			// FIXME: Make this behaviour explicit by returning warnings
+			if (path == '/' && this._url.indexOf(baseUrl + path) === -1) {
+				path = '';
 			}
 			this._url =
 				(scheme ? scheme + '://' : '')
@@ -66,13 +84,37 @@ var oauthSignature = (function() {
 					+ (port ? ':' + port : '')
 					+ path;
 			return this._url;
+		},
+		parseInBrowser : function () {
+			return {
+				scheme : url('protocol', this._url).toLowerCase(),
+				authority : url('hostname', this._url).toLocaleLowerCase(),
+				port : url('port', this._url),
+				path :url('path', this._url)
+			};
+		},
+		parseInNode : function () {
+			var url = require('url'),
+				parsedUri = url.parse(this._url),
+				scheme = parsedUri.protocol;
+			// strip the ':' at the end of the scheme added by the url module
+			if (scheme.charAt(scheme.length - 1) == ":") {
+				scheme = scheme.substring(0, scheme.length - 1);
+			}
+			return {
+				scheme : scheme,
+				authority : parsedUri.hostname,
+				port : parsedUri.port,
+				path : parsedUri.pathname
+			};
 		}
 	};
 
 	function ParametersElement (parameters) {
-		this._parameters = parameters; // Format: { 'key': ['value 1', 'value 2'] };
-		this._sortedKeys = [ ];
-		this._normalizedParameters = [ ];
+		// Parameters format: { 'key': ['value 1', 'value 2'] };
+		this._parameters = parameters || {};
+		this._sortedKeys = [];
+		this._normalizedParameters = [];
 		this._rfc3986 = new Rfc3986();
 		this._sortParameters();
 		this._concatenateParameters();
@@ -82,6 +124,7 @@ var oauthSignature = (function() {
 		_sortParameters : function () {
 			var key;
 			for (key in this._parameters) {
+				// FIXME: Add hasOwnProperty check
 				this._sortedKeys.push(key);
 			}
 			this._sortedKeys.sort();
@@ -109,17 +152,16 @@ var oauthSignature = (function() {
 	};
 
 	function ParametersLoader (parameters) {
-		this._parameters = { }; // Format: { 'key': ['value 1', 'value 2'] }
-		this._loadParameters(parameters || { });
+		// Format: { 'key': ['value 1', 'value 2'] }
+		this._parameters = {};
+		this._loadParameters(parameters || {});
 	}
 
 	ParametersLoader.prototype = {
 		_loadParameters : function (parameters) {
 			if (parameters instanceof Array) {
 				this._loadParametersFromArray(parameters);
-				return;
-			}
-			if (typeof parameters === 'object') {
+			} else if (typeof parameters === 'object') {
 				this._loadParametersFromObject(parameters);
 			}
 		},
@@ -197,14 +239,16 @@ var oauthSignature = (function() {
 	};
 
 	function HmacSha1(text, key) {
+		// load CryptoJs in the browser or in node
+		this._cryptoJS = isNode ? require('crypto-js') : CryptoJS;
 		this._text = text || '';
 		this._key = key || '';
-		this._hash = CryptoJS.HmacSHA1(this._text, this._key);
+		this._hash = this._cryptoJS.HmacSHA1(this._text, this._key);
 	}
 
 	HmacSha1.prototype = {
 		getBase64EncodedHash : function () {
-			return this._hash.toString(CryptoJS.enc.Base64);
+			return this._hash.toString(this._cryptoJS.enc.Base64);
 		}
 	};
 
@@ -217,5 +261,11 @@ var oauthSignature = (function() {
 	oauthSignature.Rfc3986 = Rfc3986;
 	oauthSignature.HmacSha1Signature = HmacSha1Signature;
 	oauthSignature.HmacSha1 = HmacSha1;
-	return oauthSignature;
+
+	// support for the browser and nodejs
+	if (typeof module !== 'undefined') {
+		module.exports = oauthSignature;
+	} else {
+		window.oauthSignature = oauthSignature;
+	}
 })();

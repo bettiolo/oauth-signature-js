@@ -38,7 +38,10 @@
     "karma-jasmine": "~0.1.5",
     "karma-phantomjs-launcher": "~0.1.2",
     "grunt-karma": "~0.6.2",
-    "grunt-cli": "~0.1.13"
+    "grunt-cli": "~0.1.13",
+    "mocha": "~1.17.1",
+    "grunt-mocha-test": "~0.9.3",
+    "chai": "~1.9.0"
   },
   "volo": {
     "baseUrl": "src/lib",
@@ -50,5 +53,8 @@
       "../lib-dev/mocha": "github:visionmedia/mocha/1.17.1",
       "../lib-dev/chai": "github:chaijs/chai/1.9.0"
     }
+  },
+  "dependencies": {
+    "crypto-js": "~3.1.2-2"
   }
 }

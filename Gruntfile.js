@@ -14,10 +14,10 @@ module.exports = function (grunt) {
 			},
 			specs : {
 				src : [
-					'src/app/oauth-signature.js',
 					'src/lib/cryptojs/hmac-sha1.js',
 					'src/lib/cryptojs/enc-base64-min.js',
-					'src/lib/url.min.js'
+					'src/lib/url.min.js',
+					'src/app/oauth-signature.js'
 				],
 				dest : 'dist/oauth-signature.js',
 				nonull : true
@@ -30,6 +30,15 @@ module.exports = function (grunt) {
 				},
 				options : {
 					// sourceMap : '<%= cfg.dist.dir %>/pub.min.map.js';
+				}
+			}
+		},
+		mochaTest : {
+			dev : {
+				src : ['src/app/*.mocha.js'],
+				options : {
+					ui : 'qunit',
+					reporter : 'spec'
 				}
 			}
 		},
@@ -74,8 +83,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-karma');
+	grunt.loadNpmTasks('grunt-mocha-test');
 
 	grunt.registerTask('build', [ 'clean', 'concat', 'uglify', 'test-build' ]);
 	grunt.registerTask('test', [ 'karma:dev:start' ]);
-	grunt.registerTask('test-build', [ 'karma:dist:start' ]);
+	grunt.registerTask('test-build', [ 'mochaTest:dev', 'karma:dist:start' ]);
 };

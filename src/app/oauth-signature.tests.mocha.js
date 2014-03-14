@@ -1,4 +1,7 @@
-var assert = chai.assert;
+'use strict';
+var isNode = (typeof window === 'undefined');
+var assert = (isNode ? require('chai') : chai).assert;
+var oauthSignature = (isNode ? require('./oauth-signature') : oauthSignature);
 
 suite('HttpMethodElement');
 test('Converts the http method to uppercase', function () {
@@ -80,23 +83,23 @@ test('Loads parameters from different input structures', function () {
 		'An array-like structure should be loaded');
 	assert.deepEqual(new oauthSignature.ParametersLoader( { a : null }).get(), { a : [ '' ] },
 		'An object-like structure with an empty property should maintain the property');
-	assert.deepEqual(new oauthSignature.ParametersLoader( { a : [ ] }).get(), { a : [ '' ] },
+	assert.deepEqual(new oauthSignature.ParametersLoader( { a : [] }).get(), { a : [ '' ] },
 		'An object-like structure with an empty array property should maintain the property');
 	assert.deepEqual(new oauthSignature.ParametersLoader( [ { a : null } ]).get(), { a : [ '' ] },
 		'An array-like structure with an empty property should maintain the property');
-	assert.deepEqual(new oauthSignature.ParametersLoader( [ { a : [ ] } ]).get(), { a : [ '' ] },
+	assert.deepEqual(new oauthSignature.ParametersLoader( [ { a : [] } ]).get(), { a : [ '' ] },
 		'An array-like structure with an empty array property should maintain the property');
 });
 test('Handles non-values', function () {
-	assert.deepEqual(new oauthSignature.ParametersLoader().get(), { },
+	assert.deepEqual(new oauthSignature.ParametersLoader().get(), {},
 		'An undefined parameter should be returned as an empty object');
-	assert.deepEqual(new oauthSignature.ParametersLoader('').get(), { },
+	assert.deepEqual(new oauthSignature.ParametersLoader('').get(), {},
 		'An empty string parameter should be returned as an empty object');
-	assert.deepEqual(new oauthSignature.ParametersLoader(null).get(), { },
+	assert.deepEqual(new oauthSignature.ParametersLoader(null).get(), {},
 		'An null parameter should be returned as an empty object');
-	assert.deepEqual(new oauthSignature.ParametersLoader({ }).get(), { },
+	assert.deepEqual(new oauthSignature.ParametersLoader({}).get(), {},
 		'An empty object-like parameter should be returned as an empty object');
-	assert.deepEqual(new oauthSignature.ParametersLoader([ ]).get(), { },
+	assert.deepEqual(new oauthSignature.ParametersLoader([]).get(), {},
 		'An empty array-like parameter should be returned as an empty object');
 });
 
@@ -127,7 +130,7 @@ test('Handles non-values', function () {
 		'An empty string input should be returned as an empty string');
 	assert.equal(new oauthSignature.ParametersElement(null).get(), '',
 		'A null input should be returned as an empty string');
-	assert.equal(new oauthSignature.ParametersElement({ }).get(), '',
+	assert.equal(new oauthSignature.ParametersElement({}).get(), '',
 		'An empty object input should be returned as an empty string');
 });
 
