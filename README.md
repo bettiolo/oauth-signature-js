@@ -1,4 +1,4 @@
-# OAuth 1.0a signature generator
+# OAuth 1.0a signature generator for node and the browser
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
 [![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
