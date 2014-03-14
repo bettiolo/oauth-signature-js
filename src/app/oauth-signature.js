@@ -263,7 +263,7 @@
 	oauthSignature.HmacSha1 = HmacSha1;
 
 	// support for the browser and nodejs
-	if (typeof module !== 'undefined') {
+	if (isNode) {
 		module.exports = oauthSignature;
 	} else {
 		window.oauthSignature = oauthSignature;
