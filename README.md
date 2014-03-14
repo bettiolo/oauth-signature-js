@@ -53,7 +53,7 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 This project has an extensive test coverage for all the corner cases present in the OAuth specification.
 
-Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
+Take a look at the test file [src/app/signature.tests.mocha.js](src/app/oauth-signature.tests.mocha.js)
 
 ## How do I run tests?
 
@@ -61,7 +61,7 @@ The tests can be executed in your browser or in node
 
 ### Browser
 
-Open the file [src/test-runner.qunit.html](src/test-runner.qunit.html) in your browser
+Open the file [src/test-runner.mocha.html](src/test-runner.mocha.html) or [src/test-runner.qunit.html](src/test-runner.qunit.html) in your browser
 
 ### Node
 
