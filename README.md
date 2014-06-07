@@ -11,9 +11,11 @@
 To generate the OAuth signature call the following method:
 
 ```js
-oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret)
+oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, encode)
 ```
 `tokenSecret` is optional
+
+`encode` will encode the signature following the Rfc3986 Spec. _true by default_.
 
 ## Example
 
@@ -36,10 +38,14 @@ var httpMethod = 'GET',
 	},
 	consumerSecret = 'kd94hf93k423kf44',
 	tokenSecret = 'pfkkdhi9sl3r4s00',
-	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret);
+	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
+	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, false),
+	;
 ```
 
-The `encodedSignature` variable will contain the BASE64 encoded HMAC-SHA1 hash: `tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D`.
+The `encodedSignature` variable will contain the BASE64 encoded HMAC-SHA1 hash, ready to be used as a query parameter in a request: `tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D`.
+
+The `signature` variable will contain the BASE64 HMAC-SHA1 hash, without encoding: `tR3+Ty81lMeYAr/Fid0kMTYa/WM=`.
 
 ## Requesting a protected resource
 
