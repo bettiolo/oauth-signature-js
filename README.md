@@ -101,7 +101,7 @@ And you can hit the echo OAuth endpoints at this url: http://echo.lab.madgex.com
 - token secret: **accesssecret**
 - nonce: **IMPORTANT!** generate a new one at EACH request otherwise you will get a 400 Bad Request
 - timestamp: **IMPORTANT!** refresh the timestamp before each call
- -fields: **add a field with name `foo` and value `bar`**
+- fields: **add a field with name `foo` and value `bar`**
 
 A url similar to this one will be generated: `http://echo.lab.madgex.com/echo.ashx?foo=bar&oauth_consumer_key=key&oauth_nonce=643377115&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1410807318&oauth_token=accesskey&oauth_version=1.0&oauth_signature=zCmKoF9rVlNxAkD8wUCizFUajs4%3D`
 
