@@ -87,3 +87,22 @@ Open the file [src/test-runner.mocha.html](src/test-runner.mocha.html) or [src/t
 ### Node
 
 Execute `npm test` in the console
+
+### Live example
+
+If you want to make a working experiment you can use the live version of the OAuth signature page at this url: http://bettiolo.github.io/oauth-reference-page/
+
+And you can hit the echo OAuth endpoints at this url: http://echo.lab.madgex.com/
+
+url: *http://echo.lab.madgex.com/echo.ashx*
+consumer key: *key*
+consumer secret: *secret*
+token: *accesskey*
+token secret: *accesssecret*
+nonce: *IMPORTANT!* generate a new one at EACH request otherwise you will get a 400 Bad Request
+timestamp: *IMPORTANT!* refresh the timestamp before each call
+fields: *add a field with name `foo` and value `bar`*
+
+A url similar to this one will be generated: `http://echo.lab.madgex.com/echo.ashx?foo=bar&oauth_consumer_key=key&oauth_nonce=643377115&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1410807318&oauth_token=accesskey&oauth_version=1.0&oauth_signature=zCmKoF9rVlNxAkD8wUCizFUajs4%3D`
+
+Click on the generated link on the right hand side and you will see the echo server returning `foo=bar`
