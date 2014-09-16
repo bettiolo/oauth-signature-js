@@ -7,9 +7,9 @@
 	function OAuthSignature() {
 	}
 
-	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, consumerSecret, tokenSecret) {
+	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, consumerSecret, tokenSecret, encode) {
 		var signatureBaseString = new SignatureBaseString(httpMethod, url, parameters).generate();
-		return new HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret).generate();
+		return new HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret).generate(encode);
 	}
 
 	// Specification: http://oauth.net/core/1.0/#anchor14
@@ -233,8 +233,10 @@
 	}
 
 	HmacSha1Signature.prototype = {
-		generate : function () {
-			return this._rfc3986.encode(this._base64EncodedHash);
+		generate : function (encode) {
+			return encode === false ?
+					this._base64EncodedHash :
+					this._rfc3986.encode(this._base64EncodedHash);
 		}
 	};
 
