@@ -42,6 +42,7 @@ the default `options` parameter is as follows
 var options = {
 	encodeSignature: true // will encode the signature following the RFC3986 Spec by default
 }
+```
 
 ## Example
 
