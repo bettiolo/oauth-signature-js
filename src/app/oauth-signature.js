@@ -7,10 +7,14 @@
 	function OAuthSignature() {
 	}
 
-	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, consumerSecret, tokenSecret, encode) {
+	OAuthSignature.prototype.generate = function (httpMethod, url, parameters, consumerSecret, tokenSecret, options) {
 		var signatureBaseString = new SignatureBaseString(httpMethod, url, parameters).generate();
-		return new HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret).generate(encode);
-	}
+		var encodeSignature = true;
+		if (options) {
+			encodeSignature = options.encodeSignature;
+		}
+		return new HmacSha1Signature(signatureBaseString, consumerSecret, tokenSecret).generate(encodeSignature);
+	};
 
 	// Specification: http://oauth.net/core/1.0/#anchor14
 	// url: if the scheme is missing, http will be added automatically

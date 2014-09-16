@@ -372,7 +372,33 @@ test('Produces the signature for the OAuth 1.0a GET reference sample', function 
 		consumerSecret = 'kd94hf93k423kf44',
 		tokenSecret = 'pfkkdhi9sl3r4s00',
 		expectedEncodedSignature = 'tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D',
-		encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret);
+		expectedDecodedSignature = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=',
+		encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
+		unencodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
+			{ encodeSignature: false });
 	equal(encodedSignature, expectedEncodedSignature,
-		'The generated GET signature should match the expected reference value');
+		'The generated GET signature should match the expected RFC3986 encoded reference signature by default');
+	equal(unencodedSignature, expectedDecodedSignature,
+		'The generated unencoded GET signature should match the expected unencoded reference signature');
+});
+test('Produces the expected decoded signature when optional token not provided', function () {
+	var httpMethod = 'GET',
+		url = 'http://api.example.com',
+		parameters = {
+			oauth_consumer_key : 'key',
+			oauth_nonce : 'kllo9940pd9333jh',
+			oauth_timestamp : '1191242096',
+			oauth_signature_method : 'HMAC-SHA1', // ToDo: should be optional and default to HMAC-SHA1
+			oauth_version : '1.0' // ToDo: should be optional and default to 1.0
+		},
+		consumerSecret = 'secret',
+		expectedEncodedSignature = '5vNiG7RrEtOHXZ8gE1HQiJ7ssoc%3D',
+		expectedDecodedSignature = '5vNiG7RrEtOHXZ8gE1HQiJ7ssoc=',
+		encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret),
+		unencodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, null,
+			{ encodeSignature: false });
+	equal(encodedSignature, expectedEncodedSignature,
+		'The generated GET signature should match the expected RFC3986 encoded signature by default');
+	equal(unencodedSignature, expectedDecodedSignature,
+		'The generated unencoded GET signature should match the expected unencoded signature');
 });
