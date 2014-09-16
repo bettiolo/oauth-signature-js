@@ -32,11 +32,16 @@ Add a `<script>` to your `index.html`:
 To generate the OAuth signature call the following method:
 
 ```js
-oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, encode)
+oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, options)
 ```
 `tokenSecret` is optional
+`options` is optional
 
-`encode` will encode the signature following the Rfc3986 Spec. _true by default_.
+the default `options` parameter is as follows
+```js
+var options = {
+	encodeSignature: true // will encode the signature following the RFC3986 Spec by default
+}
 
 ## Example
 
@@ -60,7 +65,8 @@ var httpMethod = 'GET',
 	consumerSecret = 'kd94hf93k423kf44',
 	tokenSecret = 'pfkkdhi9sl3r4s00',
 	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
-	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, false),
+	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, 
+		{ encodeSignature: false}),
 	;
 ```
 
