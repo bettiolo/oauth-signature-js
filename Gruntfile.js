@@ -53,7 +53,14 @@ module.exports = function (grunt) {
 				logLevel : 'WARN',
 				autoWatch : false,
 				browsers : [ 'PhantomJS' ],
-				captureTimeout : 60000
+				captureTimeout : 60000,
+				phantomjsLauncher: {
+					cmd: {
+						linux: 'node_modules/phantomjs/lib/phantom/bin/phantomjs',
+						darwin: 'node_modules/phantomjs/lib/phantom/bin/phantomjs',
+						win32: 'node_modules/phantomjs/lib/phantom/bin/phantomjs.exe'
+					}
+				}
 			},
 			dev : {
 				options : {
