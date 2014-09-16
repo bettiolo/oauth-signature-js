@@ -65,13 +65,15 @@ var httpMethod = 'GET',
 	},
 	consumerSecret = 'kd94hf93k423kf44',
 	tokenSecret = 'pfkkdhi9sl3r4s00',
+	// generates a RFC3986 encoded, BASE64 encoded HMAC-SHA1 hash
 	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
+	// generates a BASE64 encode HMAC-SHA1 hash
 	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, 
 		{ encodeSignature: false}),
 	;
 ```
 
-The `encodedSignature` variable will contain the BASE64 encoded HMAC-SHA1 hash, ready to be used as a query parameter in a request: `tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D`.
+The `encodedSignature` variable will contain the RFC3986 encoded, BASE64 encoded HMAC-SHA1 hash, ready to be used as a query parameter in a request: `tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D`.
 
 The `signature` variable will contain the BASE64 HMAC-SHA1 hash, without encoding: `tR3+Ty81lMeYAr/Fid0kMTYa/WM=`.
 
