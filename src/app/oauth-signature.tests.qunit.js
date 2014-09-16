@@ -329,6 +329,12 @@ test('Handles non-values', function () {
 });
 
 module('HmacSha1Signature');
+test('Generates encoded or decoded signature', function () {
+	equal(new oauthSignature.HmacSha1Signature('a', 'b', 'c').generate(), 'sI3tgv7FRWmRT0TmLifBAFF12lU%3D',
+		'Generates RFC3986 encoded signature by default');
+	equal(new oauthSignature.HmacSha1Signature('a', 'b', 'c').generate(false), 'sI3tgv7FRWmRT0TmLifBAFF12lU=',
+		'Generates non encoded signature');
+});
 test('Encodes the secrets following the RFC3986', function () {
 	var signatureBaseString = 'GET&http%3A%2F%2Fapi.example.com%2Fendpoint&oauth_consumer_key%3Dconsumer-key%26oauth_nonce%3D5678%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234%26oauth_token%3Dtoken-key%26oauth_version%3D1.0';
 	equal(new oauthSignature.HmacSha1Signature(signatureBaseString, '你好', 'åçñ').generate(), 'JXcouSrYw1x7ql1ArjfT1Bg8O9g%3D',
