@@ -1,7 +1,7 @@
 {
   "name": "oauth-signature",
   "description": "OAuth 1.0a signature generator",
-  "version": "1.1.4",
+  "version": "1.2.1",
   "author": "Marco Bettiolo <marco@bettiolo.it> (https://github.com/bettiolo)",
   "homepage": "https://github.com/bettiolo/oauth-signature-js",
   "repository": {
@@ -15,7 +15,7 @@
   "main": "src/app/oauth-signature",
   "scripts": {
     "prepublish": "grunt build",
-    "test": "grunt test-build"
+    "test": "grunt build"
   },
   "engines": {
     "node": "*"
