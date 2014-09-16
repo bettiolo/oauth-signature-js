@@ -34,8 +34,8 @@ To generate the OAuth signature call the following method:
 ```js
 oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, options)
 ```
-`tokenSecret` is optional
-`options` is optional
+- `tokenSecret` is optional
+- `options` is optional
 
 the default `options` parameter is as follows
 ```js
