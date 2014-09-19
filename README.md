@@ -99,6 +99,10 @@ The tests can be executed in your browser or in node
 
 Open the file [src/test-runner.mocha.html](src/test-runner.mocha.html) or [src/test-runner.qunit.html](src/test-runner.qunit.html) in your browser
 
+You can also run them live: 
+ - [src/test-runner.mocha.html](https://bettiolo.github.io/oauth-signature-js/src/test-runner.mocha.html)
+ - [src/test-runner.qunit.html](https://bettiolo.github.io/oauth-signature-js/src/test-runner.qunit.html)
+
 ### Node
 
 Execute `npm test` in the console
