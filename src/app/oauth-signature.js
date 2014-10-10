@@ -1,9 +1,9 @@
 ;(function() {
 	'use strict';
-
-	// In node there is no global Window object
-	var isNode = (typeof window === 'undefined');
-
+	
+	// Check the existance of module and module.exports to detect node
+	var isNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
+	
 	function OAuthSignature() {
 	}
 
