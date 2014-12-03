@@ -1,6 +1,7 @@
 # OAuth 1.0a signature generator for node and the browser
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
+[![Bower version](https://badge.fury.io/bo/oauth-signature-js.svg)](http://badge.fury.io/bo/oauth-signature-js)
 [![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
 [![Dependency Status](https://david-dm.org/bettiolo/oauth-signature-js.png?theme=shields.io)](https://david-dm.org/bettiolo/oauth-signature-js)
 
@@ -67,9 +68,8 @@ var httpMethod = 'GET',
 	// generates a RFC3986 encoded, BASE64 encoded HMAC-SHA1 hash
 	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
 	// generates a BASE64 encode HMAC-SHA1 hash
-	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret, 
-		{ encodeSignature: false}),
-	;
+	signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
+		{ encodeSignature: false});
 ```
 
 The `encodedSignature` variable will contain the RFC3986 encoded, BASE64 encoded HMAC-SHA1 hash, ready to be used as a query parameter in a request: `tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D`.
