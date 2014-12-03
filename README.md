@@ -2,7 +2,7 @@
 ### Compliant with [RFC 5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth 1.0a](http://oauth.net/core/1.0a)
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
-[![Bower version](https://badge.fury.io/bo/oauth-signature-js.svg)](http://badge.fury.io/bo/oauth-signature-js)
+[![Bower version](https://badge.fury.io/bo/oauth-signature.svg)](http://badge.fury.io/bo/oauth-signature-js)
 [![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
 [![Dependency Status](https://david-dm.org/bettiolo/oauth-signature-js.png?theme=shields.io)](https://david-dm.org/bettiolo/oauth-signature-js)
 
