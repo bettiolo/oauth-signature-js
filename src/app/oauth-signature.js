@@ -1,7 +1,7 @@
 ;(function() {
 	'use strict';
 	
-	// Check the existance of module and module.exports to detect node
+	// Check the existence of module and module.exports to detect node
 	var isNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
 	
 	function OAuthSignature() {
