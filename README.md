@@ -1,5 +1,5 @@
 # OAuth 1.0a signature generator for node and the browser 
-### Compliant with RFC5843 + Errata ID 2550
+### Compliant with [RFC5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth 1.0a](http://oauth.net/core/1.0a)
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
 [![Bower version](https://badge.fury.io/bo/oauth-signature-js.svg)](http://badge.fury.io/bo/oauth-signature-js)
