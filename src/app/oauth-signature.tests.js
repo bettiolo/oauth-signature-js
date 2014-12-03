@@ -316,7 +316,8 @@ test('Produces the OAuth 1.0a POST reference sample', function () {
 	assert.equal(new oauthSignature.SignatureBaseString('POST', url, parameters).generate(), expectedSignatureBaseString,
 		'The generated POST signature base string should match the expected value');
 });
-test('Produces the RFC5849 POST reference sample', function () {
+test('Produces the RFC 5849 POST reference sample', function () {
+	// Example from http://tools.ietf.org/html/rfc5849
 	var parameters = {
 			oauth_consumer_key : '9djdj82h48djs9d2',
 			oauth_token : 'kkk9d7dh3k39sjv7',
@@ -371,8 +372,8 @@ test('Encodes the secrets following the RFC3986', function () {
 	assert.equal(new oauthSignature.HmacSha1Signature(signatureBaseString, '你好', 'åçñ').generate(), 'JXcouSrYw1x7ql1ArjfT1Bg8O9g%3D',
 		'The secrets are encoding using RFC3986');
 });
-test('Matches the RFC5843 POST sample section 3.1 + Errata ID 2550', function () {
-	// This is an implementation of http://www.rfc-base.org/txt/rfc-5849.txt section 3.1
+test('Matches the RFC 5843 POST sample section 3.1 + Errata ID 2550', function () {
+	// This is an implementation of http://tools.ietf.org/html/rfc5849 section 3.1
 	// Fixed by errata: http://www.rfc-editor.org/errata_search.php?rfc=5849
 	var signatureBaseString = 'POST&http%3A%2F%2Fexample.com%2Frequest&a2%3Dr%2520b%26a3%3D2%2520q%26a3%3Da%26b5%3D%253D%25253D%26c%2540%3D%26c2%3D%26oauth_consumer_key%3D9djdj82h48djs9d2%26oauth_nonce%3D7d8f3e4a%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D137131201%26oauth_token%3Dkkk9d7dh3k39sjv7';
 	assert.equal(new oauthSignature.HmacSha1Signature(signatureBaseString, 'j49sk3j29djd', 'dh893hdasih9').generate(), 'r6%2FTJjbCOr97%2F%2BUU0NsvSne7s5g%3D',
@@ -419,8 +420,8 @@ test('Produces the signature for the OAuth 1.0a GET reference sample', function 
 	assert.equal(unencodedSignature, expectedDecodedSignature,
 		'The generated unencoded GET signature should match the expected unencoded reference signature');
 });
-test('Produces the signature for the RFC5849 POST reference sample + Errata ID 2550', function () {
-	// This is an implementation of http://www.rfc-base.org/txt/rfc-5849.txt section 3.1
+test('Produces the signature for the RFC 5849 POST reference sample + Errata ID 2550', function () {
+	// This is an implementation of http://tools.ietf.org/html/rfc5849 section 3.1
 	// Fixed by Errata: http://www.rfc-editor.org/errata_search.php?rfc=5849
 	var httpMethod = 'POST',
 		url = 'http://example.com/request',
