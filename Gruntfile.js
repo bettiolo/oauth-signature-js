@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 		},
 		mochaTest : {
 			dev : {
-				src : ['src/app/*.mocha.js'],
+				src : ['src/app/*.tests.js'],
 				options : {
 					ui : 'qunit',
 					reporter : 'spec'
