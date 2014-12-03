@@ -85,7 +85,7 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 ## Advantages
 
-This project has an extensive test coverage for all the corner cases present in the OAuth specifications (RFC5843 + Errata ID 2550 and the OAuth.net community RFC)
+This project has an extensive test coverage for all the corner cases present in the OAuth specifications ([RFC5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth.net community version](http://oauth.net/core/1.0a))
 
 Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
 
