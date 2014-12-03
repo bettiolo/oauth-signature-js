@@ -470,3 +470,11 @@ test('Produces the expected decoded signature when optional token not provided',
 	assert.equal(unencodedSignature, expectedDecodedSignature,
 		'The generated unencoded GET signature should match the expected unencoded signature');
 });
+
+suite('Node or Browser Detection');
+test('Node or Browser properly detected', function () {
+	var oldIsNode = (typeof window === 'undefined');
+	var newIsNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
+	assert.equal(oldIsNode, newIsNode,
+		'Both methods of detection should produce the same value');
+});
