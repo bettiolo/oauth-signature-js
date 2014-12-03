@@ -152,12 +152,15 @@ e;d++)if(d%4){var g=f.indexOf(b.charAt(d-1))<<2*(d%4),h=f.indexOf(b.charAt(d))>>
 		this._concatenateParameters();
 	}
 
-	ParametersElement .prototype = {
+	ParametersElement.prototype = {
 		_sortParameters : function () {
-			var key;
+			var key,
+				encodedKey;
 			for (key in this._parameters) {
-				// FIXME: Add hasOwnProperty check
-				this._sortedKeys.push(key);
+				if (this._parameters.hasOwnProperty(key)) {
+					encodedKey = this._rfc3986.encode(key);
+					this._sortedKeys.push(encodedKey);
+				}
 			}
 			this._sortedKeys.sort();
 		},
@@ -167,10 +170,10 @@ e;d++)if(d%4){var g=f.indexOf(b.charAt(d-1))<<2*(d%4),h=f.indexOf(b.charAt(d))>>
 				this._normalizeParameter(this._sortedKeys[i]);
 			}
 		},
-		_normalizeParameter : function (key) {
+		_normalizeParameter : function (encodedKey) {
 			var i,
+				key = this._rfc3986.decode(encodedKey),
 				values = this._parameters[key],
-				encodedKey = this._rfc3986.encode(key),
 				encodedValue;
 			values.sort();
 			for (i = 0; i < values.length; i++) {

@@ -35,52 +35,10 @@ module.exports = function (grunt) {
 		},
 		mochaTest : {
 			dev : {
-				src : ['src/app/*.mocha.js'],
+				src : ['src/app/*.tests.js'],
 				options : {
 					ui : 'qunit',
 					reporter : 'spec'
-				}
-			}
-		},
-		karma : {
-			options : {
-				basePath : '',
-				frameworks : [ 'qunit' ],
-				exclude : [ ],
-				reporters : [ 'dots' ],
-				port : 9876,
-				colors : true,
-				logLevel : 'WARN',
-				autoWatch : false,
-				browsers : [ 'PhantomJS' ],
-				captureTimeout : 60000,
-				phantomjsLauncher: {
-					cmd: {
-						linux: 'phantomjs',
-						darwin: 'phantomjs',
-						win32: 'phantomjs'
-					}
-				}
-			},
-			dev : {
-				options : {
-					singleRun : true,
-					files : [
-						'src/lib/url.min.js',
-						'src/lib/cryptojs/hmac-sha1.js',
-						'src/lib/cryptojs/enc-base64-min.js',
-						'src/app/oauth-signature.js',
-						'src/app/oauth-signature.tests.qunit.js'
-					]
-				}
-			},
-			dist : {
-				options : {
-					singleRun : true,
-					files : [
-						'dist/oauth-signature.min.js',
-						'src/app/oauth-signature.tests.qunit.js'
-					]
 				}
 			}
 		}
@@ -89,10 +47,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 
 	grunt.registerTask('build', [ 'clean', 'concat', 'uglify', 'test-build' ]);
-	grunt.registerTask('test', [ 'karma:dev:start' ]);
-	grunt.registerTask('test-build', [ 'mochaTest:dev', 'karma:dist:start' ]);
+	grunt.registerTask('test', [ 'mochaTest:dev' ]);
+	grunt.registerTask('test-build', [ 'mochaTest:dev' ]);
 };

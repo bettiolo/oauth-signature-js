@@ -117,11 +117,18 @@ test('Sorts and concatenates the parameters', function () {
 			z : [ 't', 'p' ],
 			f : [ 'a', '50', '25' ],
 			a : [ '1' ]
+		},
+		orderByAscendingByteValue = {
+			c2 : [ '' ],
+			'c@' : [ '' ]
 		};
 	assert.equal(new oauthSignature.ParametersElement(orderByName).get(), 'a=&baz=qux&foo=bar&foo=%C3%9F',
 		'The parameters should be concatenated alphabetically by name');
 	assert.equal(new oauthSignature.ParametersElement(orderByNameAndValue).get(), 'a=1&c=hi%20there&f=25&f=50&f=a&z=p&z=t',
 		'The parameters should be ordered alphabetically by name and value');
+	assert.equal(new oauthSignature.ParametersElement(orderByAscendingByteValue).get(), 'c%40=&c2=',
+		'The parameters should be ordered by ascending byte value');
+
 });
 test('Handles non-values', function () {
 	assert.equal(new oauthSignature.ParametersElement().get(), '',
@@ -135,7 +142,7 @@ test('Handles non-values', function () {
 });
 
 suite('Rfc3986');
-test('Encodes the value following the RFC3986', function () {
+test('Encodes the value following the RFC 3986', function () {
 	var i,
 		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
 			'abcdefghijklmnopqrstuvwxyz' +
@@ -171,7 +178,7 @@ test('Handles encoding of non-values', function () {
 	assert.equal(new oauthSignature.Rfc3986().encode(null), '',
 		'Null value should return empty string');
 });
-test('Decodes the value following the RFC3986', function () {
+test('Decodes the value following the RFC 3986', function () {
 	var i,
 		unreservedCharacters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
 			'abcdefghijklmnopqrstuvwxyz' +
@@ -193,7 +200,7 @@ test('Decodes the value following the RFC3986', function () {
 	assert.equal(new oauthSignature.Rfc3986().decode('%31%32%33%41%42%43'), '123ABC',
 		'Encoded unreserved characters must be decoded');
 });
-test('Decodes the value containing UTF8 characters following the RFC3629', function () {
+test('Decodes the value containing UTF8 characters following the RFC 3629', function () {
 	assert.equal(new oauthSignature.Rfc3986().decode('%C3%A5%C3%A7%C3%B1'), 'åçñ',
 		'Value MUST be percent-decoded to get UTF-8 octets');
 	assert.equal(new oauthSignature.Rfc3986().decode('%E4%BD%A0%E5%A5%BD'), '你好',
@@ -258,6 +265,8 @@ test('Ends with the normalized request parameters', function () {
 		'The array of values for a single key should be ordered alphabetically by value');
 	assert.equal(new oauthSignature.SignatureBaseString('', '', [{ z : 't' }, { z : 'p'}, { f : 'a' }, { f : 50 }, { f : '25' }, { c : 'hi there' }, { a : 1 }]).generate(), '&&a%3D1%26c%3Dhi%2520there%26f%3D25%26f%3D50%26f%3Da%26z%3Dp%26z%3Dt',
 		'The parameter specified with an array of objects with the same key should be ordered alphabetically by value');
+	assert.equal(new oauthSignature.SignatureBaseString('', '', { 'c@' : '' }).generate(), '&&c%2540%3D',
+		'The parameter name should be encoded');
 });
 test('Handles non-values', function () {
 	assert.equal(new oauthSignature.SignatureBaseString().generate(), '&&',
@@ -307,6 +316,25 @@ test('Produces the OAuth 1.0a POST reference sample', function () {
 	assert.equal(new oauthSignature.SignatureBaseString('POST', url, parameters).generate(), expectedSignatureBaseString,
 		'The generated POST signature base string should match the expected value');
 });
+test('Produces the RFC 5849 POST reference sample', function () {
+	// Example from http://tools.ietf.org/html/rfc5849
+	var parameters = {
+			oauth_consumer_key : '9djdj82h48djs9d2',
+			oauth_token : 'kkk9d7dh3k39sjv7',
+			oauth_nonce : '7d8f3e4a',
+			oauth_timestamp : '137131201',
+			oauth_signature_method : 'HMAC-SHA1',
+			b5 : '=%3D',
+			a3 : [ 'a', '2 q' ],
+			'c@' : '',
+			a2 : 'r b',
+			c2 : ''
+		},
+		url = 'http://example.com/request',
+		expectedSignatureBaseString = 'POST&http%3A%2F%2Fexample.com%2Frequest&a2%3Dr%2520b%26a3%3D2%2520q%26a3%3Da%26b5%3D%253D%25253D%26c%2540%3D%26c2%3D%26oauth_consumer_key%3D9djdj82h48djs9d2%26oauth_nonce%3D7d8f3e4a%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D137131201%26oauth_token%3Dkkk9d7dh3k39sjv7';
+	assert.equal(new oauthSignature.SignatureBaseString('POST', url, parameters).generate(), expectedSignatureBaseString,
+		'The generated POST signature base string should match the expected value');
+});
 
 suite('HmacSha1');
 test('Generates base64 encoded hash for test string', function () {
@@ -335,14 +363,21 @@ test('Handles non-values', function () {
 suite('HmacSha1Signature');
 test('Generates encoded or decoded signature', function () {
 	assert.equal(new oauthSignature.HmacSha1Signature('a', 'b', 'c').generate(), 'sI3tgv7FRWmRT0TmLifBAFF12lU%3D',
-		'Generates RFC3986 encoded signature by default');
+		'Generates RFC 3986 encoded signature by default');
 	assert.equal(new oauthSignature.HmacSha1Signature('a', 'b', 'c').generate(false), 'sI3tgv7FRWmRT0TmLifBAFF12lU=',
 		'Generates non encoded signature');
 });
-test('Encodes the secrets following the RFC3986', function () {
+test('Encodes the secrets following the RFC 3986', function () {
 	var signatureBaseString = 'GET&http%3A%2F%2Fapi.example.com%2Fendpoint&oauth_consumer_key%3Dconsumer-key%26oauth_nonce%3D5678%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234%26oauth_token%3Dtoken-key%26oauth_version%3D1.0';
 	assert.equal(new oauthSignature.HmacSha1Signature(signatureBaseString, '你好', 'åçñ').generate(), 'JXcouSrYw1x7ql1ArjfT1Bg8O9g%3D',
-		'The secrets are encoding using RFC3986');
+		'The secrets are encoding using RFC 3986');
+});
+test('Matches the RFC 5843 POST sample section 3.1 + Errata ID 2550', function () {
+	// This is an implementation of http://tools.ietf.org/html/rfc5849 section 3.1
+	// Fixed by errata: http://www.rfc-editor.org/errata_search.php?rfc=5849
+	var signatureBaseString = 'POST&http%3A%2F%2Fexample.com%2Frequest&a2%3Dr%2520b%26a3%3D2%2520q%26a3%3Da%26b5%3D%253D%25253D%26c%2540%3D%26c2%3D%26oauth_consumer_key%3D9djdj82h48djs9d2%26oauth_nonce%3D7d8f3e4a%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D137131201%26oauth_token%3Dkkk9d7dh3k39sjv7';
+	assert.equal(new oauthSignature.HmacSha1Signature(signatureBaseString, 'j49sk3j29djd', 'dh893hdasih9').generate(), 'r6%2FTJjbCOr97%2F%2BUU0NsvSne7s5g%3D',
+		'The correct signature is generated');
 });
 test('Appends the secrets separator (&)', function () {
 	var signatureBaseString = 'GET&http%3A%2F%2Fapi.example.com%2Fendpoint&oauth_consumer_key%3Dconsumer-key%26oauth_nonce%3D5678%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234%26oauth_version%3D1.0';
@@ -381,9 +416,38 @@ test('Produces the signature for the OAuth 1.0a GET reference sample', function 
 		unencodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
 			{ encodeSignature: false });
 	assert.equal(encodedSignature, expectedEncodedSignature,
-		'The generated GET signature should match the expected RFC3986 encoded reference signature by default');
+		'The generated GET signature should match the expected RFC 3986 encoded reference signature by default');
 	assert.equal(unencodedSignature, expectedDecodedSignature,
 		'The generated unencoded GET signature should match the expected unencoded reference signature');
+});
+test('Produces the signature for the RFC 5849 POST reference sample + Errata ID 2550', function () {
+	// This is an implementation of http://tools.ietf.org/html/rfc5849 section 3.1
+	// Fixed by Errata: http://www.rfc-editor.org/errata_search.php?rfc=5849
+	var httpMethod = 'POST',
+		url = 'http://example.com/request',
+		parameters = {
+			oauth_consumer_key : '9djdj82h48djs9d2',
+			oauth_token : 'kkk9d7dh3k39sjv7',
+			oauth_nonce : '7d8f3e4a',
+			oauth_timestamp : '137131201',
+			oauth_signature_method : 'HMAC-SHA1',
+			b5 : '=%3D',
+			a3 : [ 'a', '2 q' ],
+			'c@' : '',
+			a2 : 'r b',
+			c2 : ''
+		},
+		consumerSecret = 'j49sk3j29djd',
+		tokenSecret = 'dh893hdasih9',
+		expectedEncodedSignature = 'r6%2FTJjbCOr97%2F%2BUU0NsvSne7s5g%3D',
+		expectedDecodedSignature = 'r6/TJjbCOr97/+UU0NsvSne7s5g=',
+		encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
+		unencodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
+			{ encodeSignature: false });
+	assert.equal(encodedSignature, expectedEncodedSignature,
+		'The generated POST signature should match the expected RFC 3986 encoded reference signature by default');
+	assert.equal(unencodedSignature, expectedDecodedSignature,
+		'The generated unencoded POST signature should match the expected unencoded reference signature');
 });
 test('Produces the expected decoded signature when optional token not provided', function () {
 	var httpMethod = 'GET',
@@ -402,7 +466,7 @@ test('Produces the expected decoded signature when optional token not provided',
 		unencodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, null,
 			{ encodeSignature: false });
 	assert.equal(encodedSignature, expectedEncodedSignature,
-		'The generated GET signature should match the expected RFC3986 encoded signature by default');
+		'The generated GET signature should match the expected RFC 3986 encoded signature by default');
 	assert.equal(unencodedSignature, expectedDecodedSignature,
 		'The generated unencoded GET signature should match the expected unencoded signature');
 });
