@@ -1,11 +1,10 @@
-# OAuth 1.0a signature generator for node and the browser
+# OAuth 1.0a signature generator for node and the browser 
+### Compliant with RFC5843 + Errata ID 2550
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
 [![Bower version](https://badge.fury.io/bo/oauth-signature-js.svg)](http://badge.fury.io/bo/oauth-signature-js)
 [![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
 [![Dependency Status](https://david-dm.org/bettiolo/oauth-signature-js.png?theme=shields.io)](https://david-dm.org/bettiolo/oauth-signature-js)
-
-[![NPM](https://nodei.co/npm/oauth-signature.png?mini=true)](https://nodei.co/npm/oauth-signature/)
 
 ## Installation
 
@@ -86,7 +85,7 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 ## Advantages
 
-This project has an extensive test coverage for all the corner cases present in the OAuth specifications (RFC5843 POST sample section 3.1 + Errata ID 2550 and the OAuth.net community RFC)
+This project has an extensive test coverage for all the corner cases present in the OAuth specifications (RFC5843 + Errata ID 2550 and the OAuth.net community RFC)
 
 Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
 
