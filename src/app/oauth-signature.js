@@ -182,12 +182,15 @@
 			var key;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					this._loadParameterValue(key, parameters[key] || '');
+					this._loadParameterValue(key, parameters[key]);
 				}
 			}
 		},
 		_loadParameterValue : function (key, value) {
 			var i;
+			if (value == null) {
+				value = '';
+			}
 			if (value instanceof Array) {
 				for (i = 0; i < value.length; i++) {
 					this._addParameter(key, value[i]);
@@ -216,7 +219,7 @@
 
 	Rfc3986.prototype = {
 		encode : function (decoded) {
-			if (!decoded) {
+			if (decoded == null) {
 				return '';
 			}
 			// using implementation from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FencodeURIComponent
