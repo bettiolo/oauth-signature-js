@@ -121,3 +121,5 @@ And you can hit the echo OAuth endpoints at this url: http://echo.lab.madgex.com
 A url similar to this one will be generated: `http://echo.lab.madgex.com/echo.ashx?foo=bar&oauth_consumer_key=key&oauth_nonce=643377115&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1410807318&oauth_token=accesskey&oauth_version=1.0&oauth_signature=zCmKoF9rVlNxAkD8wUCizFUajs4%3D`
 
 Click on the generated link on the right hand side and you will see the echo server returning `foo=bar`
+
+{'methodName': string, 'params': array}
