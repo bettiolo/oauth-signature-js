@@ -1,9 +1,9 @@
 ;(function() {
 	'use strict';
-
-	// In node there is no global Window object
-	var isNode = (typeof window === 'undefined');
-
+	
+	// Check the existence of module and module.exports to detect node
+	var isNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
+	
 	function OAuthSignature() {
 	}
 
@@ -98,18 +98,18 @@
 			};
 		},
 		parseInNode : function () {
-			var url = require('url'),
+			var url = require('uri-js'),
 				parsedUri = url.parse(this._url),
-				scheme = parsedUri.protocol;
+				scheme = parsedUri.scheme;
 			// strip the ':' at the end of the scheme added by the url module
 			if (scheme.charAt(scheme.length - 1) == ":") {
 				scheme = scheme.substring(0, scheme.length - 1);
 			}
 			return {
 				scheme : scheme,
-				authority : parsedUri.hostname,
+				authority : parsedUri.host,
 				port : parsedUri.port,
-				path : parsedUri.pathname
+				path : parsedUri.path
 			};
 		}
 	};

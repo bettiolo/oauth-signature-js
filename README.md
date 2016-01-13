@@ -1,8 +1,8 @@
 # OAuth 1.0a signature generator for node and the browser 
-### Compliant with [RFC 5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth 1.0a](http://oauth.net/core/1.0a)
+### Compliant with [RFC 5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [community spec](http://oauth.net/core/1.0a)
 
 [![Build Status](https://travis-ci.org/bettiolo/oauth-signature-js.png?branch=master)](https://travis-ci.org/bettiolo/oauth-signature-js)
-[![Bower version](https://badge.fury.io/bo/oauth-signature-js.svg)](http://badge.fury.io/bo/oauth-signature-js)
+[![Bower version](https://badge.fury.io/bo/oauth-signature.svg)](http://badge.fury.io/bo/oauth-signature-js)
 [![NPM version](https://badge.fury.io/js/oauth-signature.png)](http://badge.fury.io/js/oauth-signature)
 [![Dependency Status](https://david-dm.org/bettiolo/oauth-signature-js.png?theme=shields.io)](https://david-dm.org/bettiolo/oauth-signature-js)
 
@@ -85,7 +85,7 @@ http://photos.example.net/photos?file=vacation.jpg&size=original&oauth_consumer_
 
 ## Advantages
 
-This project has an extensive test coverage for all the corner cases present in the OAuth specifications ([RFC 5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth.net community version](http://oauth.net/core/1.0a))
+This project has an extensive test coverage for all the corner cases present in the OAuth specifications ([RFC 5843](http://tools.ietf.org/html/rfc5849) + [Errata ID 2550](http://www.rfc-editor.org/errata_search.php?rfc=5849) and [OAuth.net community-based specification](http://oauth.net/core/1.0a))
 
 Take a look at the test file [src/app/signature.tests.js](src/app/oauth-signature.tests.js)
 
@@ -121,3 +121,5 @@ And you can hit the echo OAuth endpoints at this url: http://echo.lab.madgex.com
 A url similar to this one will be generated: `http://echo.lab.madgex.com/echo.ashx?foo=bar&oauth_consumer_key=key&oauth_nonce=643377115&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1410807318&oauth_token=accesskey&oauth_version=1.0&oauth_signature=zCmKoF9rVlNxAkD8wUCizFUajs4%3D`
 
 Click on the generated link on the right hand side and you will see the echo server returning `foo=bar`
+
+{'methodName': string, 'params': array}
