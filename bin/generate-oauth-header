@@ -26,7 +26,7 @@ program
             Object.assign(params, parseParameter(param));
         });
         var signature = oauthSignature.generate(httpMethod, url, params, program.consumerSecret, program.tokenSecret, { encodeSignature: program.encode });
-        console.log(chalk.yellow(signature));
+        console.log(chalk.yellow(generateHeader(params, signature)));
     });
 
 program.parse(process.argv);
@@ -40,4 +40,14 @@ function parseParameter(parameter) {
     }
     result[parameterArray[0]] = parameterArray[1];
     return result;
+}
+
+function generateHeader(params, signature) {
+    var  header = "Authorization:OAuth ";
+    for (var key in params) {
+        var value = params[key];
+        header += key + "=\"" + value + "\",";
+    }
+    header += "oauth_signature=\"" + signature + "\"";
+    return header;
 }
