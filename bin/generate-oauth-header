@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+var oauthSignature = require ('../src/app/oauth-signature');
+var chalk = require ('chalk');
+var program = require ('commander');
+
+function boolean(string) {
+    if (string === 'true') return true;
+    if (string === 'false') return false;
+    console.error(chalk.red("%s is not a valid boolean"), string);
+    process.exit(1);
+}
+
+program
+    .version('1.0.0')
+    .option('-e --encode <true|false>', 'Encode signature, defaults to true',  boolean, true)
+    .option('-c --consumer-secret <secret>', 'Consumer secret')
+    .option('-t --token-secret <secret>', 'Token secret (optional)')
+    .arguments('<httpMethod> <url> <parameters...>')
+    .action(function(httpMethod, url, parameters) {
+        if (!program.consumerSecret) {
+            console.log(chalk.red("Consumer secret is required"));
+        }
+        var params = {};
+        parameters.forEach(function(param) {
+            Object.assign(params, parseParameter(param));
+        });
+        var signature = oauthSignature.generate(httpMethod, url, params, program.consumerSecret, program.tokenSecret, { encodeSignature: program.encode });
+        console.log(chalk.yellow(generateHeader(params, signature)));
+    });
+
+program.parse(process.argv);
+
+function parseParameter(parameter) {
+    var result = {};
+    var parameterArray = parameter.split('=');
+    if (parameterArray.length != 2) {
+        console.error(chalk.red("Invalid parameter: %s. Parameters must use key=value syntax"), parameter);
+        process.exit(1);
+    }
+    result[parameterArray[0]] = parameterArray[1];
+    return result;
+}
+
+function generateHeader(params, signature) {
+    var  header = "Authorization:OAuth ";
+    for (var key in params) {
+        var value = params[key];
+        header += key + "=\"" + value + "\",";
+    }
+    header += "oauth_signature=\"" + signature + "\"";
+    return header;
+}
