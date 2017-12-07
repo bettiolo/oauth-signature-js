@@ -1,6 +1,5 @@
 {
   "name": "oauth-signature",
-  "version": "1.4.0",
   "main": "dist/oauth-signature.js",
   "ignore": [
     ".jshintrc",
