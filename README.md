@@ -122,6 +122,12 @@ A url similar to this one will be generated: `http://echo.lab.madgex.com/echo.as
 
 Click on the generated link on the right hand side and you will see the echo server returning `foo=bar`
 
+# Maintenance
+
+## Updating uri-js/js-url
+
+`npm run update`
+
 ## Publish a new version
 
 ```bash

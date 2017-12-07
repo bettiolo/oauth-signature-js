@@ -15,7 +15,9 @@
   "main": "src/app/oauth-signature",
   "scripts": {
     "prepublish": "grunt build",
-    "test": "grunt build"
+    "test": "grunt build",
+    "update": "npm install uri-js@latest; volo update",
+    "postupdate": "npm run test"
   },
   "engines": {
     "node": "*"
@@ -40,9 +42,9 @@
   "volo": {
     "baseUrl": "src/lib",
     "dependencies": {
-      "url.min": "github:websanova/js-url/v1.8.6#url.min.js",
-      "cryptojs/hmac-sha1": "https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js",
-      "cryptojs/enc-base64-min": "https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"
+      "url.min": "github:websanova/js-url/v2.5.2#url.min.js",
+      "cryptojs/hmac-sha1": "github:sytelus/CryptoJS/v3.1.2#rollups/hmac-sha1.js",
+      "cryptojs/enc-base64-min": "github:sytelus/CryptoJS/v3.1.2#components/enc-base64-min.js"
     }
   },
   "dependencies": {
