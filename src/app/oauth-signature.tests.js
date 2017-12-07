@@ -64,17 +64,23 @@ test('Loads parameters from different input structures', function () {
 	var objectLikeInput =
 		{
 			a : 'b',
+			b : 0,
+			c : false,
 			foo : [ 'bar', 'baz', 'qux' ]
 		},
 		arrayLikeInput =
 			[
 				{ a : 'b'},
+				{ b : 0 },
+				{ c : false },
 				{ foo : 'bar' },
 				{ foo : ['baz', 'qux'] }
 			],
 		expectedOutput =
 		{
 			a : [ 'b' ],
+			b : [ '0' ],
+			c : [ 'false' ],
 			foo : [ 'bar', 'baz', 'qux' ]
 		};
 	assert.deepEqual(new oauthSignature.ParametersLoader(objectLikeInput).get(), expectedOutput,

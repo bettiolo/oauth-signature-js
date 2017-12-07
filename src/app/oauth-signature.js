@@ -1,9 +1,9 @@
 ;(function() {
 	'use strict';
-	
+
 	// Check the existence of module and module.exports to detect node
 	var isNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
-	
+
 	function OAuthSignature() {
 	}
 
@@ -182,7 +182,15 @@
 			var key;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					this._loadParameterValue(key, parameters[key] || '');
+					var stringValue = parameters[key] || '';
+
+					try {
+						if (typeof parameters[key] === 'number' || typeof parameters[key] === 'boolean') {
+							stringValue = parameters[key].toString();
+						}
+					} catch (e) {}
+
+					this._loadParameterValue(key, stringValue);
 				}
 			}
 		},
