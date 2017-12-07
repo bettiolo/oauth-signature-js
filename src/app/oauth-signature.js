@@ -182,13 +182,7 @@
 			var key;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					var stringValue = parameters[key] || '';
-
-					try {
-						if (typeof parameters[key] === 'number' || typeof parameters[key] === 'boolean') {
-							stringValue = parameters[key].toString();
-						}
-					} catch (e) {}
+					var stringValue = this._getStringFromParameter(parameters[key]);
 
 					this._loadParameterValue(key, stringValue);
 				}
@@ -198,7 +192,9 @@
 			var i;
 			if (value instanceof Array) {
 				for (i = 0; i < value.length; i++) {
-					this._addParameter(key, value[i]);
+					var stringValue = this._getStringFromParameter(value[i]);
+
+					this._addParameter(key, stringValue);
 				}
 				if (value.length == 0) {
 					this._addParameter(key, '');
@@ -206,6 +202,17 @@
 			} else {
 				this._addParameter(key, value);
 			}
+		},
+		_getStringFromParameter : function (parameter) {
+			var stringValue = parameter || '';
+
+			try {
+				if (typeof parameter === 'number' || typeof parameter === 'boolean') {
+					stringValue = parameter.toString();
+				}
+			} catch (e) {}
+
+			return stringValue;
 		},
 		_addParameter : function (key, value) {
 			if (!this._parameters[key]) {
