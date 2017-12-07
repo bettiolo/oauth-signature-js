@@ -1,9 +1,9 @@
 ;(function() {
 	'use strict';
-	
+
 	// Check the existence of module and module.exports to detect node
 	var isNode = (typeof module != 'undefined' && typeof module.exports != 'undefined');
-	
+
 	function OAuthSignature() {
 	}
 
@@ -182,7 +182,9 @@
 			var key;
 			for (key in parameters) {
 				if (parameters.hasOwnProperty(key)) {
-					this._loadParameterValue(key, parameters[key] || '');
+					var stringValue = this._getStringFromParameter(parameters[key]);
+
+					this._loadParameterValue(key, stringValue);
 				}
 			}
 		},
@@ -190,7 +192,9 @@
 			var i;
 			if (value instanceof Array) {
 				for (i = 0; i < value.length; i++) {
-					this._addParameter(key, value[i]);
+					var stringValue = this._getStringFromParameter(value[i]);
+
+					this._addParameter(key, stringValue);
 				}
 				if (value.length == 0) {
 					this._addParameter(key, '');
@@ -198,6 +202,17 @@
 			} else {
 				this._addParameter(key, value);
 			}
+		},
+		_getStringFromParameter : function (parameter) {
+			var stringValue = parameter || '';
+
+			try {
+				if (typeof parameter === 'number' || typeof parameter === 'boolean') {
+					stringValue = parameter.toString();
+				}
+			} catch (e) {}
+
+			return stringValue;
 		},
 		_addParameter : function (key, value) {
 			if (!this._parameters[key]) {
