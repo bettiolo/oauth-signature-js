@@ -128,6 +128,10 @@ Click on the generated link on the right hand side and you will see the echo ser
 
 `npm run update`
 
+## Updating chai/mocha
+
+Update them via `npm` but also manually in `test-runner.html`
+
 ## Publish a new version
 
 ```bash
